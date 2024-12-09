@@ -1,0 +1,1 @@
+<template>Diak View</template>

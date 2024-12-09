@@ -1,0 +1,1 @@
+<template>Tanar View</template>
