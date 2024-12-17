@@ -6,7 +6,8 @@ import { ref } from 'vue';
 const registrationDataRef = ref<RegistrationData>({
     name: '',
     email: '',
-    neptun_code: ''
+    jelszo: '',
+    class: ''
 })
 
 const { mutate: registration, isPending} = useRegistration()
@@ -18,7 +19,8 @@ const { mutate: registration, isPending} = useRegistration()
         <v-card-text>
             <v-text-field v-model="registrationDataRef.name" label="Név" variant="outlined"></v-text-field>
             <v-text-field v-model="registrationDataRef.email" label="Email cím" variant="outlined"></v-text-field>
-            <v-text-field v-model="registrationDataRef.neptun_code" label="Osztály" variant="outlined"></v-text-field>
+            <v-text-field v-model="registrationDataRef.jelszo" label="Jelszó" variant="outlined"></v-text-field>
+            <v-text-field v-model="registrationDataRef.class" label="Osztály" variant="outlined"></v-text-field>
         </v-card-text>
         <v-card-actions>
             <v-btn @click="() => {
