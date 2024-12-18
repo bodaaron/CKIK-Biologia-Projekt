@@ -98,7 +98,7 @@ export const usePutForgottenPassword = () => {
 
 
 const login = async (data: LoginParam): Promise<RegistrationResponse> => {
-    const response = await axiosClient.post("http://172.22.1.219/api/v1/login", data)
+    const response = await axiosClient.post("http://localhost:3000/users/login", data)
     return response.data.data
 }
 

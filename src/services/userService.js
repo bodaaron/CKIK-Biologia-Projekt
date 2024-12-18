@@ -11,6 +11,11 @@ class UserService
     {
         return await userRepository.getUsers();
     }
+
+    async getUser(email)
+    {
+        return await userRepository.getUser(email);
+    }
 }
 
 module.exports = new UserService();

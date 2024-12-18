@@ -1,8 +1,8 @@
 export type RegistrationData = {
-    name: string,
+    nev: string,
     email: string,
     jelszo: string,
-    class: string
+    osztaly: string
 }
 
 export type RegistrationResponse = {
@@ -22,7 +22,7 @@ export type SetPasswordData = {
 
 export type LoginParam = {
     email: string,
-    password: string
+    jelszo: string
 }
 
 export type ForgottenPasswordParam = {

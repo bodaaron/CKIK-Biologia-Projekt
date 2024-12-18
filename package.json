@@ -17,6 +17,7 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@tanstack/vue-query": "^5.62.7",
     "axios": "^1.7.9",
     "pinia": "^2.2.6",

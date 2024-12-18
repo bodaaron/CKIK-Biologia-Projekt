@@ -2,6 +2,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { mdi } from 'vuetify/iconsets/mdi'
 
 const vuetify = createVuetify({
   components,
@@ -9,7 +10,13 @@ const vuetify = createVuetify({
   theme: {
     themes: {
     }
-  }
+  },
+  icons: {
+    defaultSet: 'mdi',
+    sets: {
+      mdi,
+    },
+  },
 })
 
 export default vuetify

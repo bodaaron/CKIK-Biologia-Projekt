@@ -8,6 +8,7 @@ import router from './router'
 import vuetify from './lib/vuetify'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import queryClient from './lib/queryClient'
+import '@mdi/font/css/materialdesignicons.css'
 
 const app = createApp(App)
 

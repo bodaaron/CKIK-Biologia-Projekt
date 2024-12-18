@@ -8,12 +8,11 @@ const {push}= useRouter()
 
 const loginParam = ref<LoginParam>({
     email: '',
-    password: ''
+    jelszo: ''
 })
 
 
 const {mutate: login, isPending} = useLogin()
-//const { mutate: registration, isPending} = useRegistration()
 
 </script>
 <template>
@@ -21,7 +20,7 @@ const {mutate: login, isPending} = useLogin()
         <v-card-title>Belépés</v-card-title>
         <v-card-text>
             <v-text-field v-model="loginParam.email" label="Email" variant="outlined"></v-text-field>
-            <v-text-field v-model="loginParam.password" label="Jelszó" variant="outlined"></v-text-field>
+            <v-text-field v-model="loginParam.jelszo" label="Jelszó" variant="outlined"></v-text-field>
         </v-card-text>
         <v-card-actions>
             <v-btn color="info" variant="elevated" @click="() => {

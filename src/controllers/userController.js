@@ -15,7 +15,6 @@ exports.createUser = async (req, res, next) =>
 
     const newUser =
     {
-        id: null,
         nev: nev,
         email: email,
         osztaly: osztaly,
