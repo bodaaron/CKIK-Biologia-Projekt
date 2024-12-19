@@ -14,7 +14,7 @@ const {data} = useGetLoggedUser()
             <br>
             Email: {{ data?.email }}
             <br>
-            Email: {{ data?.osztaly }}
+            Osztláy: {{ data?.osztaly }}
             <br>
         </v-card-text>
         <!-- <v-card-actios>

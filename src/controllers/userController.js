@@ -40,6 +40,12 @@ exports.createUser = async (req, res, next) =>
 
 }
 
+exports.getUser = async (req,res ,next) =>{
+
+    const email = req.body;
+    res.status(200).send(await userService.getUser(email));
+}
+
 exports.loginUser = async (req, res, next) =>
 {
     const { email, jelszo } = req.body;

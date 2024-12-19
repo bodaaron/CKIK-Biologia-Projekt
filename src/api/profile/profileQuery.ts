@@ -3,15 +3,8 @@ import { useQuery } from "@tanstack/vue-query"
 import type { Profile } from "./profile"
 
 const getLoggedUser = async (): Promise<Profile> => {
-    const loginToken = JSON.parse(localStorage.getItem("login") ?? "")
-    let token = ""
-    if(loginToken && loginToken?.token){
-        token = String(loginToken.token)
-    }
-    const response = await axiosClient.get(`http://172.22.1.219/api/v1/user`, {
-     headers: {Authorization:"Bearer "+token} 
-    }
-    )
+    const email = localStorage.getItem("email");
+    const response = await axiosClient.post(`http://localhost:3000/users/user`,{email: email})
     return response.data.data
 }
 

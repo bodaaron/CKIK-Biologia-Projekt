@@ -99,7 +99,7 @@ export const usePutForgottenPassword = () => {
 
 const login = async (data: LoginParam): Promise<RegistrationResponse> => {
     const response = await axiosClient.post("http://localhost:3000/users/login", data)
-    console.log(response);
+    localStorage.setItem("email",data.email)
     return response.data.data
 }
 
