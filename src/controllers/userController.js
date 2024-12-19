@@ -13,25 +13,31 @@ exports.createUser = async (req, res, next) =>
 {
     const { nev, email, jelszo, osztaly } = req.body;
 
-    const newUser =
-    {
-        nev: nev,
-        email: email,
-        osztaly: osztaly,
-        jogosultsag: 0,
-        jelszo: await bcrypt.hash(jelszo, salt),
+    if(nev == "" || email == "" || jelszo == "" || osztaly == ""){
+        res.status(400).send("Nem lehet üres mező!");
+    }
+    else{
+        const newUser =
+        {
+            nev: nev,
+            email: email,
+            osztaly: osztaly,
+            jogosultsag: 0,
+            jelszo: await bcrypt.hash(jelszo, salt),
+        }
+    
+        const result = await userService.createUser(newUser);
+    
+        if(result)
+        {
+            res.status(201).json(result);
+        }
+        else
+        {
+            res.status(400).send("Fail");
+        }
     }
 
-    const result = await userService.createUser(newUser);
-
-    if(result)
-    {
-        res.status(201).json(result);
-    }
-    else
-    {
-        res.status(400).send("Fail");
-    }
 }
 
 exports.loginUser = async (req, res, next) =>
@@ -40,12 +46,21 @@ exports.loginUser = async (req, res, next) =>
 
     const user = await userService.getUser(email);
 
-    if(bcrypt.compare(jelszo, user.jelszo))
-    {
-        res.status(200).send("Login successfull");
+    if(user)
+    { 
+        const jo = await bcrypt.compare(jelszo, user.jelszo)
+        if(jo)
+        {
+            res.status(200).send("Login successfull");
+        }
+        else
+        {
+            res.status(400).send("Wrong password");
+        }
     }
     else
     {
-        res.status(400).send("Wrong password");
+        res.status(400).send("Hibás E-mail cím!")
     }
+        
 }

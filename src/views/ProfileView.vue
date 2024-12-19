@@ -17,9 +17,9 @@ const {data} = useGetLoggedUser()
             Email: {{ data?.osztaly }}
             <br>
         </v-card-text>
-        <v-card-actios>
+        <!-- <v-card-actios>
             <v-btn>CRUD</v-btn>
-        </v-card-actios>
+        </v-card-actios> -->
     </v-card>
 
 
