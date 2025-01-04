@@ -16,6 +16,11 @@ class UserService
     {
         return await userRepository.getUser(email);
     }
+
+    async modUser(nev,email,osztaly)
+    {
+        return await userRepository.modUser(nev,email,osztaly)
+    }
 }
 
 module.exports = new UserService();

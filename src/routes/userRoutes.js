@@ -12,4 +12,6 @@ router.post("/user",userController.getUser)
 
 router.post("/create", userController.createUser);
 
+router.post("/mod",userController.modUser)
+
 module.exports = router;

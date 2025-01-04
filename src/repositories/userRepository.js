@@ -1,3 +1,4 @@
+const e = require("express");
 const db = require("../database/dbContext")
 
 class UserRepository
@@ -28,10 +29,31 @@ class UserRepository
             {
                 where:
                 {
+                    email: email
+                }
+            }
+        )
+    }
+
+    async modUser(nev,email,osztaly)
+    {
+        const user = await this.felhasznalo.findOne
+        (
+            {
+                where:
+                {
                     email: email,
                 }
             }
         )
+
+        user.set({
+            nev: nev,
+            email: email,
+            osztaly: osztaly,
+        });
+
+        await user.save();
     }
 }
 
