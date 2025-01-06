@@ -1,6 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-require("dotenv").config();
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+console.log(process.env.DB_USERNAME);
 
 const sequelize = new Sequelize
 (
@@ -10,8 +14,8 @@ const sequelize = new Sequelize
 
     {
         host: process.env.DB_HOST,
-        dialect: process.env.DB_DIALECT,
-        logging: console.log,
+        dialect: "mysql",
+        logging: false,
     }
 )
 

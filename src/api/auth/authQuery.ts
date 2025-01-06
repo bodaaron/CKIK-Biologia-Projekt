@@ -5,7 +5,7 @@ import { useRoute, useRouter } from "vue-router"
 import { QUERY_KEYS } from "@/utils/queryKeys"
 
 const registration = async (data: RegistrationData): Promise<RegistrationResponse> => {
-    const response = await axiosClient.post("http://localhost:3000/users/create", data)
+    const response = await axiosClient.post("http://localhost:3000/users/", data)
     console.log({response})
     return response.data.data
 }

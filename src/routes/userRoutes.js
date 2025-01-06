@@ -10,7 +10,7 @@ router.post("/login", userController.loginUser);
 
 router.post("/user",userController.getUser)
 
-router.post("/create", userController.createUser);
+router.post("/", userController.createUser);
 
 router.post("/mod",userController.modUser)
 
