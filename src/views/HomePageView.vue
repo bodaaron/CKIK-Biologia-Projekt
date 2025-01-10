@@ -11,21 +11,33 @@ const loginParam = ref<LoginParam>({
     jelszo: ''
 })
 
+const error = ref<string | null>(null);
+
 
 const {mutate: login, isPending} = useLogin()
+
+const handleLogin = () => {
+    error.value = null;
+    login(loginParam.value, {
+        onError: (err: any) => {
+            error.value = err.response.data.error;
+        }
+    });
+};
 
 </script>
 <template>
     <v-card>
         <v-card-title>Belépés</v-card-title>
         <v-card-text>
+            <v-alert v-if="error" type="error" dismissible>
+                {{ error }}
+            </v-alert>  
             <v-text-field v-model="loginParam.email" label="Email" variant="outlined"></v-text-field>
             <v-text-field v-model="loginParam.jelszo" label="Jelszó" variant="outlined" type="password"></v-text-field>
         </v-card-text>
         <v-card-actions>
-            <v-btn color="info" variant="elevated" @click=" async() => {
-                 login(loginParam)
-            }" :loading="isPending">
+            <v-btn color="info" variant="elevated" @click="handleLogin" :loading="isPending">
                 Belépés
             </v-btn>
             <!-- <v-btn @click="() => {

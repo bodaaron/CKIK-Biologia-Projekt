@@ -15,11 +15,8 @@ exports.createUser = async (req, res, next) =>
 
     const userek = await userService.getUsers();
 
-    if(nev == "" || email == "" || jelszo == "" || osztaly == ""){
-        res.status(400).send("Nem lehet üres mező!");
-    }
-    else if (userek.some(user => user.email === email)) {
-        res.status(400).send("Email cím már létezik!");
+    if (userek.some(user => user.email === email)) {
+        return res.status(400).json({error: "Ez az email cím már használatban van!"});
     }
     else{
         const newUser =
@@ -60,25 +57,24 @@ exports.loginUser = async (req, res, next) =>
         const { email, jelszo } = req.body;
         
         const user = await userService.getUser(email);
-        
+
+        if (!user) {
+            return res.status(400).json({ error: "Hibás E-mail cím!" });
+        }
+
         if(user)
-            { 
-                const jo = await bcrypt.compare(jelszo, user.jelszo)
-                if(jo)
-                    {
-                        res.status(200).send("Login successfull");
-                    }
-                    else
-                    {
-                        res.status(400).send("Wrong password");
-                    }
-                }
-                else
-                {
-                    res.status(400).send("Hibás E-mail cím!")
-                }
-                
+        { 
+            const jo = await bcrypt.compare(jelszo, user.jelszo)
+            if(jo)
+            {
+                res.status(200).send("Login successfull");
             }
+            else
+            {
+                return res.status(400).json({ error: "Hibás jelszó!" });
+            }
+        }   
+    }
             
             
 exports.modUser = async (req,res,next) =>{

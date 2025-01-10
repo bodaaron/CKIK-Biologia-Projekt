@@ -3,6 +3,7 @@ import type { LoginParam, RegistrationData, RegistrationResponse} from "./auth"
 import { useMutation, useQuery } from "@tanstack/vue-query"
 import { useRoute, useRouter } from "vue-router"
 import { QUERY_KEYS } from "@/utils/queryKeys"
+import { AxiosError } from "axios"
 
 const registration = async (data: RegistrationData): Promise<RegistrationResponse> => {
     const response = await axiosClient.post("http://localhost:3000/users/", data)
@@ -15,6 +16,10 @@ export const useRegistration = () => {
     return useMutation({
         mutationFn: registration,
         onSuccess(data) {
+        },
+        onError(error: any) {
+            console.log(error);
+            throw new Error(error.response.data.error);
         },
     })
 }
@@ -32,6 +37,9 @@ export const useLogin = () => {
         onSuccess(data) {
             localStorage.setItem("login", JSON.stringify(data))
             push({name: 'profile'})
+        },
+        onError(error: any) {
+            throw new Error(error.response.data.error);
         },
     })
 }
