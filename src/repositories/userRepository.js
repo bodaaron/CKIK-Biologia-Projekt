@@ -35,14 +35,15 @@ class UserRepository
         )
     }
 
-    async modUser(nev,email,osztaly)
+    async modUser(LogEmail,nev,email,osztaly)
     {
+        console.log(LogEmail);
         const user = await this.felhasznalo.findOne
         (
             {
                 where:
                 {
-                    email: email,
+                    email: LogEmail,
                 }
             }
         )

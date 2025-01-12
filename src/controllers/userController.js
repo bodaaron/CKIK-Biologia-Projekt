@@ -52,6 +52,8 @@ exports.getUser = async (req,res ,next) =>{
     res.status(200).send(user);
 }
 
+var LogEmail = "";
+
 exports.loginUser = async (req, res, next) =>
     {
         const { email, jelszo } = req.body;
@@ -68,6 +70,8 @@ exports.loginUser = async (req, res, next) =>
             if(jo)
             {
                 res.status(200).send("Login successfull");
+                LogEmail = email;
+                console.log()
             }
             else
             {
@@ -79,7 +83,15 @@ exports.loginUser = async (req, res, next) =>
             
 exports.modUser = async (req,res,next) =>{
 
-    const {nev,email,osztaly} = req.body; 
+    const {id,nev,email,osztaly} = req.body; 
 
-    res.status(200).send(await userService.modUser(nev,email,osztaly));
+    const userek = await userService.getUsers();
+
+    if (userek.some(user => user.email === email && user.id != id)) {
+        return res.status(400).json({error: "Ez az email cím már használatban van!"});
+    }
+    else{ 
+        res.status(200).send(await userService.modUser(LogEmail,nev,email,osztaly));
+        LogEmail = email;
+    }
 }

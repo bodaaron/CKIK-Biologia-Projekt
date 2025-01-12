@@ -5,6 +5,7 @@ import type { ChangeData, ChangeResponse, Profile } from "./profile"
 const getLoggedUser = async (): Promise<Profile> => {
     const email = localStorage.getItem("email");
     const response = await axiosClient.post(`http://localhost:3000/users/user`,{email})
+    localStorage.setItem("id",response.data.id);
     return response.data
 }
 
@@ -28,6 +29,9 @@ export const usechange = () => {
     return useMutation({
         mutationFn: change,
         onSuccess(data) {
+        },
+        onError(error: any) {
+            throw new Error(error.response.data.error);
         },
     })
 }

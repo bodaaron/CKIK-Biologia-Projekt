@@ -13,13 +13,6 @@ const registrationDataRef = ref<RegistrationData>({
     osztaly: ''
 })
 
-// const state = reactive({
-//   nev: registrationDataRef,
-//   email: registrationDataRef,
-//   jelszo: registrationDataRef,
-//   osztaly: registrationDataRef,
-// })
-
 const { mutate: registration, isPending} = useRegistration()
 
 const show1 = ref(false);
@@ -66,17 +59,17 @@ const handleRegistration = async () => {
   
     if (isValid) {
         await registration(registrationDataRef.value,{
-        onError: (err: any) => {
-        error.value =  err.response.data.error;
-
-        if(error.value == null){  
-        alert('Sikeres regisztráció!');
-        push({name: 'home'});
-        }
-        
+        onError: async (err: any) => {
+            error.value = await err.response.data.error;
+        },
+        onSuccess()
+        {
+            alert('Sikeres regisztráció!');
+            push({name: 'home'});
         }});
     }   
 };
+
 
 
 </script>

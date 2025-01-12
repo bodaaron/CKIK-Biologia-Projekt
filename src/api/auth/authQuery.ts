@@ -24,11 +24,18 @@ export const useRegistration = () => {
     })
 }
 
+var jog:number;
+var email:string;
+
 const login = async (data: LoginParam): Promise<RegistrationResponse> => {
     const response = await axiosClient.post("http://localhost:3000/users/login", data)
     localStorage.setItem("email",data.email)
+    email = String(localStorage.getItem("email"));
+    const response2 = await axiosClient.post(`http://localhost:3000/users/user`,{email})
+    jog = response2.data.jogosultsag;
     return response.data.data
 }
+
 
 export const useLogin = () => {
     const {push} = useRouter()
@@ -36,9 +43,14 @@ export const useLogin = () => {
         mutationFn: login,
         onSuccess(data) {
             localStorage.setItem("login", JSON.stringify(data))
-            push({name: 'profile'})
+            if(jog == 1){
+                push({name: 'tanar'})
+            }
+            else{
+                push({name: 'tanulo'})
+            }
         },
-        onError(error: any) {
+        async onError(error: any) {
             throw new Error(error.response.data.error);
         },
     })
