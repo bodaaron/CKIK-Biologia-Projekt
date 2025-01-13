@@ -5,7 +5,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TanuloView from '@/views/TanuloView.vue'
 import TanarView from '@/views/TanarView.vue'
 import TesztPageView from '@/views/TesztPageView.vue'
-import HomePageView2 from '@/views/HomePageView2.vue'
 import RegistrationView2 from '@/views/RegistrationView2.vue'
 
 const router = createRouter({
@@ -15,11 +14,6 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomePageView,
-    },
-    {
-      path: '/home2',
-      name: 'home2',
-      component: HomePageView2,
     },
     {
       path: '/registration',
