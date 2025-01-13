@@ -1,6 +1,6 @@
 import axiosClient from "@/lib/axios"
 import { useMutation, useQuery } from "@tanstack/vue-query"
-import type { ChangeData, ChangeResponse, Profile } from "./profile"
+import type { ChangeData, ChangeResponse, Kep, Profile } from "./profile"
 
 const getLoggedUser = async (): Promise<Profile> => {
     const email = localStorage.getItem("email");
@@ -34,4 +34,19 @@ export const usechange = () => {
             throw new Error(error.response.data.error);
         },
     })
+}
+
+const getKepek = async (): Promise<Kep[]> => {
+    const response = await axiosClient.get(`http://localhost:3000/kepek/`)
+    return response.data
+}
+
+
+export const useGetKepek = () => {
+    return useQuery(
+        {
+            queryKey: ["getKepek"],
+            queryFn: getKepek,
+        }
+    )
 }

@@ -15,3 +15,9 @@ export type ChangeData = {
 export type ChangeResponse = {
     token: string,
 }
+
+export type Kep = {
+    id: number,
+    nev: string,
+    fajlnev: number,
+}

@@ -15,6 +15,14 @@ app.use(cors({
 
 const userRoutes = require("./routes/userRoutes");
 
+const kepRoutes = require("./routes/kepRoutes")
+
+const adatRoutes = require("./routes/adatRoutes")
+
 app.use("/users", userRoutes);
+
+app.use("/kepek",kepRoutes);
+
+app.use("/adatok",adatRoutes);
 
 module.exports = app;
