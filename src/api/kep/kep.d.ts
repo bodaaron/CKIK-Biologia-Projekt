@@ -1,3 +1,5 @@
-export type Kep = {
-    sorszam: number,
+export type Adat = {
+    id: number,
+    adatSorszam: number,
+    helyesValasz: string,
 }

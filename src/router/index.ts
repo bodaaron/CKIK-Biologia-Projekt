@@ -42,7 +42,7 @@ const router = createRouter({
       component: TanarView,
     },
     {
-      path: '/teszt/:tesztId',
+      path: '/teszt/:id/:tesztId',
       name: 'teszt',
       component: TesztPageView,
     },

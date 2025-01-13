@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ChangeData } from '@/api/profile/profile';
-import { usechange, useGetLoggedUser } from '@/api/profile/profileQuery';
+import { usechange, useGetKepek, useGetLoggedUser } from '@/api/profile/profileQuery';
 import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
@@ -10,6 +10,7 @@ import type { ComputedRefSymbol } from '@vue/reactivity';
 
 
 const {data} = useGetLoggedUser()
+const {data: kepek, isLoading} = useGetKepek()
 const { mutate: change, isPending} = usechange()
 const {push} = useRouter();
 
@@ -21,9 +22,8 @@ const userData = ref<ChangeData>({
 });
 
 const dialog = ref(false);
-const kepek = ref<string[]>(['64','63']);
+const dialog2 = ref(false);
 const kivalasztottKep = ref<number | null>(null);
-const kivalasztottKep2 = ref<string>('');
 
 
 watchEffect(() => {
@@ -44,13 +44,8 @@ const handleGyakorloKitoltes = async () => {
     dialog.value = true;
 };
 
-const handleImageClick = (index: number,image: string) => {
-  kivalasztottKep.value = index;
-  kivalasztottKep2.value = image;
-};
-
-const handleKitoltClick = () =>{
-  push({name: "teszt", params:{tesztId:kivalasztottKep2.value}})
+const handleKitoltClick = (id:number,tesztId:number) =>{
+  push({name: "teszt", params:{id:id,tesztId:tesztId}})
 };
 
 const rules = {
@@ -113,6 +108,10 @@ const handleChange = async () => {
     }  
 };
 
+const handleMegtekintes = async (id: number) =>{
+    dialog2.value = true;
+    kivalasztottKep.value = id;
+}
 
 </script>
 <template>
@@ -162,43 +161,55 @@ const handleChange = async () => {
         </v-card-actions>
     </v-card>
 
-    <v-dialog v-model="dialog" width="auto">
-        <v-card>
-            <v-card-title>Image Gallery</v-card-title>
-                <v-row>
-                    <v-col
-                        v-for="(image, index) in kepek"
-                        :key="index"
-                        cols="12" sm="4" md="4">
-                        <v-img :src="'kepek/'+image+'.jpg'" :alt="'Image ' + index" @click="handleImageClick(index,image)" :class="{'selected-image': kivalasztottKep === index}"></v-img>
-                    </v-col>
-                </v-row>
-        <template v-slot:actions>
-            <v-btn v-if="kivalasztottKep != null"
-              class="ms-auto"
-              text="Kitöltés"
-              @click="handleKitoltClick"
-            ></v-btn>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
+      <v-card>
+        <v-card-title class="d-flex">Teszt kiválasztása
+          <v-spacer ></v-spacer>
           <v-btn
-            class="ms-auto"
-            text="Bezárás"
+            icon="mdi-close"
             @click="dialog = false"
           ></v-btn>
-        </template>
-      </v-card>
-    </v-dialog>
+        </v-card-title>
+        <v-table>
+      <thead>
+        <tr>
+          <th class="text-left">
+            Név
+          </th>
+          <th class="text-left">
+            Sorszám
+          </th>
+          <th class="text-left">
+            Műveletek
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="kep in kepek":key="kep.id">
+          <td>{{ kep.nev }}</td>
+          <td>{{ kep.fajlnev }}</td>
+          <td>
+          <v-btn class="ms-auto" text="Kitöltés" @click="handleKitoltClick(kep.id,kep.fajlnev)"></v-btn>
+          <v-btn class="ms-auto" text="Megtekintés" @click="handleMegtekintes(kep.fajlnev)"></v-btn>
+          </td>
+        </tr>
+      </tbody>
+      </v-table>  
+    </v-card>
+  </v-dialog>
 
+  <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
+    <v-card>
+      <v-card-title class="d-flex">Kép előnézet
+        <v-spacer ></v-spacer>
+        <v-btn
+          icon="mdi-close"
+          @click="dialog2 = false"
+        ></v-btn>
+      </v-card-title>
+      <v-card-text>
+        <v-img :src="'kepek/'+kivalasztottKep+'.jpg'"></v-img>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
-
-<style scoped>
-.selected-image {
-  border: 4px solid #007bff;
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
-  transition: all 0.3s ease;
-}
-
-.v-img:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-}
-</style>

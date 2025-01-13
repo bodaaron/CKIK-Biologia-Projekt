@@ -167,7 +167,7 @@ const handleChange = async () => {
                         v-for="(image, index) in kepek"
                         :key="index"
                         cols="12" sm="4" md="4">
-                        <v-img :src="'kepek/'+image+'.jpg'" :alt="'Image ' + index" @click="handleImageClick(index,image)" :class="{'selected-image': kivalasztottKep === index}"></v-img>
+                        <v-img :src="'kepek/'+image+'.jpg'" :alt="'Image' + index" @click="handleImageClick(index,image)" :class="{'selected-image': kivalasztottKep === index}"></v-img>
                     </v-col>
                 </v-row>
         <template v-slot:actions>
@@ -198,4 +198,4 @@ const handleChange = async () => {
   cursor: pointer;
   transform: scale(1.05);
 }
-</style>
+</style> 
