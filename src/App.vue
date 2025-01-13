@@ -4,5 +4,11 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <RouterView />
+  <v-app full-height>
+    <v-layout class="rounded rounded-md">
+      <v-main>
+        <RouterView></RouterView>
+      </v-main>
+    </v-layout>
+  </v-app>
 </template>
