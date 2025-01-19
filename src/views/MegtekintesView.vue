@@ -26,22 +26,26 @@ const handleClick = (area: any) => {
     alert("WOWZA");
 };
 
+
+
+document.onclick = function(e){
+  var x = e.pageX;
+  var y = e.pageY;
+  console.log("X is "+x+" and Y is "+y);
+};
+
+
 </script>
 <template>
-    <v-img :src="`/public/kepek/${kep}.jpg`" usemap="#dynamic-map"></v-img>
+    <img :src="`/public/kepek/${kep}.jpg`" usemap="#dynamic-map" style="max-width: 100%; height: auto;"></img>
     <map name="dynamic-map">
       <area
         v-for="(area, index) in areas"
         :key="index"
         :shape="area.shape"
         :coords="area.coords"
+        :href="'https://www.youtube.com/watch?v=V4REaV-Fy2A'"
         @click.prevent="handleClick(area)"
       />
     </map>
-<!-- 
-    <img src="/public/kepek/64.jpg" usemap="#image-map">
-
-    <map name="image-map">
-        <area target="" alt="" title="" href="" coords="2619,861,55" shape="circle">
-    </map> -->
 </template>
