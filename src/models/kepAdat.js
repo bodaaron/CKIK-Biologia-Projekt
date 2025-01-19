@@ -22,6 +22,18 @@ module.exports = (sequelize, DataTypes) =>
             {
                 type: DataTypes.STRING(60),
             },
+            x:
+            {
+                type: DataTypes.INTEGER,
+            },
+            y:
+            {
+                type: DataTypes.INTEGER,
+            },
+            size:
+            {
+                type: DataTypes.INTEGER,
+            },
             kepId:
             {
                 type: DataTypes.INTEGER

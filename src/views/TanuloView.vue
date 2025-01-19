@@ -7,12 +7,14 @@ import useVuelidate from '@vuelidate/core';
 import { email, helpers, required} from '@vuelidate/validators';
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript';
 import type { ComputedRefSymbol } from '@vue/reactivity';
+import { useGetAdatok } from '@/api/kep/kepQuery';
 
 
 const {data} = useGetLoggedUser()
 const {data: kepek, isLoading} = useGetKepek()
 const { mutate: change, isPending} = usechange()
 const {push} = useRouter();
+
 
 const userData = ref<ChangeData>({
   id: Number(localStorage.getItem("id")),
@@ -36,12 +38,12 @@ watchEffect(() => {
 
 const hasChanges = computed(() => {
   return userData.value.nev !== data.value?.nev ||
-         userData.value.email !== data.value?.email ||
-         userData.value.osztaly !== data.value?.osztaly;
+  userData.value.email !== data.value?.email ||
+  userData.value.osztaly !== data.value?.osztaly;
 });
 
 const handleGyakorloKitoltes = async () => {
-    dialog.value = true;
+  dialog.value = true;
 };
 
 const handleKitoltClick = (id:number,tesztId:number) =>{
@@ -49,12 +51,12 @@ const handleKitoltClick = (id:number,tesztId:number) =>{
 };
 
 const rules = {
-    nev: { required: helpers.withMessage('Név megadása kötelező!', required) },
-    email: { 
-        email: helpers.withMessage('Kérjük, adjon meg egy érvényes email címet!', email),
-        required: helpers.withMessage('Email cím megadása kötelező!', required)
-    },
-    osztaly: { required: helpers.withMessage('Kérjük, válasszon egy osztályt!', required) },
+  nev: { required: helpers.withMessage('Név megadása kötelező!', required) },
+  email: { 
+    email: helpers.withMessage('Kérjük, adjon meg egy érvényes email címet!', email),
+    required: helpers.withMessage('Email cím megadása kötelező!', required)
+  },
+  osztaly: { required: helpers.withMessage('Kérjük, válasszon egy osztályt!', required) },
 };
 
 const items = [
@@ -83,34 +85,35 @@ const error = ref<string | null>(null);
 error.value = null;
 
 const handleChange = async () => {
-    error.value = null;
-    const isValid = await v$.value.$validate();
+  error.value = null;
+  const isValid = await v$.value.$validate();
   
-    if (isValid) {
-        await change(userData.value,{
-        onError: (err: any) => {
+  if (isValid) {
+    await change(userData.value,{
+      onError: (err: any) => {
         error.value = err.response.data.error;
-          if(userData.value.email !== data.value?.email){
-            userData.value.email = String(data.value?.email)
-          }
-        },
-        onSuccess(){
-          if(userData.value.email !== data.value?.email){
-            alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
-            push({name: "home" })
-          }
-          else{
-            alert('Sikeres adatmódosítás!');
-            window.location.reload();
-          }
+        if(userData.value.email !== data.value?.email){
+          userData.value.email = String(data.value?.email)
         }
-      });
-    }  
+      },
+      onSuccess(){
+        if(userData.value.email !== data.value?.email){
+          alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
+          push({name: "home" })
+        }
+        else{
+          alert('Sikeres adatmódosítás!');
+          window.location.reload();
+        }
+      }
+    });
+  }  
 };
 
-const handleMegtekintes = async (id: number) =>{
-    dialog2.value = true;
-    kivalasztottKep.value = id;
+const handleMegtekintes = async (id: number, fajlnev: number) =>{
+  // dialog2.value = true;
+  // kivalasztottKep.value = fajlnev;
+  push({name: "megtekintes", params:{id:id,fajlnev:fajlnev}})
 }
 
 </script>
@@ -190,7 +193,7 @@ const handleMegtekintes = async (id: number) =>{
           <td>{{ kep.fajlnev }}</td>
           <td>
           <v-btn class="ms-auto" text="Kitöltés" @click="handleKitoltClick(kep.id,kep.fajlnev)"></v-btn>
-          <v-btn class="ms-auto" text="Megtekintés" @click="handleMegtekintes(kep.fajlnev)"></v-btn>
+          <v-btn class="ms-auto" text="Megtekintés" @click="handleMegtekintes(kep.id,kep.fajlnev)"></v-btn>
           </td>
         </tr>
       </tbody>
@@ -198,7 +201,7 @@ const handleMegtekintes = async (id: number) =>{
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
+  <!-- <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
     <v-card>
       <v-card-title class="d-flex">Kép előnézet
         <v-spacer ></v-spacer>
@@ -211,5 +214,5 @@ const handleMegtekintes = async (id: number) =>{
         <v-img :src="'kepek/'+kivalasztottKep+'.jpg'"></v-img>
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-dialog> -->
 </template>
