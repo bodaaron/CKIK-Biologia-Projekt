@@ -74,75 +74,88 @@ const handleRegistration = async () => {
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <v-card-title class="text-center">Regisztráció</v-card-title>
       <v-card-text>
-        <v-alert v-if="error" type="error" dismissible>
-          {{ error }}
-        </v-alert>
         <v-form @submit.prevent="handleRegistration">
           <v-text-field
-            v-model="registrationDataRef.nev"
-            :error-messages="v$.nev.$errors.map((e) => String(e.$message))"
-            :counter="40"
-            label="Név"
-            required
-            @blur="v$.nev.$touch"
-            @input="v$.nev.$touch"
-            variant="outlined"
-            density="compact"
-            prepend-inner-icon="mdi-account-outline"
+          v-model="registrationDataRef.nev"
+          :error-messages="v$.nev.$errors.map((e) => String(e.$message))"
+          :counter="40"
+          label="Név"
+          required
+          @blur="v$.nev.$touch"
+          @input="v$.nev.$touch"
+          variant="outlined"
+          density="compact"
+          prepend-inner-icon="mdi-account-outline"
           ></v-text-field>
-
+          
           <v-text-field
-            v-model="registrationDataRef.email"
-            :error-messages="v$.email.$errors.map((e) => String(e.$message))"
-            label="Email"
-            required
-            @blur="v$.email.$touch"
-            @input="v$.email.$touch"
-            density="compact"
-            prepend-inner-icon="mdi-email-outline"
-            variant="outlined"
+          v-model="registrationDataRef.email"
+          :error-messages="v$.email.$errors.map((e) => String(e.$message))"
+          label="Email"
+          required
+          @blur="v$.email.$touch"
+          @input="v$.email.$touch"
+          density="compact"
+          prepend-inner-icon="mdi-email-outline"
+          variant="outlined"
           ></v-text-field>
-
+          
           <v-text-field
-            v-model="registrationDataRef.jelszo"
-            :error-messages="v$.jelszo.$errors.map((e) => String(e.$message))"
-            label="Jelszó"
-            required
-            :type="show1 ? 'text' : 'password'"
-            @blur="v$.jelszo.$touch"
-            @input="v$.jelszo.$touch"
-            density="compact"
-            prepend-inner-icon="mdi-lock-outline"
-            variant="outlined"
-            :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="show1 = !show1"
+          v-model="registrationDataRef.jelszo"
+          :error-messages="v$.jelszo.$errors.map((e) => String(e.$message))"
+          label="Jelszó"
+          required
+          :type="show1 ? 'text' : 'password'"
+          @blur="v$.jelszo.$touch"
+          @input="v$.jelszo.$touch"
+          density="compact"
+          prepend-inner-icon="mdi-lock-outline"
+          variant="outlined"
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="show1 = !show1"
           ></v-text-field>
-
+          
           <v-select
-            v-model="registrationDataRef.osztaly"
-            :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
-            label="Osztály"
-            :items="items"
-            required
-            @blur="v$.osztaly.$touch"
-            @change="v$.osztaly.$touch"
-            density="compact"
-            variant="outlined"
+          v-model="registrationDataRef.osztaly"
+          :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
+          label="Osztály"
+          :items="items"
+          required
+          @blur="v$.osztaly.$touch"
+          @change="v$.osztaly.$touch"
+          density="compact"
+          variant="outlined"
           ></v-select>
-
+          
           <v-card-actions>
             <v-btn
-              class="mb-8"
-              size="large"
-              variant="elevated"
-              :loading="isPending"
-              type="submit"
-              block
+            class="mb-8"
+            size="large"
+            variant="elevated"
+            :loading="isPending"
+            type="submit"
+            block
             >
-              Regisztráció
-            </v-btn>
-          </v-card-actions>
-        </v-form>
+            Regisztráció
+          </v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card-text>
+    <v-alert v-if="error" type="error" dismissible>
+      {{ error }}
+    </v-alert>
+    <v-card-text
+    class="text-center"
+    @click="
+          () => {
+            push({ name: 'home' })
+          }
+        "
+      >
+        <a class="text-green text-decoration-none" rel="noopener noreferrer">
+          Már van fiókom
+          <v-icon icon="mdi-chevron-right"> </v-icon>
+        </a>
       </v-card-text>
     </v-card>
   </v-container>

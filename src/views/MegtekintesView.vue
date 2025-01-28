@@ -22,15 +22,10 @@ const kivalasztottErtek = ref<string>('');
 
 
 const updateAreas = () => {
-  console.log(naturalHeight.value);
-  console.log(naturalWidth.value);
   if (!imgElement.value || !adatok.value || !naturalHeight.value || !naturalWidth.value) return;
 
   const currentWidth = imgElement.value.clientWidth;
   const currentHeight = imgElement.value.clientHeight;
-
-  console.log(currentWidth);
-  console.log(currentHeight);
 
   const scaleX = currentWidth / naturalWidth.value;
   const scaleY = currentHeight / naturalHeight.value;
@@ -43,10 +38,19 @@ const updateAreas = () => {
 };
 
 onMounted(() => {
-  if (!imgElement.value) return 
+  if (!imgElement.value) return;
+
   imgElement.value?.addEventListener('load', () => {
-    naturalWidth.value = 1903;
-    naturalHeight.value = 2537;
+    if(imgElement.value?.naturalWidth == 3024){
+      naturalWidth.value = 1903;
+      naturalHeight.value = 2537;
+    }
+    else if(imgElement.value?.naturalWidth == 4032){
+      console.log(imgElement.value.clientWidth);
+      console.log(imgElement.value.clientHeight);
+      naturalWidth.value = 1903;
+      naturalHeight.value = 1427;
+    }
     updateAreas();
   }); 
 });
