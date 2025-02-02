@@ -2,20 +2,22 @@
 import type { RegistrationData } from '@/api/auth/auth'
 import { useRegistration } from '@/api/auth/authQuery'
 import useVuelidate from '@vuelidate/core'
-import { email, helpers, required } from '@vuelidate/validators'
-import { reactive, ref, type Ref } from 'vue'
+import { email, helpers, required, sameAs } from '@vuelidate/validators'
+import { computed, reactive, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const registrationDataRef = ref<RegistrationData>({
   nev: '',
   email: '',
   jelszo: '',
+  jelszoMeg: '',
   osztaly: '',
 })
 const visible = ref(false)
 const { mutate: registration, isPending } = useRegistration()
 
 const show1 = ref(false)
+const show2 = ref(false)
 
 const { push } = useRouter()
 
@@ -27,6 +29,9 @@ const rules = {
   },
   osztaly: { required: helpers.withMessage('Kérjük, válasszon egy osztályt!', required) },
   jelszo: { required: helpers.withMessage('Jelszó megadása kötelező!', required) },
+  jelszoMeg: {
+    required: helpers.withMessage('Jelszó megerősítése kötelező!', required),
+    sameAsJelszo: helpers.withMessage('A két jelszó nem egyezik!',sameAs(computed(()=> registrationDataRef.value.jelszo)))},
 }
 
 const items = [
@@ -115,6 +120,21 @@ const handleRegistration = async () => {
           @click:append-inner="show1 = !show1"
           ></v-text-field>
           
+          <v-text-field
+          v-model="registrationDataRef.jelszoMeg"
+          :error-messages="v$.jelszoMeg.$errors.map((e) => String(e.$message))"
+          label="Jelszó megerősítés"
+          required
+          :type="show2 ? 'text' : 'password'"
+          @blur="v$.jelszoMeg.$touch"
+          @input="v$.jelszoMeg.$touch"
+          density="compact"
+          prepend-inner-icon="mdi-lock-outline"
+          variant="outlined"
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="show2 = !show2"
+          ></v-text-field>
+
           <v-select
           v-model="registrationDataRef.osztaly"
           :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
