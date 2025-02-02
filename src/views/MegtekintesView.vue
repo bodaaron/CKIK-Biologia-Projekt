@@ -93,7 +93,7 @@ document.onclick = function(e){
       :shape="area.shape"
       :coords="area.coords"
       :ertek="area.ertek"
-      :href="'https://www.youtube.com/watch?v=V4REaV-Fy2A'"
+      :href="''"
       @click.prevent="handleClick(area)"
     />
   </map>

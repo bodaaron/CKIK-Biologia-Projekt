@@ -166,12 +166,7 @@ const handleRegistration = async () => {
     </v-alert>
     <v-card-text
     class="text-center"
-    @click="
-          () => {
-            push({ name: 'home' })
-          }
-        "
-      >
+    @click="() => {push({ name: 'home' })}">
         <a class="text-green text-decoration-none" rel="noopener noreferrer">
           Már van fiókom
           <v-icon icon="mdi-chevron-right"> </v-icon>
