@@ -135,7 +135,7 @@ const handleEltunes = async () => {
 }
 </script>
 <template>
-  <v-btn @click="handleEltunes">Háttér megtekintése</v-btn>
+  <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
   <v-container class="d-flex align-center justify-center fill-height">
     <v-card v-show="!eltunt">
       <v-card-title> Tanulói Felület </v-card-title>
@@ -244,10 +244,15 @@ const handleEltunes = async () => {
 <style scoped>
 .behind {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+}
+.hattergomb,
+.v-card,
+.v-container {
+  z-index: 1;
 }
 </style>
