@@ -21,3 +21,11 @@ export type Kep = {
     nev: string,
     fajlnev: number,
 }
+
+export type User = {
+    id: number,
+    nev: string,
+    email: string,
+    osztaly: string,
+    jogosultsag: number,
+}
