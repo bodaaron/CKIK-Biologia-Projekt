@@ -6,6 +6,7 @@ import TanuloView from '@/views/TanuloView.vue'
 import TanarView from '@/views/TanarView.vue'
 import TesztPageView from '@/views/TesztPageView.vue'
 import MegtekintesView from '@/views/MegtekintesView.vue'
+import ForgotView from '@/views/ForgotView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
       path: '/megtekintes/:id/:fajlnev',
       name: 'megtekintes',
       component: MegtekintesView,
+    },
+    {
+      path: '/elfelejtettjelszo',
+      name: 'eljelejtettjelszo',
+      component: ForgotView,
     },
   ],
 })

@@ -39,7 +39,6 @@ const selectedOsztaly = ref<string | null>(null)
 const kivalasztottKep = ref<number | null>(null)
 const eltunt = ref(false)
 
-
 watchEffect(() => {
   if (data.value) {
     userData.value.nev = data.value.nev || ''
@@ -140,27 +139,26 @@ const handleEltunes = async () => {
   }
 }
 
-const filteredUsers = ref<User[]>([]);
-const nameSearch = ref('');
+const filteredUsers = ref<User[]>([])
+const nameSearch = ref('')
 
+const handleKereses = async () => {
+  error2.value = ''
+  if (!users.value) return
+  filteredUsers.value = users.value.filter((user) => {
+    const classMatches = selectedOsztaly.value ? user.osztaly === selectedOsztaly.value : true
 
+    const nameMatches = nameSearch.value
+      ? user.nev.toLowerCase().includes(nameSearch.value.toLowerCase())
+      : true
 
-const handleKereses = async () =>{
-  error2.value = "";
-  if(!users.value) return
-  filteredUsers.value = users.value.filter(user => {
-    const classMatches = selectedOsztaly.value ? user.osztaly === selectedOsztaly.value : true;
-    
-    const nameMatches = nameSearch.value ? user.nev.toLowerCase().includes(nameSearch.value.toLowerCase()) : true;
+    return classMatches && nameMatches
+  })
 
-    return classMatches && nameMatches;
-  });
-
-  if(filteredUsers.value.length == 0){
-    error2.value = "Nincs ilyen felhasználó"
+  if (filteredUsers.value.length == 0) {
+    error2.value = 'Nincs ilyen felhasználó'
   }
 }
-
 </script>
 <template>
   <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
@@ -204,10 +202,14 @@ const handleKereses = async () =>{
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" >Teszt kiosztása</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" >Teszt kijavítása</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek" >Felhasználók</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
+          >Gyakorló teszt kitöltés</v-btn
+        >
+        <v-btn color="info" variant="elevated" :loading="isPending">Teszt kiosztása</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending">Teszt kijavítása</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek"
+          >Felhasználók</v-btn
+        >
       </v-card-actions>
     </v-card>
 
@@ -231,8 +233,16 @@ const handleKereses = async () =>{
               <td>{{ kep.nev }}</td>
               <td>{{ kep.fajlnev }}</td>
               <td>
-                <v-btn class="ms-auto" text="Kitöltés" @click="handleKitoltClick(kep.id, kep.fajlnev)"></v-btn>
-                <v-btn class="ms-auto" text="Megtekintés" @click="handleMegtekintes(kep.id, kep.fajlnev)"></v-btn>
+                <v-btn
+                  class="ms-auto"
+                  text="Kitöltés"
+                  @click="handleKitoltClick(kep.id, kep.fajlnev)"
+                ></v-btn>
+                <v-btn
+                  class="ms-auto"
+                  text="Megtekintés"
+                  @click="handleMegtekintes(kep.id, kep.fajlnev)"
+                ></v-btn>
               </td>
             </tr>
           </tbody>
@@ -242,20 +252,25 @@ const handleKereses = async () =>{
 
     <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
       <v-card>
-        <v-card-title class="d-flex">Felhasználók
+        <v-card-title class="d-flex"
+          >Felhasználók
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
         </v-card-title>
         <v-card-actions>
           <v-select
-              label="Keresés osztály alapján"
-              :items="items"
-              v-model="selectedOsztaly"
-              @blur="handleKereses"
-            ></v-select>
-          <v-text-field label="Keresés név alapján" v-model="nameSearch" @input=handleKereses></v-text-field>
+            label="Keresés osztály alapján"
+            :items="items"
+            v-model="selectedOsztaly"
+            @blur="handleKereses"
+          ></v-select>
+          <v-text-field
+            label="Keresés név alapján"
+            v-model="nameSearch"
+            @input="handleKereses"
+          ></v-text-field>
           <v-alert v-if="error2" type="error" dismissible>
-          {{ error2 }}
+            {{ error2 }}
           </v-alert>
         </v-card-actions>
         <v-table>
@@ -275,16 +290,8 @@ const handleKereses = async () =>{
               <td>{{ user.osztaly }}</td>
               <!-- <td>{{ user.jogosultsag }}</td> -->
               <td>
-                <v-btn
-                  class="ms-auto"
-                  text="Feleletek"
-                  @click="handleKitoltClick(user.id,)"
-                ></v-btn>
-                <v-btn
-                  class="ms-auto"
-                  text="Törlés"
-                  @click="handleMegtekintes(user.id)"
-                ></v-btn>
+                <v-btn class="ms-auto" text="Feleletek" @click="handleKitoltClick(user.id)"></v-btn>
+                <v-btn class="ms-auto" text="Törlés" @click="handleMegtekintes(user.id)"></v-btn>
               </td>
             </tr>
           </tbody>

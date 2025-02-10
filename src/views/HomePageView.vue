@@ -75,6 +75,19 @@ const handleLogin = () => {
           <v-icon icon="mdi-chevron-right"> </v-icon>
         </a>
       </v-card-text>
+      <v-card-text
+        class="text-center"
+        @click="
+          () => {
+            push({ name: 'eljelejtettjelszo' })
+          }
+        "
+      >
+        <a class="text-green text-decoration-none" rel="noopener noreferrer">
+          Elfelejtettem a jelszavamat
+          <v-icon icon="mdi-chevron-right"> </v-icon>
+        </a>
+      </v-card-text>
       <v-alert v-if="error" type="error" dismissible>
         {{ error }}
       </v-alert>

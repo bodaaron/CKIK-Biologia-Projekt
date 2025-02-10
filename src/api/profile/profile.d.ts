@@ -1,31 +1,31 @@
 export type Profile = {
-    id: number,
-    nev: string,
-    email: string,
-    osztaly: string,
+  id: number
+  nev: string
+  email: string
+  osztaly: string
 }
 
 export type ChangeData = {
-    id: number,
-    nev: string,
-    email: string,
-    osztaly: string
+  id: number
+  nev: string
+  email: string
+  osztaly: string
 }
 
 export type ChangeResponse = {
-    token: string,
+  token: string
 }
 
 export type Kep = {
-    id: number,
-    nev: string,
-    fajlnev: number,
+  id: number
+  nev: string
+  fajlnev: number
 }
 
 export type User = {
-    id: number,
-    nev: string,
-    email: string,
-    osztaly: string,
-    jogosultsag: number,
+  id: number
+  nev: string
+  email: string
+  osztaly: string
+  jogosultsag: number
 }
