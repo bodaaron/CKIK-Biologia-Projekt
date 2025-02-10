@@ -172,9 +172,6 @@ const handleRegistration = async () => {
           <v-icon icon="mdi-chevron-right"> </v-icon>
         </a>
       </v-card-text>
-      <v-alert v-if="error" type="error" dismissible>
-          {{ error }}
-        </v-alert>
       <v-card-text
         class="text-center"
         @click="

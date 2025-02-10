@@ -1,6 +1,6 @@
 import axiosClient from '@/lib/axios'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import type { ChangeData, ChangeResponse, Forgot, Kep, Profile, User } from './profile'
+import type { ChangeData, ChangeResponse, Kep, Profile, User } from './profile'
 
 const getLoggedUser = async (): Promise<Profile> => {
   const email = localStorage.getItem('email')

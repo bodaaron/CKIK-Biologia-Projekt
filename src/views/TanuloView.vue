@@ -184,8 +184,8 @@ const handleEltunes = async () => {
     </v-card>
 
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Teszt kiválasztása
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
@@ -204,12 +204,12 @@ const handleEltunes = async () => {
               <td>{{ kep.fajlnev }}</td>
               <td>
                 <v-btn
-                  class="ms-auto"
+                  class="ms-auto kitoltes"
                   text="Kitöltés"
                   @click="handleKitoltClick(kep.id, kep.fajlnev)"
                 ></v-btn>
                 <v-btn
-                  class="ms-auto"
+                  class="ms-auto megtekintes"
                   text="Megtekintés"
                   @click="handleMegtekintes(kep.id, kep.fajlnev)"
                 ></v-btn>
@@ -254,5 +254,28 @@ const handleEltunes = async () => {
 .v-card,
 .v-container {
   z-index: 1;
+}
+.tesztTitle{
+  color: #009688;
+  background-color: #e0f2f1;
+}
+.kitoltes{
+  background-color: #800020;
+  color: #ece7e2;
+}
+.megtekintes{
+  background-color: #2e8b57;
+  color:#ece7e2;
+}
+.v-table{
+  background-color: #558B2F; 
+  color: #ece7e2;
+}
+.alul{
+  background-color: #e0f2f1;
+}
+.hattergomb{
+  background-color: #006663;
+  color: #ece7e2;
 }
 </style>
