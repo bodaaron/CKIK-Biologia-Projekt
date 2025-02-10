@@ -33,9 +33,17 @@ const userData = ref<ChangeData>({
   osztaly: '',
 })
 
+const osztalyTesztData = ({
+  selectedTeszt: '',
+  selectedOsztaly: '',
+})
+
 const dialog = ref(false)
 const dialog2 = ref(false)
+const dialog3 = ref(false)
 const selectedOsztaly = ref<string | null>(null)
+const selectedTesztOsztaly = ref<string | null>(null)
+const selectedTeszt = ref<string | null>(null)
 const kivalasztottKep = ref<number | null>(null)
 const eltunt = ref(false)
 
@@ -62,6 +70,7 @@ const handleGyakorloKitoltes = async () => {
 
 const handleUserek = async () => {
   dialog2.value = true
+  feltolt();
 }
 
 const handleKitoltClick = (id: number, tesztId: number) => {
@@ -75,6 +84,11 @@ const rules = {
     required: helpers.withMessage('Email cím megadása kötelező!', required),
   },
   osztaly: { required: helpers.withMessage('Kérjük, válasszon egy osztályt!', required) },
+}
+
+const tesztRules = {
+  selectedOsztaly: {required: helpers.withMessage('Osztály kiválasztása kötelező!',required)},
+  selectedTeszt: {required: helpers.withMessage('Teszt kiválasztása kötelező',required)},
 }
 
 const items = [
@@ -96,7 +110,11 @@ const items = [
   '9.C',
 ]
 
+var items2 = [""];
+
+
 const v$ = useVuelidate(rules, userData.value)
+const v$2 = useVuelidate(tesztRules, osztalyTesztData)
 
 const error = ref<string | null>(null)
 const error2 = ref<string | null>(null)
@@ -141,9 +159,24 @@ const handleEltunes = async () => {
 }
 
 const filteredUsers = ref<User[]>([]);
+
+const feltolt = async () =>{
+  if(!users.value) return
+  filteredUsers.value = users.value;
+}
 const nameSearch = ref('');
+const nameTesztSearch = ref('');
 
+const handleTesztKiosztOsztaly = async ()=>{
+  if(!kepek.value) return
+  dialog3.value = true;
+  items2 = kepek.value.map(item => item.nev);
+  console.log(kepek)
+}
 
+const handleKiosztOsztalyDB = async ()=>{
+  console.log("teszt kiosztva")
+}
 
 const handleKereses = async () =>{
   error2.value = "";
@@ -204,10 +237,9 @@ const handleKereses = async () =>{
         </v-form>
       </v-card-text>
       <v-card-actions>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek" >Felhasználók</v-btn>   
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKiosztOsztaly">Felelet kiosztása osztálynak</v-btn>
         <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" >Teszt kiosztása</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" >Teszt kijavítása</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek" >Felhasználók</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -275,20 +307,44 @@ const handleKereses = async () =>{
               <td>{{ user.osztaly }}</td>
               <!-- <td>{{ user.jogosultsag }}</td> -->
               <td>
-                <v-btn
-                  class="ms-auto"
-                  text="Feleletek"
-                  @click="handleKitoltClick(user.id,)"
-                ></v-btn>
-                <v-btn
-                  class="ms-auto"
-                  text="Törlés"
-                  @click="handleMegtekintes(user.id)"
-                ></v-btn>
+                <v-btn class="ms-auto" text="Feleletek" @click="handleUserFeleletek(user.id,)"></v-btn>
+                <v-btn class="ms-auto" text="Törlés" @click="handleTorles(user.id)"></v-btn>
               </td>
             </tr>
           </tbody>
         </v-table>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex">Felelet kiosztása osztálynak
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
+        </v-card-title>
+        <v-form @submit.prevent="handleKiosztOsztalyDB">
+          <v-card-actions>
+          <v-select
+              label="Kiosztható tesztek"
+              :items="items2"
+              :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
+              v-model="osztalyTesztData.selectedTeszt"
+              @blur="v$2.selectedTeszt.$touch"
+              @change="v$2.selectedTeszt.$touch"
+              required
+          ></v-select>
+          <v-select
+              label="Osztály választása"
+              :items="items"
+              v-model="osztalyTesztData.selectedOsztaly"
+              :error-messages="v$2.selectedOsztaly.$errors.map((e) => String(e.$message))"
+              @blur="v$2.selectedOsztaly.$touch"
+              @change="v$2.selectedOsztaly.$touch"
+              required
+          ></v-select>
+          </v-card-actions>
+          <v-btn type="submit">Teszt kiosztása</v-btn>
+        </v-form>
       </v-card>
     </v-dialog>
 
