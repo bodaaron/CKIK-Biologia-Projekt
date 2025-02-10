@@ -7,6 +7,7 @@ import TanarView from '@/views/TanarView.vue'
 import TesztPageView from '@/views/TesztPageView.vue'
 import MegtekintesView from '@/views/MegtekintesView.vue'
 import ForgotView from '@/views/ForgotView.vue'
+import ResetPasswordView from '@/views/ResetPasswordView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
       path: '/elfelejtettjelszo',
       name: 'eljelejtettjelszo',
       component: ForgotView,
+    },
+    {
+      path: '/jelszo-visszaallitas/:token',
+      name: 'resetPassword',
+      component: ResetPasswordView,
     },
   ],
 })
