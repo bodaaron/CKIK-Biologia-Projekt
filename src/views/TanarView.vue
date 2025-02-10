@@ -8,6 +8,7 @@ import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
+import type { OsztalynakFeleletData } from '@/api/felelet/felelet'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -33,7 +34,7 @@ const userData = ref<ChangeData>({
   osztaly: '',
 })
 
-const osztalyTesztData = ({
+const osztalyTesztData = ref<OsztalynakFeleletData>({
   selectedTeszt: '',
   selectedOsztaly: '',
 })
@@ -41,7 +42,9 @@ const osztalyTesztData = ({
 const dialog = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
+const dialog4 = ref(false)
 const selectedOsztaly = ref<string | null>(null)
+const selectedDiak = ref<string | null>(null)
 const selectedTesztOsztaly = ref<string | null>(null)
 const selectedTeszt = ref<string | null>(null)
 const kivalasztottKep = ref<number | null>(null)
@@ -174,8 +177,63 @@ const handleTesztKiosztOsztaly = async ()=>{
   console.log(kepek)
 }
 
+const handleTesztKiosztDiak = async (nev: string)=>{
+  dialog4.value = true;
+  selectedDiak.value = nev;
+}
+
 const handleKiosztOsztalyDB = async ()=>{
-  console.log("teszt kiosztva")
+  const isValid = await v$2.value.$validate()
+
+  if(isValid){
+  }
+
+  // if (isValid) {
+  //   await change(userData.value, {
+  //     onError: (err: any) => {
+  //       error.value = err.response.data.error
+  //       if (userData.value.email !== data.value?.email) {
+  //         userData.value.email = String(data.value?.email)
+  //       }
+  //     },
+  //     onSuccess() {
+  //       if (userData.value.email !== data.value?.email) {
+  //         alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
+  //         push({ name: 'home' })
+  //       } else {
+  //         alert('Sikeres adatmódosítás!')
+  //         window.location.reload()
+  //       }
+  //     },
+  //   })
+  // }
+}
+
+const handleKiosztDiakDB = async ()=>{
+  const isValid = await v$2.value.$validate()
+
+  if(isValid){
+  }
+
+  // if (isValid) {
+  //   await change(userData.value, {
+  //     onError: (err: any) => {
+  //       error.value = err.response.data.error
+  //       if (userData.value.email !== data.value?.email) {
+  //         userData.value.email = String(data.value?.email)
+  //       }
+  //     },
+  //     onSuccess() {
+  //       if (userData.value.email !== data.value?.email) {
+  //         alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
+  //         push({ name: 'home' })
+  //       } else {
+  //         alert('Sikeres adatmódosítás!')
+  //         window.location.reload()
+  //       }
+  //     },
+  //   })
+  // }
 }
 
 const handleKereses = async () =>{
@@ -308,6 +366,7 @@ const handleKereses = async () =>{
               <!-- <td>{{ user.jogosultsag }}</td> -->
               <td>
                 <v-btn class="ms-auto" text="Feleletek" @click="handleUserFeleletek(user.id,)"></v-btn>
+                <v-btn class="ms-auto" text="Felelet kiosztása" @click="handleTesztKiosztDiak(user.nev)"></v-btn>
                 <v-btn class="ms-auto" text="Törlés" @click="handleTorles(user.id)"></v-btn>
               </td>
             </tr>
@@ -347,6 +406,30 @@ const handleKereses = async () =>{
         </v-form>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex">Felelet kiosztása {{selectedDiak}} tanulónak
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
+        </v-card-title>
+        <v-form @submit.prevent="handleKiosztDiakDB">
+          <v-card-actions>
+          <v-select
+              label="Kiosztható tesztek"
+              :items="items2"
+              :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
+              v-model="osztalyTesztData.selectedTeszt"
+              @blur="v$2.selectedTeszt.$touch"
+              @change="v$2.selectedTeszt.$touch"
+              required
+          ></v-select>
+          </v-card-actions>
+          <v-btn type="submit">Teszt kiosztása</v-btn>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
 
     <v-carousel
       class="full-background-carousel behind"
