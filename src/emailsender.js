@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const crypto = require('crypto')
 require('dotenv').config()
 
 const transporter = nodemailer.createTransport({
@@ -9,8 +10,15 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex')
+}
+
 function sendMail(toEmail) {
   return new Promise((resolve, reject) => {
+    const token = generateToken()
+    const resetPasswordLink = `http://localhost:5173/jelszo-visszaallitas/${token}`
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: toEmail,
@@ -21,7 +29,7 @@ function sendMail(toEmail) {
           <p style="font-size: 16px;">Kedves Felhasználó,</p>
           <p style="font-size: 16px;">A linkre kattintva megváltoztathatja a jelszavát!</p>
           <div style="text-align: center; margin-top: 20px;">
-            <a href="http://yourwebsite.com/reset-password?email=${toEmail}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Jelszó változtatás</a>
+            <a href="${resetPasswordLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Jelszó változtatás</a>
           </div>
           <p style="font-size: 16px;">Amennyiben nem ön kérte a jelszó változtatás, hagyja figyelmen kívül ezt az üzenetet.</p>
           <p style="font-size: 16px;">Üdvözlettel,<br>A Biology Webpage Csapata</p>
