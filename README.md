@@ -43,7 +43,7 @@ npm run test:unit
 ```sh
 npm run lint
 ```
-Database Setup
+### Database Setup
 ```sh
 INSERT INTO kep values(null,"Gerinctelenek",064);
 INSERT INTO kepAdat values(null,1,"Álláb",1645,540,21,1);
