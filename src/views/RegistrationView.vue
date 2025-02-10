@@ -74,9 +74,6 @@ const handleRegistration = async () => {
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <v-card-title class="text-center">Regisztráció</v-card-title>
       <v-card-text>
-        <v-alert v-if="error" type="error" dismissible>
-          {{ error }}
-        </v-alert>
         <v-form @submit.prevent="handleRegistration">
           <v-text-field
             v-model="registrationDataRef.nev"
@@ -143,6 +140,22 @@ const handleRegistration = async () => {
             </v-btn>
           </v-card-actions>
         </v-form>
+      </v-card-text>
+      <v-alert v-if="error" type="error" dismissible>
+          {{ error }}
+        </v-alert>
+      <v-card-text
+        class="text-center"
+        @click="
+          () => {
+            push({ name: 'home' })
+          }
+        "
+      >
+        <a class="text-green text-decoration-none" rel="noopener noreferrer">
+          Ha már van fiókja itt bejelentkezhet
+          <v-icon icon="mdi-chevron-right"> </v-icon>
+        </a>
       </v-card-text>
     </v-card>
   </v-container>

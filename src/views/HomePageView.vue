@@ -71,7 +71,7 @@ const handleLogin = () => {
         "
       >
         <a class="text-green text-decoration-none" rel="noopener noreferrer">
-          Regisztráció
+          Ha még nincs fiókja, itt regisztrálhat
           <v-icon icon="mdi-chevron-right"> </v-icon>
         </a>
       </v-card-text>
