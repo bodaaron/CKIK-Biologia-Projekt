@@ -43,3 +43,23 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+Database Setup
+```sh
+INSERT INTO kep values(null,"Gerinctelenek",064);
+INSERT INTO kepAdat values(null,1,"Álláb",1645,540,21,1);
+INSERT INTO kepAdat values(null,2,"Mag",1642,609,21,1);
+INSERT INTO kepAdat values(null,3,"Vacuolum",1644,679,21,1);
+INSERT INTO kepAdat values(null,4,"Cilia",1579,2099,21,1);
+INSERT INTO kepAdat values(null,5,"Zárványtest",1506,2131,21,1);
+INSERT INTO kepAdat values(null,6,"Emésztő rendszer",1431,2146,21,1);
+INSERT INTO kepAdat values(null,7,"Láb vacuolum",1359,2193,21,1);
+INSERT INTO kepAdat values(null,8,"Gullet",1285,2227,21,1);
+INSERT INTO kepAdat values(null,9,"Szájnyílás",1220,2251,21,1);
+INSERT INTO kepAdat values(null,10,"Cilia",479,1747,21,1);
+INSERT INTO kepAdat values(null,11,"Összehúzódó vacuolumok",547,1715,21,1);
+INSERT INTO kepAdat values(null,12,"Kiválasztó nyílás",629,1700,21,1);
+INSERT INTO kepAdat values(null,13,"Láb vacuolum",708,1667,21,1);
+INSERT INTO kepAdat values(null,14,"Nagymag",782,1640,21,1);
+INSERT INTO kepAdat values(null,15,"Kismag",853,1619,21,1); 
+INSERT INTO felhasznalo (nev, email, jelszo, osztaly, jogosultsag)   VALUES ('Kiss Péter', 'kiss.peter@gmail.com', '$2b$10$IU65XRxR7h1Ah9TiuD65pexc/MYhbo/0Neb.Tsz0.q8g7Tx2TpmGe', '10.A', 'tanulo'); 
+```
