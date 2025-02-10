@@ -244,8 +244,8 @@ const handleKereses = async () =>{
     </v-card>
 
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Teszt kiválasztása
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
@@ -263,8 +263,8 @@ const handleKereses = async () =>{
               <td>{{ kep.nev }}</td>
               <td>{{ kep.fajlnev }}</td>
               <td>
-                <v-btn class="ms-auto" text="Kitöltés" @click="handleKitoltClick(kep.id, kep.fajlnev)"></v-btn>
-                <v-btn class="ms-auto" text="Megtekintés" @click="handleMegtekintes(kep.id, kep.fajlnev)"></v-btn>
+                <v-btn class="ms-auto kitoltes" text="Kitöltés" @click="handleKitoltClick(kep.id, kep.fajlnev)"></v-btn>
+                <v-btn class="ms-auto megtekintes" text="Megtekintés" @click="handleMegtekintes(kep.id, kep.fajlnev)"></v-btn>
               </td>
             </tr>
           </tbody>
@@ -307,8 +307,8 @@ const handleKereses = async () =>{
               <td>{{ user.osztaly }}</td>
               <!-- <td>{{ user.jogosultsag }}</td> -->
               <td>
-                <v-btn class="ms-auto" text="Feleletek" @click="handleUserFeleletek(user.id,)"></v-btn>
-                <v-btn class="ms-auto" text="Törlés" @click="handleTorles(user.id)"></v-btn>
+                <v-btn class="ms-auto feleletGomb" text="Feleletek" @click="handleUserFeleletek(user.id,)"></v-btn>
+                <v-btn class="ms-auto torlesGomb" text="Törlés" @click="handleTorles(user.id)"></v-btn>
               </td>
             </tr>
           </tbody>
@@ -382,5 +382,36 @@ const handleKereses = async () =>{
 .v-card,
 .v-container {
   z-index: 1;
+}
+.tesztTitle{
+  color: #009688;
+  background-color: #e0f2f1;
+}
+.kitoltes{
+  background-color: #800020;
+  color: #ece7e2;
+}
+.megtekintes{
+  background-color: #2e8b57;
+  color:#ece7e2;
+}
+.v-table{
+  background-color: #558B2F; 
+  color: #ece7e2;
+}
+.alul{
+  background-color: #e0f2f1;
+}
+.hattergomb{
+  background-color: #006663;
+  color: #ece7e2;
+}
+.torlesGomb{
+  background-color: #B71C1C;
+  color: #FFEBEE;
+}
+.feleletGomb{
+  background-color: #2e8b57;
+  color: #DCEDC8;
 }
 </style>
