@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import type { ChangeData, User } from '@/api/profile/profile'
 import { usechange, useGetKepek, useGetLoggedUser, useGetUserek } from '@/api/profile/profileQuery'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
-import type { OsztalynakFeleletData } from '@/api/felelet/felelet'
+import type { DiaknakFeleletData, OsztalynakFeleletData } from '@/api/felelet/felelet'
+import { useDiakFelelet } from '@/api/felelet/feleletQuery'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -25,6 +26,7 @@ const { data } = useGetLoggedUser()
 const { data: kepek, isLoading } = useGetKepek()
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
+const { mutate: diakFelelet} = useDiakFelelet()
 const { push } = useRouter()
 
 const userData = ref<ChangeData>({
@@ -37,6 +39,12 @@ const userData = ref<ChangeData>({
 const osztalyTesztData = ref<OsztalynakFeleletData>({
   selectedTeszt: '',
   selectedOsztaly: '',
+})
+
+const diakTesztData = ref<DiaknakFeleletData>({
+  diakId: 0,
+  tanarId: 0,
+  kepId: 0,
 })
 
 const dialog = ref(false)
@@ -88,9 +96,13 @@ const rules = {
   osztaly: { required: helpers.withMessage('Kérjük, válasszon egy osztályt!', required) },
 }
 
-const tesztRules = {
+const tesztRulesOsztaly = {
   selectedOsztaly: { required: helpers.withMessage('Osztály kiválasztása kötelező!', required) },
   selectedTeszt: { required: helpers.withMessage('Teszt kiválasztása kötelező', required) },
+}
+
+const tesztRulesDiak = {
+  kepId: { required: helpers.withMessage('Teszt kiválasztása kötelező', required) },
 }
 
 const items = [
@@ -112,10 +124,11 @@ const items = [
   '9.C',
 ]
 
-var items2 = ['']
+var items2 = [ {nev:'',id:0}]
 
 const v$ = useVuelidate(rules, userData.value)
-const v$2 = useVuelidate(tesztRules, osztalyTesztData)
+const v$2 = useVuelidate(tesztRulesOsztaly, osztalyTesztData)
+const v$3 = useVuelidate(tesztRulesDiak, diakTesztData)
 
 const error = ref<string | null>(null)
 const error2 = ref<string | null>(null)
@@ -163,21 +176,24 @@ const filteredUsers = ref<User[]>([])
 
 const feltolt = async () => {
   if (!users.value) return
+  
   filteredUsers.value = users.value
 }
 const nameSearch = ref('')
 const nameTesztSearch = ref('')
 
 const handleTesztKiosztOsztaly = async () => {
-  if (!kepek.value) return
   dialog3.value = true
-  items2 = kepek.value.map((item) => item.nev)
-  console.log(kepek)
+  if(!kepek.value) return
+  items2 = kepek.value.map(item => ({ nev: item.nev, id: item.id }));
 }
 
-const handleTesztKiosztDiak = async (nev: string) => {
+const handleTesztKiosztDiak = async (nev: string,id: number) => {
   dialog4.value = true
   selectedDiak.value = nev
+  diakTesztData.value.diakId = id;
+  if(!kepek.value) return
+  items2 = kepek.value.map(item => ({ nev: item.nev, id: item.id }));
 }
 
 const handleKiosztOsztalyDB = async () => {
@@ -208,30 +224,17 @@ const handleKiosztOsztalyDB = async () => {
 }
 
 const handleKiosztDiakDB = async () => {
-  const isValid = await v$2.value.$validate()
+  const isValid = await v$3.value.$validate()
+
+  diakTesztData.value.tanarId = Number(data.value?.id);
 
   if (isValid) {
+    await diakFelelet(diakTesztData.value,{
+      onSuccess(){
+        alert('Felelet sikeresen kiosztva!')
+      }
+    })
   }
-
-  // if (isValid) {
-  //   await change(userData.value, {
-  //     onError: (err: any) => {
-  //       error.value = err.response.data.error
-  //       if (userData.value.email !== data.value?.email) {
-  //         userData.value.email = String(data.value?.email)
-  //       }
-  //     },
-  //     onSuccess() {
-  //       if (userData.value.email !== data.value?.email) {
-  //         alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
-  //         push({ name: 'home' })
-  //       } else {
-  //         alert('Sikeres adatmódosítás!')
-  //         window.location.reload()
-  //       }
-  //     },
-  //   })
-  // }
 }
 
 const handleKereses = async () => {
@@ -395,7 +398,7 @@ const handleKereses = async () => {
                 <v-btn
                   class="ms-auto torlesGomb"
                   text="Felelet kiosztása"
-                  @click="handleTesztKiosztDiak(user.nev)"
+                  @click="handleTesztKiosztDiak(user.nev,user.id)"
                 ></v-btn>
                 <v-btn
                   class="ms-auto torlesGomb"
@@ -454,10 +457,12 @@ const handleKereses = async () => {
             <v-select
               label="Kiosztható tesztek"
               :items="items2"
-              :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
-              v-model="osztalyTesztData.selectedTeszt"
-              @blur="v$2.selectedTeszt.$touch"
-              @change="v$2.selectedTeszt.$touch"
+              v-model="diakTesztData.kepId"
+              item-title="nev"
+              item-value="id"
+              :error-messages="v$3.kepId.$errors.map((e) => String(e.$message))"
+              @blur="v$3.kepId.$touch"
+              @change="v$3.kepId.$touch"
               required
             ></v-select>
           </v-card-actions>
