@@ -6,4 +6,6 @@ const feleletController = require("../controllers/feleletController");
 
 router.post("/diak",feleletController.createFeleletDiak);
 
+router.get("/:id",feleletController.getDiakFeleletek);
+
 module.exports = router;

@@ -8,3 +8,10 @@ export type DiaknakFeleletData = {
     tanarId: number,
     kepId: number,
 }
+
+export type Felelet = {
+    id: number,
+    kepId: number,
+    tanarId: number,
+    kitoltesDatum: Date,
+}

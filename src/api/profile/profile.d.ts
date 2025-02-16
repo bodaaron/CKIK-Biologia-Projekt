@@ -3,6 +3,7 @@ export type Profile = {
   nev: string
   email: string
   osztaly: string
+  jogosultsag: number
 }
 
 export type ChangeData = {

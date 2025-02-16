@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ChangeData } from '@/api/profile/profile'
-import { usechange, useGetKepek, useGetLoggedUser } from '@/api/profile/profileQuery'
+import { usechange, useGetKepek, useGetLoggedUser, useGetUserek } from '@/api/profile/profileQuery'
 import { computed, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
@@ -8,6 +8,7 @@ import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
+import { useGetDiakFeleletek } from '@/api/felelet/feleletQuery'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -22,6 +23,8 @@ const slides = [
 
 const { data } = useGetLoggedUser()
 const { data: kepek, isLoading } = useGetKepek()
+const { data: feleletek} = useGetDiakFeleletek(Number(localStorage.getItem('id')))
+const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
 const { push } = useRouter()
 
@@ -121,8 +124,6 @@ const handleChange = async () => {
 }
 
 const handleMegtekintes = async (id: number, fajlnev: number) => {
-  // dialog2.value = true;
-  // kivalasztottKep.value = fajlnev;
   push({ name: 'megtekintes', params: { id: id, fajlnev: fajlnev } })
 }
 
@@ -132,6 +133,11 @@ const handleEltunes = async () => {
   } else {
     eltunt.value = false
   }
+}
+
+const handleTesztKitoltes = async () =>{
+  dialog2.value = true;
+  console.log(feleletek);
 }
 </script>
 <template>
@@ -176,10 +182,8 @@ const handleEltunes = async () => {
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn>Teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
-          >Gyakorló teszt kitöltés</v-btn
-        >
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKitoltes">Teszt kitöltés</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -212,6 +216,41 @@ const handleEltunes = async () => {
                   class="ms-auto megtekintes"
                   text="Megtekintés"
                   @click="handleMegtekintes(kep.id, kep.fajlnev)"
+                ></v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle">Teszt kiválasztása
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
+        </v-card-title>
+        <v-table>
+          <thead>
+            <tr>
+              <th class="text-left">Név</th>
+              <th class="text-left">Sorszám</th>
+              <th class="text-left">Tanár</th>
+              <th class="text-left">Kitöltve</th>
+              <th class="text-left">Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="felelet in feleletek" :key="felelet.id" v-if="kepek">
+              <td>{{ kepek.find(k => k.id == felelet.kepId)?.nev }}</td>
+              <td>{{ kepek.find(k => k.id == felelet.kepId)?.fajlnev }}</td>
+              <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
+              <td>{{ felelet.kitoltesDatum || "Ez a felelet még nincs kitöltve"}}</td>
+              <td>
+                <v-btn
+                  class="ms-auto kitoltes"
+                  text="Kitöltés"
+                  @click="handleKitoltClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev))"
                 ></v-btn>
               </td>
             </tr>

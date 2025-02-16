@@ -15,5 +15,18 @@ class FeleletRepository
         
         return newFelelet;
     }
+
+    async getDiakFeleletek(id)
+    {   
+        return await this.felelet.findAll
+        (
+            {
+                where:
+                {
+                    diakId: id
+                }
+            }
+        );
+    }
 }
 module.exports = new FeleletRepository(db);

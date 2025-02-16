@@ -44,7 +44,7 @@ const osztalyTesztData = ref<OsztalynakFeleletData>({
 const diakTesztData = ref<DiaknakFeleletData>({
   diakId: 0,
   tanarId: 0,
-  kepId: 0,
+  kepId: undefined as unknown as number,
 })
 
 const dialog = ref(false)
@@ -232,6 +232,7 @@ const handleKiosztDiakDB = async () => {
     await diakFelelet(diakTesztData.value,{
       onSuccess(){
         alert('Felelet sikeresen kiosztva!')
+        dialog4.value = false;
       }
     })
   }
