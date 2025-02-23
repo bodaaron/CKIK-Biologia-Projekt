@@ -8,7 +8,9 @@ import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
-import { useGetDiakFeleletek } from '@/api/felelet/feleletQuery'
+import { useGetDiakFeleletek, useGetValaszok } from '@/api/felelet/feleletQuery'
+import type { Valaszok } from '@/api/felelet/felelet'
+import type { UseQueryReturnType } from '@tanstack/vue-query'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -40,6 +42,7 @@ const dialog2 = ref(false)
 const dialog3 = ref(false)
 const kivalasztottKep = ref<number | null>(null)
 const eltunt = ref(false)
+
 
 watchEffect(() => {
   if (data.value) {
@@ -145,10 +148,10 @@ const handleTesztKitoltes = async () =>{
   console.log(feleletek);
 }
 
-const handleValaszokMegtekint= async () =>{
+const handleValaszokMegtekint= async (id: Number) =>{
   dialog3.value = true;
-
 }
+
 </script>
 <template>
   <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
@@ -262,10 +265,10 @@ const handleValaszokMegtekint= async () =>{
                   text="Kitöltés"
                   @click="handleKitoltTesztClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev), Number(felelet.id))"
                 ></v-btn>
-                <v-btn
+                <v-btn v-if="felelet.kitoltesDatum != null"
                   class="ms-auto"
                   text="Válaszok megtekintése"
-                  @click="handleValaszokMegtekint()"
+                  @click="handleValaszokMegtekint(felelet.id)"
                 ></v-btn>
               </td>
             </tr>
@@ -276,7 +279,7 @@ const handleValaszokMegtekint= async () =>{
 
     <v-dialog max-width="500" v-model="dialog3" transition="dialog-bottom-transition" fullscreen>
     <v-card>
-      <v-card-title class="d-flex">vÁLASZOK
+      <v-card-title class="d-flex">Válaszok
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
       </v-card-title>
@@ -297,13 +300,12 @@ const handleValaszokMegtekint= async () =>{
           </th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="adat in adatok":key="adat.id">
-          <td>{{ adat.adatSorszam }}</td>
-          <td>{{ adat.helyesValasz }}</td>
-          <td>{{ answers[adat.id] || 'Nincs válasz' }}</td>
+      <!-- <tbody>
+        <tr v-for="valasz in valaszok?.data":key="valasz.id">
+          <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
+          <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td>
         </tr>
-      </tbody>
+      </tbody> -->
       </v-table>  
     </v-card>
   </v-dialog>

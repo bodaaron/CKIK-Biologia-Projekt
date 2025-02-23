@@ -20,3 +20,9 @@ export type Valasz = {
     feleletId: number,
     valasz: string
 }
+
+export type Valaszok = {
+    id: number,
+    valasz: string,
+    elfogadotte: number,
+}

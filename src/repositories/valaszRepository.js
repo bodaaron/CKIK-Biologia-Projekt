@@ -15,5 +15,18 @@ class ValaszRepository
         
         return newValasz;
     }
+
+    async getValaszok(id)
+    {   
+        return await this.valaszok.findAll
+        (
+            {
+                where:
+                {
+                    feleletId: id
+                }
+            }
+        );
+    }
 }
 module.exports = new ValaszRepository(db);

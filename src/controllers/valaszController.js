@@ -17,3 +17,11 @@ exports.createValasz= async (req, res, next) => {
     res.status(400).send('Fail')
   }
 }
+
+exports.getValaszok = async (req, res, next) =>
+  {
+      const {id} = req.params;
+  
+      res.status(200).send(await valaszService.getValaszok(id));
+  }
+  

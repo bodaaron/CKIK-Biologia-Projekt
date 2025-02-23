@@ -2,7 +2,7 @@ import axiosClient from "@/lib/axios"
 import { useMutation, useQuery } from "@tanstack/vue-query"
 import { useRoute, useRouter } from "vue-router"
 import { AxiosError } from "axios"
-import type { DiaknakFeleletData, Felelet, Valasz } from "./felelet"
+import type { DiaknakFeleletData, Felelet, Valasz, Valaszok } from "./felelet"
 
 const diakFelelet = async (data: DiaknakFeleletData) => {
     const response = await axiosClient.post("http://localhost:3000/feleletek/diak", data)
@@ -68,3 +68,17 @@ export const useFeleletDateUpdate = () => {
         },
     })
 }
+
+
+const getValaszok = async (id:number): Promise<Valaszok[]> => {
+    const response = await axiosClient.get(`http://localhost:3000/valaszok/${id}`)
+    return response.data
+}
+
+export const useGetValaszok = (id: number) => {
+    return useQuery({
+        queryKey: ["getValaszok", id],
+        queryFn: () => getValaszok(id),
+        enabled: !!id
+    });
+};
