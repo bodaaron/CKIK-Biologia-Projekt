@@ -8,6 +8,7 @@ import TesztPageView from '@/views/TesztPageView.vue'
 import MegtekintesView from '@/views/MegtekintesView.vue'
 import ForgotView from '@/views/ForgotView.vue'
 import ResetPasswordView from '@/views/ResetPasswordView.vue'
+import FeleletView from '@/views/FeleletView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +37,11 @@ const router = createRouter({
       path: '/teszt/:id/:tesztId',
       name: 'teszt',
       component: TesztPageView,
+    },
+    {
+      path: '/felelet/:id/:tesztId/:feleletId',
+      name: 'felelet',
+      component: FeleletView,
     },
     {
       path: '/megtekintes/:id/:fajlnev',

@@ -21,6 +21,8 @@ const adatRoutes = require("./routes/adatRoutes")
 
 const feleletRoutes = require("./routes/feleletRoutes")
 
+const valaszRoutes = require("./routes/valaszRoutes")
+
 app.use("/users", userRoutes);
 
 app.use("/kepek",kepRoutes);
@@ -28,5 +30,7 @@ app.use("/kepek",kepRoutes);
 app.use("/adatok",adatRoutes);
 
 app.use("/feleletek",feleletRoutes);
+
+app.use("/valaszok",valaszRoutes)
 
 module.exports = app;

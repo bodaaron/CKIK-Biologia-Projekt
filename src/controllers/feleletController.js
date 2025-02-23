@@ -1,3 +1,4 @@
+const { DATE } = require('sequelize');
 const FeleletService = require('../services/feleletService')
 
 exports.createFeleletDiak = async (req, res, next) => {
@@ -23,4 +24,10 @@ exports.createFeleletDiak = async (req, res, next) => {
 exports.getDiakFeleletek = async (req,res,next) =>{
   const {id} = req.params;
   res.status(200).send(await FeleletService.getDiakFeleletek(id));
+}
+
+exports.updateFeleletDate = async (req,res,next) =>{
+  const {date} = new Date;
+  const {id} = req.params;
+  res.status(200).send(await FeleletService.updateFeleletDate(date,id));
 }

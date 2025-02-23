@@ -1,3 +1,4 @@
+const { DATE } = require("sequelize");
 const db = require("../database/dbContext")
 
 class FeleletRepository
@@ -27,6 +28,25 @@ class FeleletRepository
                 }
             }
         );
+    }
+
+    async updateFeleletDate(date,id)
+    {
+        const felelet = await this.felelet.findOne
+        (
+            {
+                where:
+                {
+                    id: id,
+                }
+            }
+        )
+
+        felelet.set({
+            kitoltesDatum: Date.now()
+        });
+
+        await felelet.save();
     }
 }
 module.exports = new FeleletRepository(db);

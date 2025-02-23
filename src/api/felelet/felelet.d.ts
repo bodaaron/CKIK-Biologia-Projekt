@@ -15,3 +15,8 @@ export type Felelet = {
     tanarId: number,
     kitoltesDatum: Date,
 }
+
+export type Valasz = {
+    feleletId: number,
+    valasz: string
+}

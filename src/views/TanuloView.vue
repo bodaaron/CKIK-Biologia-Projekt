@@ -37,6 +37,7 @@ const userData = ref<ChangeData>({
 
 const dialog = ref(false)
 const dialog2 = ref(false)
+const dialog3 = ref(false)
 const kivalasztottKep = ref<number | null>(null)
 const eltunt = ref(false)
 
@@ -62,6 +63,10 @@ const handleGyakorloKitoltes = async () => {
 
 const handleKitoltClick = (id: number, tesztId: number) => {
   push({ name: 'teszt', params: { id: id, tesztId: tesztId } })
+}
+
+const handleKitoltTesztClick = (id: number, tesztId: number, feleletId: number) => {
+  push({ name: 'felelet', params: { id: id, tesztId: tesztId, feleletId: feleletId } })
 }
 
 const rules = {
@@ -138,6 +143,11 @@ const handleEltunes = async () => {
 const handleTesztKitoltes = async () =>{
   dialog2.value = true;
   console.log(feleletek);
+}
+
+const handleValaszokMegtekint= async () =>{
+  dialog3.value = true;
+
 }
 </script>
 <template>
@@ -247,10 +257,15 @@ const handleTesztKitoltes = async () =>{
               <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
               <td>{{ felelet.kitoltesDatum || "Ez a felelet még nincs kitöltve"}}</td>
               <td>
-                <v-btn
+                <v-btn v-if="felelet.kitoltesDatum == null"
                   class="ms-auto kitoltes"
                   text="Kitöltés"
-                  @click="handleKitoltClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev))"
+                  @click="handleKitoltTesztClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev), Number(felelet.id))"
+                ></v-btn>
+                <v-btn
+                  class="ms-auto"
+                  text="Válaszok megtekintése"
+                  @click="handleValaszokMegtekint()"
                 ></v-btn>
               </td>
             </tr>
@@ -258,6 +273,40 @@ const handleTesztKitoltes = async () =>{
         </v-table>
       </v-card>
     </v-dialog>
+
+    <v-dialog max-width="500" v-model="dialog3" transition="dialog-bottom-transition" fullscreen>
+    <v-card>
+      <v-card-title class="d-flex">vÁLASZOK
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
+      </v-card-title>
+      <v-table>
+      <thead>
+        <tr>
+          <th class="text-left">
+            Sorszám
+          </th>
+          <th class="text-left">
+            Helyes válasz
+          </th>
+          <th class="text-left">
+            Válaszod
+          </th>
+          <th class="text-left">
+            Elfogadva
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="adat in adatok":key="adat.id">
+          <td>{{ adat.adatSorszam }}</td>
+          <td>{{ adat.helyesValasz }}</td>
+          <td>{{ answers[adat.id] || 'Nincs válasz' }}</td>
+        </tr>
+      </tbody>
+      </v-table>  
+    </v-card>
+  </v-dialog>
 
     <v-carousel
       class="full-background-carousel behind"
