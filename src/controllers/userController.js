@@ -42,8 +42,6 @@ exports.getUser = async (req, res, next) => {
   res.status(200).send(user)
 }
 
-var LogEmail = ''
-
 exports.loginUser = async (req, res, next) => {
   const { email, jelszo } = req.body
 
@@ -73,7 +71,6 @@ exports.modUser = async (req, res, next) => {
   if (userek.some((user) => user.email === email && user.id != id)) {
     return res.status(400).json({ error: 'Ez az email cím már használatban van!' })
   } else {
-    res.status(200).send(await userService.modUser(LogEmail, nev, email, osztaly))
-    LogEmail = email
+    res.status(200).send(await userService.modUser(id, nev, email, osztaly))
   }
 }

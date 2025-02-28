@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useGetAdatok } from '@/api/kep/kepQuery';
 import { computed, onMounted, ref, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 
@@ -12,6 +12,7 @@ const adat = ref<number>();
 adat.value = Number(route.params.id);
 
 const { data: adatok, isLoading } = useGetAdatok(Number(adat.value));
+const {back} = useRouter();
 
 const imgElement = ref<HTMLImageElement | null>(null);
 const areas = ref<any[]>([]);
@@ -112,4 +113,13 @@ document.onclick = function(e){
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <v-btn
+    class="mb-8"
+    size="large"
+    variant="elevated"
+    block
+    @click="back()">
+    Vissza a főoldalra
+  </v-btn>
 </template>

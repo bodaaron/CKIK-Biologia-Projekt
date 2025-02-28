@@ -30,7 +30,7 @@ const { mutate: diakFelelet} = useDiakFelelet()
 const { push } = useRouter()
 
 const userData = ref<ChangeData>({
-  id: Number(localStorage.getItem('id')),
+  id: 0,
   nev: '',
   email: '',
   osztaly: '',
@@ -60,6 +60,7 @@ const eltunt = ref(false)
 
 watchEffect(() => {
   if (data.value) {
+    userData.value.id == data.value?.id || 0
     userData.value.nev = data.value.nev || ''
     userData.value.email = data.value.email || ''
     userData.value.osztaly = data.value.osztaly || ''
@@ -68,6 +69,7 @@ watchEffect(() => {
 
 const hasChanges = computed(() => {
   return (
+    userData.value.id !== data.value?.id ||
     userData.value.nev !== data.value?.nev ||
     userData.value.email !== data.value?.email ||
     userData.value.osztaly !== data.value?.osztaly

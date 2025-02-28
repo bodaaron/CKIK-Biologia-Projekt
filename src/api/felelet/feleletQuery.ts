@@ -10,13 +10,8 @@ const diakFelelet = async (data: DiaknakFeleletData) => {
 }
 
 export const useDiakFelelet = () => {
-    const {push} = useRouter()
     return useMutation({
         mutationFn: diakFelelet,
-        onSuccess(data) {
-        },
-        onError() {
-        },
     })
 }
 
@@ -39,11 +34,8 @@ const valaszLeadas = async (data: Valasz) => {
 }
 
 export const useValaszLeadas = () => {
-    const {push} = useRouter()
     return useMutation({
         mutationFn: valaszLeadas,
-        onSuccess(data) {
-        },
         onError(error: any) {
             console.log(error);
             throw new Error(error.response.data.error);
@@ -57,11 +49,8 @@ const feleletDateUpdate = async (id: Number) => {
 }
 
 export const useFeleletDateUpdate = () => {
-    const {push} = useRouter()
     return useMutation({
         mutationFn: feleletDateUpdate,
-        onSuccess(data) {
-        },
         onError(error: any) {
             console.log(error);
             throw new Error(error.response.data.error);
@@ -75,10 +64,8 @@ const getValaszok = async (id:number): Promise<Valaszok[]> => {
     return response.data
 }
 
-export const useGetValaszok = (id: number) => {
-    return useQuery({
-        queryKey: ["getValaszok", id],
-        queryFn: () => getValaszok(id),
-        enabled: !!id
-    });
-};
+export const useGetValaszok = () =>{
+    return useMutation({
+        mutationFn: (id: number) => getValaszok(id)
+    })
+}

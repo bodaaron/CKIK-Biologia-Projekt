@@ -28,10 +28,12 @@ const { data: kepek, isLoading } = useGetKepek()
 const { data: feleletek} = useGetDiakFeleletek(Number(localStorage.getItem('id')))
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
+const { mutateAsync: getValaszok} = useGetValaszok();
 const { push } = useRouter()
+const valaszok = ref<Valaszok[]>([]);
 
 const userData = ref<ChangeData>({
-  id: Number(localStorage.getItem('id')),
+  id: 0,
   nev: '',
   email: '',
   osztaly: '',
@@ -40,12 +42,12 @@ const userData = ref<ChangeData>({
 const dialog = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
-const kivalasztottKep = ref<number | null>(null)
 const eltunt = ref(false)
 
 
 watchEffect(() => {
   if (data.value) {
+    userData.value.id = data.value.id || 0
     userData.value.nev = data.value.nev || ''
     userData.value.email = data.value.email || ''
     userData.value.osztaly = data.value.osztaly || ''
@@ -54,6 +56,7 @@ watchEffect(() => {
 
 const hasChanges = computed(() => {
   return (
+    userData.value.id !== data.value?.id ||
     userData.value.nev !== data.value?.nev ||
     userData.value.email !== data.value?.email ||
     userData.value.osztaly !== data.value?.osztaly
@@ -150,6 +153,8 @@ const handleTesztKitoltes = async () =>{
 
 const handleValaszokMegtekint= async (id: Number) =>{
   dialog3.value = true;
+  valaszok.value = await getValaszok(Number(id));
+  console.log(valaszok.value);
 }
 
 </script>
@@ -258,7 +263,8 @@ const handleValaszokMegtekint= async (id: Number) =>{
               <td>{{ kepek.find(k => k.id == felelet.kepId)?.nev }}</td>
               <td>{{ kepek.find(k => k.id == felelet.kepId)?.fajlnev }}</td>
               <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
-              <td>{{ felelet.kitoltesDatum || "Ez a felelet még nincs kitöltve"}}</td>
+              <td>{{ felelet.kitoltesDatum ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', { 
+                  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Ez a felelet még nincs kitöltve'}}</td>
               <td>
                 <v-btn v-if="felelet.kitoltesDatum == null"
                   class="ms-auto kitoltes"
@@ -290,9 +296,6 @@ const handleValaszokMegtekint= async (id: Number) =>{
             Sorszám
           </th>
           <th class="text-left">
-            Helyes válasz
-          </th>
-          <th class="text-left">
             Válaszod
           </th>
           <th class="text-left">
@@ -300,12 +303,13 @@ const handleValaszokMegtekint= async (id: Number) =>{
           </th>
         </tr>
       </thead>
-      <!-- <tbody>
-        <tr v-for="valasz in valaszok?.data":key="valasz.id">
+      <tbody>
+        <tr v-for="(valasz,index) in valaszok":key="valasz.id">
+          <td>{{ index+1 }}</td>
           <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
           <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td>
         </tr>
-      </tbody> -->
+      </tbody>
       </v-table>  
     </v-card>
   </v-dialog>

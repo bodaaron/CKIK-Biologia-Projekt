@@ -1,6 +1,6 @@
 import axiosClient from '@/lib/axios'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import type { ChangeData, ChangeResponse, Kep, Profile, User } from './profile'
+import type { ChangeData, Kep, Profile, User } from './profile'
 
 const getLoggedUser = async (): Promise<Profile> => {
   const email = localStorage.getItem('email')
@@ -16,16 +16,13 @@ export const useGetLoggedUser = () => {
   })
 }
 
-const change = async (data: ChangeData): Promise<ChangeResponse> => {
-  const response = await axiosClient.post('http://localhost:3000/users/mod', data)
-  console.log({ response })
-  return response.data.data
+const change = async (data: ChangeData) => {
+  const response = await axiosClient.post(`http://localhost:3000/users/mod/${data.id}`, data)
 }
 
 export const usechange = () => {
   return useMutation({
     mutationFn: change,
-    onSuccess(data) {},
     onError(error: any) {
       throw new Error(error.response.data.error)
     },

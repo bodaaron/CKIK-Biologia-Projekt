@@ -13,10 +13,6 @@ export type ChangeData = {
   osztaly: string
 }
 
-export type ChangeResponse = {
-  token: string
-}
-
 export type Kep = {
   id: number
   nev: string

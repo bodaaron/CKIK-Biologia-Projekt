@@ -13,8 +13,8 @@ class UserService {
     return await userRepository.getUser(email)
   }
 
-  async modUser(LogEmail, nev, email, osztaly) {
-    return await userRepository.modUser(LogEmail, nev, email, osztaly)
+  async modUser(id, nev, email, osztaly) {
+    return await userRepository.modUser(id, nev, email, osztaly)
   }
 }
 
