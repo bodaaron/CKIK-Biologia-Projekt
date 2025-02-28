@@ -9,7 +9,7 @@ import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
 import { useGetDiakFeleletek, useGetValaszok } from '@/api/felelet/feleletQuery'
-import type { Valaszok } from '@/api/felelet/felelet'
+import type { Felelet, Valaszok } from '@/api/felelet/felelet'
 import type { UseQueryReturnType } from '@tanstack/vue-query'
 
 const slides = [
@@ -25,12 +25,14 @@ const slides = [
 
 const { data } = useGetLoggedUser()
 const { data: kepek, isLoading } = useGetKepek()
-const { data: feleletek} = useGetDiakFeleletek(Number(localStorage.getItem('id')))
+// const { data: feleletek} = useGetDiakFeleletek(Number(localStorage.getItem('id')))
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
-const { mutateAsync: getValaszok} = useGetValaszok();
 const { push } = useRouter()
+const { mutateAsync: getValaszok} = useGetValaszok();
 const valaszok = ref<Valaszok[]>([]);
+const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
+const feleletek = ref<Felelet[]>([]);
 
 const userData = ref<ChangeData>({
   id: 0,
@@ -148,6 +150,7 @@ const handleEltunes = async () => {
 
 const handleTesztKitoltes = async () =>{
   dialog2.value = true;
+  feleletek.value = await getDiakFeleletek(Number(data.value?.id));
   console.log(feleletek);
 }
 

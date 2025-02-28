@@ -55,6 +55,40 @@ class UserRepository
 
         await user.save();
     }
+
+    async deleteUser(id)
+    {
+        const user = await this.felhasznalo.findOne
+        (
+            {
+                where:
+                {
+                    id: id,
+                }
+            }
+        )
+
+        user.destroy();
+    }
+
+    async giveJogToUser(id)
+    {
+        const user = await this.felhasznalo.findOne
+        (
+            {
+                where:
+                {
+                    id: id,
+                }
+            }
+        )
+
+        user.set({
+            jogosultsag: 1
+        });
+
+        await user.save();
+    }
 }
 
 module.exports = new UserRepository(db);

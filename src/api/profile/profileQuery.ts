@@ -52,3 +52,23 @@ export const useGetUserek = () => {
     queryFn: getUserek,
   })
 }
+
+const deleteUser = async (id: number) =>{
+  await axiosClient.delete(`http://localhost:3000/users/delete/${id}`)
+}
+
+export const useDeleteUser = () =>{
+  return useMutation({
+    mutationFn: (id: number) => deleteUser(id) 
+  })
+}
+
+const giveJogToUser = async (id: number) =>{
+  await axiosClient.post(`http://localhost:3000/users/jog/${id}`)
+}
+
+export const useGiveJogToUser = () =>{
+  return useMutation({
+    mutationFn: (id: number) => giveJogToUser(id) 
+  })
+}

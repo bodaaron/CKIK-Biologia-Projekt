@@ -74,3 +74,13 @@ exports.modUser = async (req, res, next) => {
     res.status(200).send(await userService.modUser(id, nev, email, osztaly))
   }
 }
+
+exports.deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+  res.status(200).send(await userService.deleteUser(id));
+}
+
+exports.giveJogToUser = async (req,res,next) =>{
+  const { id } = req.params;
+  res.status(200).send(await userService.giveJogToUser(id))
+}

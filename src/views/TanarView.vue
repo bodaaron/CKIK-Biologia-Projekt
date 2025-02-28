@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ChangeData, User } from '@/api/profile/profile'
-import { usechange, useGetKepek, useGetLoggedUser, useGetUserek } from '@/api/profile/profileQuery'
+import { usechange, useDeleteUser, useGetKepek, useGetLoggedUser, useGetUserek, useGiveJogToUser } from '@/api/profile/profileQuery'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
@@ -8,8 +8,8 @@ import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
-import type { DiaknakFeleletData, OsztalynakFeleletData } from '@/api/felelet/felelet'
-import { useDiakFelelet } from '@/api/felelet/feleletQuery'
+import type { DiaknakFeleletData, Felelet, OsztalynakFeleletData, Valaszok } from '@/api/felelet/felelet'
+import { useDiakFelelet, useGetDiakFeleletek, useGetValaszok } from '@/api/felelet/feleletQuery'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -27,6 +27,10 @@ const { data: kepek, isLoading } = useGetKepek()
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
 const { mutate: diakFelelet} = useDiakFelelet()
+const { mutate: deleteUser} = useDeleteUser();
+const { mutate: giveJogToUser} = useGiveJogToUser();
+const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
+const { mutateAsync: getValaszok} = useGetValaszok();
 const { push } = useRouter()
 
 const userData = ref<ChangeData>({
@@ -51,16 +55,23 @@ const dialog = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
 const dialog4 = ref(false)
+const dialog5 = ref(false)
+const dialog6 = ref(false)
+const dialog7 = ref(false)
+const dialog8 = ref(false)
 const selectedOsztaly = ref<string | null>(null)
 const selectedDiak = ref<string | null>(null)
 const selectedTesztOsztaly = ref<string | null>(null)
 const selectedTeszt = ref<string | null>(null)
-const kivalasztottKep = ref<number | null>(null)
+const selectedDeleteDiakId = ref<number | null>(null)
+const selectedJogosultsagDiakId = ref<number | null>(null)
+const feleletek = ref<Felelet[]>([]);
+const valaszok = ref<Valaszok[]>([]);
 const eltunt = ref(false)
 
 watchEffect(() => {
   if (data.value) {
-    userData.value.id == data.value?.id || 0
+    userData.value.id = data.value.id || 0
     userData.value.nev = data.value.nev || ''
     userData.value.email = data.value.email || ''
     userData.value.osztaly = data.value.osztaly || ''
@@ -180,9 +191,10 @@ const feltolt = async () => {
   if (!users.value) return
   
   filteredUsers.value = users.value
+  filteredUsers.value = filteredUsers.value.filter(user => user.id !== data.value?.id);
+
 }
 const nameSearch = ref('')
-const nameTesztSearch = ref('')
 
 const handleTesztKiosztOsztaly = async () => {
   dialog3.value = true
@@ -257,6 +269,41 @@ const handleKereses = async () => {
     error2.value = 'Nincs ilyen felhasználó'
   }
 }
+
+const handleTorles = async (nev: string, id: number) => {
+  dialog5.value = true;
+  selectedDiak.value = nev
+  selectedDeleteDiakId.value = id;
+}
+
+const handleTorlesIgen = async () =>{
+  deleteUser(Number(selectedDeleteDiakId.value));
+  alert("A felhasználó törölve lett")
+  window.location.reload();
+}
+
+const handleJogosultsagAdas = async (nev: string, id: number) => {
+  dialog6.value = true;
+  selectedDiak.value = nev
+  selectedJogosultsagDiakId.value = id;
+}
+
+const handleJogosultsagIgen = async () =>{
+  giveJogToUser(Number(selectedJogosultsagDiakId.value));
+  alert("A felhasználó mostantól rendelkezik tanári jogosultságokkal")
+  window.location.reload();
+}
+
+const handleUserFeleletek = async (id: number) =>{
+  dialog7.value = true;
+  feleletek.value = await getDiakFeleletek(id);
+}
+
+const handleValaszokMegtekint= async (id: Number) =>{
+  dialog8.value = true;
+  valaszok.value = await getValaszok(Number(id));
+}
+
 </script>
 <template>
   <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
@@ -372,7 +419,9 @@ const handleKereses = async () => {
             v-model="nameSearch"
             @input="handleKereses"
           ></v-text-field>
-          <v-alert v-if="error2" type="error" dismissible>
+        </v-card-actions>
+        <v-card-actions>
+          <v-alert v-if="error2" type="error">
             {{ error2 }}
           </v-alert>
         </v-card-actions>
@@ -382,7 +431,7 @@ const handleKereses = async () => {
               <th class="text-left">Név</th>
               <th class="text-left">E-mail cím</th>
               <th class="text-left">Osztály</th>
-              <!-- <th class="text-left">Jogosultság</th> -->
+              <th class="text-left">Jogosultság</th>
               <th class="text-left">Műveletek</th>
             </tr>
           </thead>
@@ -391,7 +440,7 @@ const handleKereses = async () => {
               <td>{{ user.nev }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.osztaly }}</td>
-              <!-- <td>{{ user.jogosultsag }}</td> -->
+              <td>{{ user.jogosultsag === 1 ? 'Tanár' : 'Tanuló' }}</td>
               <td>
                 <v-btn
                   class="ms-auto feleletGomb"
@@ -405,8 +454,13 @@ const handleKereses = async () => {
                 ></v-btn>
                 <v-btn
                   class="ms-auto torlesGomb"
+                  text="Tanári jogosultság adása"
+                  @click="handleJogosultsagAdas(user.nev,user.id)"
+                ></v-btn>
+                <v-btn
+                  class="ms-auto torlesGomb"
                   text="Törlés"
-                  @click="handleTorles(user.id)"
+                  @click="handleTorles(user.nev,user.id)"
                 ></v-btn>
               </td>
             </tr>
@@ -473,6 +527,101 @@ const handleKereses = async () => {
         </v-form>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex"
+          >Bíztosan törölni szeretné {{ selectedDiak }} felhasználót?
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn @click="handleTorlesIgen()" :loading="isPending">Igen</v-btn>
+          <v-btn @click="dialog5=false">Nem</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex"
+          >Bíztosan szeretne tanári jogosultságot adni {{ selectedDiak }} felhasználónak?
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn @click="handleJogosultsagIgen()" :loading="isPending">Igen</v-btn>
+          <v-btn @click="dialog6=false">Nem</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog7" transition="dialog-bottom-transition" fullscreen>
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle">Teszt kiválasztása
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog7 = false"></v-btn>
+        </v-card-title>
+        <v-table>
+          <thead>
+            <tr>
+              <th class="text-left">Név</th>
+              <th class="text-left">Sorszám</th>
+              <th class="text-left">Tanár</th>
+              <th class="text-left">Kitöltve</th>
+              <th class="text-left">Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="felelet in feleletek" :key="felelet.id" v-if="kepek">
+              <td>{{ kepek.find(k => k.id == felelet.kepId)?.nev }}</td>
+              <td>{{ kepek.find(k => k.id == felelet.kepId)?.fajlnev }}</td>
+              <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
+              <td>{{ felelet.kitoltesDatum ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', { 
+                  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Ez a felelet még nincs kitöltve'}}</td>
+              <td>
+                <v-btn v-if="felelet.kitoltesDatum != null"
+                  class="ms-auto"
+                  text="Válaszok megtekintése"
+                  @click="handleValaszokMegtekint(felelet.id)"
+                ></v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog max-width="500" v-model="dialog8" transition="dialog-bottom-transition" fullscreen>
+    <v-card>
+      <v-card-title class="d-flex">Válaszok
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog8 = false"></v-btn>
+      </v-card-title>
+      <v-table>
+      <thead>
+        <tr>
+          <th class="text-left">
+            Sorszám
+          </th>
+          <th class="text-left">
+            Felhasználó válasza
+          </th>
+          <th class="text-left">
+            Elfogadva
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(valasz,index) in valaszok":key="valasz.id">
+          <td>{{ index+1 }}</td>
+          <td>{{ valasz.valasz || 'Nem adott választ' }}</td>
+          <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td>
+        </tr>
+      </tbody>
+      </v-table>  
+    </v-card>
+  </v-dialog>
 
     <v-carousel
       class="full-background-carousel behind"

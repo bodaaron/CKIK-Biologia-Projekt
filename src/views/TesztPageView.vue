@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 
-const { push } = useRouter()
+const { push, back } = useRouter()
 
 const kep = ref<string>('');  
 kep.value = String(route.params.tesztId);
@@ -124,7 +124,7 @@ document.onclick = function(e) {
       <v-card-title class="d-flex">Végeredmény
         <v-spacer></v-spacer>
         <v-btn
-        @click="() => {push({ name: 'tanulo' })}">
+        @click="back()">
         Vissza a főoldalra
         </v-btn>
       </v-card-title>

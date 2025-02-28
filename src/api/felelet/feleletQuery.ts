@@ -15,17 +15,28 @@ export const useDiakFelelet = () => {
     })
 }
 
+// const getDiakFeleletek = async (id:number): Promise<Felelet[]> => {
+//     const response = await axiosClient.get(`http://localhost:3000/feleletek/${id}`)
+//     return response.data
+// }
+
+// export const useGetDiakFeleletek = (id: number) => {
+//     return useQuery({
+//         queryKey: ["getDiakFeleletek", id],
+//         queryFn: () => getDiakFeleletek(id),
+//         enabled: !!id
+//     });
+// };
+
 const getDiakFeleletek = async (id:number): Promise<Felelet[]> => {
     const response = await axiosClient.get(`http://localhost:3000/feleletek/${id}`)
     return response.data
 }
 
-export const useGetDiakFeleletek = (id: number) => {
-    return useQuery({
-        queryKey: ["getDiakFeleletek", id],
-        queryFn: () => getDiakFeleletek(id),
-        enabled: !!id
-    });
+export const useGetDiakFeleletek = () => {
+    return useMutation({
+        mutationFn: (id: number) => getDiakFeleletek(id)
+    })
 };
 
 const valaszLeadas = async (data: Valasz) => {
