@@ -25,7 +25,6 @@ const slides = [
 
 const { data } = useGetLoggedUser()
 const { data: kepek, isLoading } = useGetKepek()
-// const { data: feleletek} = useGetDiakFeleletek(Number(localStorage.getItem('id')))
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
 const { push } = useRouter()

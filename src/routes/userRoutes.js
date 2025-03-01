@@ -8,7 +8,7 @@ router.get("/", userController.getUsers);
 
 router.post("/login", userController.loginUser);
 
-router.post("/user",userController.getUser);
+router.get("/user/:email",userController.getUserData);
 
 router.post("/", userController.createUser);
 

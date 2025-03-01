@@ -34,8 +34,8 @@ exports.createUser = async (req, res, next) => {
   }
 }
 
-exports.getUser = async (req, res, next) => {
-  const { email } = req.body
+exports.getUserData = async (req, res, next) => {
+  const { email } = req.params
 
   const user = await userService.getUser(email)
 
@@ -54,10 +54,9 @@ exports.loginUser = async (req, res, next) => {
   if (user) {
     const jo = await bcrypt.compare(jelszo, user.jelszo)
     if (jo) {
-      res.status(200).send('Login successfull')
-      LogEmail = email
-      console.log()
-    } else {
+      res.status(200).send(user)
+    } 
+    else {
       return res.status(400).json({ error: 'Hibás jelszó!' })
     }
   }

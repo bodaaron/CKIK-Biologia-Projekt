@@ -4,8 +4,8 @@ import type { ChangeData, Kep, Profile, User } from './profile'
 
 const getLoggedUser = async (): Promise<Profile> => {
   const email = localStorage.getItem('email')
-  const response = await axiosClient.post(`http://localhost:3000/users/user`, { email })
-  localStorage.setItem('id', response.data.id)
+  const response = await axiosClient.get(`http://localhost:3000/users/user/${email}`)
+  localStorage.setItem('userData', JSON.stringify(response.data))
   return response.data
 }
 

@@ -6,10 +6,6 @@ export type RegistrationData = {
     osztaly: string
 }
 
-export type RegistrationResponse = {
-    token: string
-}
-
 export type LoginParam = {
     email: string,
     jelszo: string

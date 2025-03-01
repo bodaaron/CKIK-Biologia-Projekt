@@ -1,22 +1,16 @@
 import axiosClient from "@/lib/axios"
-import type { LoginParam, RegistrationData, RegistrationResponse} from "./auth"
-import { useMutation, useQuery } from "@tanstack/vue-query"
-import { useRoute, useRouter } from "vue-router"
-import { QUERY_KEYS } from "@/utils/queryKeys"
-import { AxiosError } from "axios"
+import type { LoginParam, RegistrationData} from "./auth"
+import { useMutation,  } from "@tanstack/vue-query"
+import { useRouter } from "vue-router"
 
-const registration = async (data: RegistrationData): Promise<RegistrationResponse> => {
+const registration = async (data: RegistrationData) => {
     const response = await axiosClient.post("http://localhost:3000/users/", data)
-    console.log({response})
     return response.data.data
 }
 
 export const useRegistration = () => {
-    const {push} = useRouter()
     return useMutation({
         mutationFn: registration,
-        onSuccess(data) {
-        },
         onError(error: any) {
             console.log(error);
             throw new Error(error.response.data.error);
@@ -25,14 +19,11 @@ export const useRegistration = () => {
 }
 
 var jog:number;
-var email:string;
 
-const login = async (data: LoginParam): Promise<RegistrationResponse> => {
+const login = async (data: LoginParam) => {
     const response = await axiosClient.post("http://localhost:3000/users/login", data)
     localStorage.setItem("email",data.email)
-    email = String(localStorage.getItem("email"));
-    const response2 = await axiosClient.post(`http://localhost:3000/users/user`,{email})
-    jog = response2.data.jogosultsag;
+    jog = response.data.jogosultsag;
     return response.data.data
 }
 
@@ -41,8 +32,7 @@ export const useLogin = () => {
     const {push} = useRouter()
     return useMutation({
         mutationFn: login,
-        onSuccess(data) {
-            localStorage.setItem("login", JSON.stringify(data))
+        onSuccess() {
             if(jog == 1){
                 push({name: 'tanar'})
             }
