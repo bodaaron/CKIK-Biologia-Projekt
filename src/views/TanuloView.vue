@@ -156,8 +156,14 @@ const handleTesztKitoltes = async () =>{
 const handleValaszokMegtekint= async (id: Number) =>{
   dialog3.value = true;
   valaszok.value = await getValaszok(Number(id));
-  console.log(valaszok.value);
 }
+
+
+const handleKijelentkezés= async () =>{
+  localStorage.clear();
+  push({name:'home'});
+}
+
 
 </script>
 <template>
@@ -204,6 +210,7 @@ const handleValaszokMegtekint= async (id: Number) =>{
       <v-card-actions>
         <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKitoltes">Teszt kitöltés</v-btn>
         <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés">Kijelentkezés</v-btn>
       </v-card-actions>
     </v-card>
 

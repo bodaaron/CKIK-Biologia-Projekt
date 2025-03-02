@@ -76,10 +76,13 @@ router.beforeEach(async (to, from, next) => {
 
    if (to.meta.roles && Array.isArray(to.meta.roles)) {
     if (!to.meta.roles.includes(userRole)) {
-      if (userRole != 0) {
+      if (userRole == 1) {
         return next('/tanar');
-      } else if (userRole != 1) {
+      } else if (userRole == 0) {
         return next('/tanulo');
+      }
+      else if (!userRole) {
+        return next('/home');
       }
     }
   }
@@ -90,11 +93,11 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  if (to.meta.requiresAuth) {
-    if (!userData || !userRole) {
-      return next('/home');
-    }
-  }
+  // if (to.meta.requiresAuth) {
+  //   if (!userData || !userRole) {
+  //     return next('/home');
+  //   }
+  // }
 
     next();
   })

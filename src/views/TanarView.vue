@@ -304,6 +304,12 @@ const handleValaszokMegtekint= async (id: Number) =>{
   valaszok.value = await getValaszok(Number(id));
 }
 
+const handleKijelentkezés= async () =>{
+  localStorage.clear();
+  push({name:'home'});
+}
+
+
 </script>
 <template>
   <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
@@ -347,19 +353,10 @@ const handleValaszokMegtekint= async (id: Number) =>{
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek"
-          >Felhasználók</v-btn
-        >
-        <v-btn
-          color="info"
-          variant="elevated"
-          :loading="isPending"
-          @click="handleTesztKiosztOsztaly"
-          >Felelet kiosztása osztálynak</v-btn
-        >
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
-          >Gyakorló teszt kitöltés</v-btn
-        >
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek">Felhasználók</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKiosztOsztaly">Felelet kiosztása osztálynak</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés">Kijelentkezés</v-btn>
       </v-card-actions>
     </v-card>
 

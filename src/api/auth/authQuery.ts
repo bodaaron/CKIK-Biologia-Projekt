@@ -23,6 +23,7 @@ var jog:number;
 const login = async (data: LoginParam) => {
     const response = await axiosClient.post("http://localhost:3000/users/login", data)
     localStorage.setItem("email",data.email)
+    localStorage.setItem('userData', JSON.stringify(response.data))
     jog = response.data.jogosultsag;
     return response.data.data
 }
