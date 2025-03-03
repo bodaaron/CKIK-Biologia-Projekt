@@ -55,8 +55,7 @@ exports.loginUser = async (req, res, next) => {
     const jo = await bcrypt.compare(jelszo, user.jelszo)
     if (jo) {
       res.status(200).send(user)
-    } 
-    else {
+    } else {
       return res.status(400).json({ error: 'Hibás jelszó!' })
     }
   }
@@ -75,11 +74,18 @@ exports.modUser = async (req, res, next) => {
 }
 
 exports.deleteUser = async (req, res, next) => {
-  const { id } = req.params;
-  res.status(200).send(await userService.deleteUser(id));
+  const { id } = req.params
+  res.status(200).send(await userService.deleteUser(id))
 }
 
-exports.giveJogToUser = async (req,res,next) =>{
-  const { id } = req.params;
+exports.giveJogToUser = async (req, res, next) => {
+  const { id } = req.params
   res.status(200).send(await userService.giveJogToUser(id))
+}
+
+exports.jelszoValtoztatUser = async (req, res, next) => {
+  const { email, jelszo } = req.body
+  var newPW = ''
+  newPW = await bcrypt.hash(jelszo, salt)
+  res.status(200).send(await userService.jelszoValtoztatUser(email, newPW))
 }

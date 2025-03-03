@@ -18,11 +18,15 @@ class UserService {
   }
 
   async deleteUser(id) {
-    return await userRepository.deleteUser(id);
+    return await userRepository.deleteUser(id)
   }
 
   async giveJogToUser(id) {
-    return await userRepository.giveJogToUser(id);
+    return await userRepository.giveJogToUser(id)
+  }
+
+  async jelszoValtoztatUser(email, newPW) {
+    return await userRepository.jelszoValtoztatUser(email, newPW)
   }
 }
 

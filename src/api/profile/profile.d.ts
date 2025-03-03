@@ -26,3 +26,8 @@ export type User = {
   osztaly: string
   jogosultsag: number
 }
+
+export type JelszoValtoztato = {
+  email: string
+  jelszo: string
+}

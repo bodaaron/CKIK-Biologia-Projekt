@@ -1,6 +1,6 @@
 import axiosClient from '@/lib/axios'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import type { ChangeData, Kep, Profile, User } from './profile'
+import type { ChangeData, JelszoValtoztato, Kep, Profile, User } from './profile'
 
 const getLoggedUser = async (): Promise<Profile> => {
   const email = localStorage.getItem('email')
@@ -52,22 +52,32 @@ export const useGetUserek = () => {
   })
 }
 
-const deleteUser = async (id: number) =>{
+const deleteUser = async (id: number) => {
   await axiosClient.delete(`http://localhost:3000/users/delete/${id}`)
 }
 
-export const useDeleteUser = () =>{
+export const useDeleteUser = () => {
   return useMutation({
-    mutationFn: (id: number) => deleteUser(id) 
+    mutationFn: (id: number) => deleteUser(id),
   })
 }
 
-const giveJogToUser = async (id: number) =>{
+const giveJogToUser = async (id: number) => {
   await axiosClient.post(`http://localhost:3000/users/jog/${id}`)
 }
 
-export const useGiveJogToUser = () =>{
+export const useGiveJogToUser = () => {
   return useMutation({
-    mutationFn: (id: number) => giveJogToUser(id) 
+    mutationFn: (id: number) => giveJogToUser(id),
+  })
+}
+
+const jelszoValtoztatas = async (data: JelszoValtoztato) => {
+  await axiosClient.post(`http://localhost:3000/users/jelszo/${data.email}`, data)
+}
+
+export const UseJelszoValtoztatas = () => {
+  return useMutation({
+    mutationFn: jelszoValtoztatas,
   })
 }

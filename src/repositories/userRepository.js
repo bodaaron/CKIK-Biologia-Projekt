@@ -1,94 +1,84 @@
-const e = require("express");
-const db = require("../database/dbContext")
+const e = require('express')
+const db = require('../database/dbContext')
 
-class UserRepository
-{
-    constructor(db)
-    {
-        this.felhasznalo = db.felhasznalo;
-    }
+class UserRepository {
+  constructor(db) {
+    this.felhasznalo = db.felhasznalo
+  }
 
-    async createUser(user)
-    {
-        const newUser = await this.felhasznalo.build(user);
+  async createUser(user) {
+    const newUser = await this.felhasznalo.build(user)
 
-        await newUser.save();
-        
-        return newUser;
-    }
+    await newUser.save()
 
-    async getUsers()
-    {
-        return await this.felhasznalo.findAll();
-    }
+    return newUser
+  }
 
-    async getUser(email)
-    {
-        return await this.felhasznalo.findOne
-        (
-            {
-                where:
-                {
-                    email: email
-                }
-            }
-        )
-    }
+  async getUsers() {
+    return await this.felhasznalo.findAll()
+  }
 
-    async modUser(id,nev,email,osztaly)
-    {
-        const user = await this.felhasznalo.findOne
-        (
-            {
-                where:
-                {
-                    id: id,
-                }
-            }
-        )
+  async getUser(email) {
+    return await this.felhasznalo.findOne({
+      where: {
+        email: email,
+      },
+    })
+  }
 
-        user.set({
-            nev: nev,
-            email: email,
-            osztaly: osztaly,
-        });
+  async modUser(id, nev, email, osztaly) {
+    const user = await this.felhasznalo.findOne({
+      where: {
+        id: id,
+      },
+    })
 
-        await user.save();
-    }
+    user.set({
+      nev: nev,
+      email: email,
+      osztaly: osztaly,
+    })
 
-    async deleteUser(id)
-    {
-        const user = await this.felhasznalo.findOne
-        (
-            {
-                where:
-                {
-                    id: id,
-                }
-            }
-        )
+    await user.save()
+  }
 
-        user.destroy();
-    }
+  async deleteUser(id) {
+    const user = await this.felhasznalo.findOne({
+      where: {
+        id: id,
+      },
+    })
 
-    async giveJogToUser(id)
-    {
-        const user = await this.felhasznalo.findOne
-        (
-            {
-                where:
-                {
-                    id: id,
-                }
-            }
-        )
+    user.destroy()
+  }
 
-        user.set({
-            jogosultsag: 1
-        });
+  async giveJogToUser(id) {
+    const user = await this.felhasznalo.findOne({
+      where: {
+        id: id,
+      },
+    })
 
-        await user.save();
-    }
+    user.set({
+      jogosultsag: 1,
+    })
+
+    await user.save()
+  }
+
+  async jelszoValtoztatUser(email, newPW) {
+    const user = await this.felhasznalo.findOne({
+      where: {
+        email: email,
+      },
+    })
+
+    user.set({
+      jelszo: newPW,
+    })
+
+    await user.save()
+  }
 }
 
-module.exports = new UserRepository(db);
+module.exports = new UserRepository(db)

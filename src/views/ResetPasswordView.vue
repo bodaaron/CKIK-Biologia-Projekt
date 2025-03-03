@@ -1,60 +1,70 @@
-<script lang="ts">
+<script lang="ts" setup>
 import { jwtDecode } from 'jwt-decode'
-import axios from 'axios'
+import axiosClient from '@/lib/axios'
+import { ref } from 'vue'
+import type { JelszoValtoztato } from '@/api/profile/profile'
+import { UseJelszoValtoztatas } from '@/api/profile/profileQuery'
+import { useRoute } from 'vue-router'
 
-export default {
-  data() {
-    return {
-      newPassword: '',
-      confirmPassword: '',
-      email: '',
-    }
-  },
-  created() {
-    const token = this.$route.params.token
-    try {
-      const decoded = jwtDecode(token)
-      this.email = decoded.email
-      console.log(decoded)
-    } catch (error) {
-      console.error('Hibás token!', error)
-    }
-  },
-  methods: {
-    async handlePasswordReset() {
+const JelszoValtoztatoData = ref<JelszoValtoztato>({
+  email: '',
+  jelszo: '',
+})
 
-      if (this.newPassword !== this.confirmPassword) {
-        alert('A jelszavak nem egyeznek!')
-        return
-      }
+const route = useRoute()
 
+const { mutate: jelszoValtoztatas } = UseJelszoValtoztatas()
+const newPassword = ref<string | null>(null)
+const confirmPassword = ref<string | null>(null)
+const email = ref<string | null>(null)
+const token = route.params.token
+const visible = ref(false)
 
-      try {
-        const response = await axios.post('http://localhost:3000/api/reset-password', {
-          email: this.email,
-          newPassword: this.newPassword,
-        })
-        alert(response.data.message)
-      } catch (error) {
-        console.error('Hiba történt a jelszó visszaállításakor:', error)
-      }
-    },
-  },
+const decode = () => {
+  const decoded = jwtDecode(String(token))
+  email.value = decoded.email
+}
+
+decode()
+
+const handlePasswordReset = () => {
+  if (newPassword.value != confirmPassword.value) {
+    alert('A jelszavak nem egyeznek')
+    return
+  } else {
+    JelszoValtoztatoData.value.email = String(email.value)
+    JelszoValtoztatoData.value.jelszo = String(newPassword.value)
+    jelszoValtoztatas(JelszoValtoztatoData.value)
+  }
 }
 </script>
 <template>
-  <div>
-    <h2>Jelszó visszaállítása</h2>
-    <form @submit.prevent="handlePasswordReset">
-      <div>
-        <label for="newPassword">Új jelszó:</label>
-        <input type="password" id="newPassword" v-model="newPassword" required />
-      </div>
-      <div>
-        <label for="confirmPassword">Jelszó megerősítése:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" required />
-      </div>
-      <button type="submit">Jelszó visszaállítása</button>
-    </form>
-  </div>
+  <v-card>
+    <v-card-title>Jelszó visszaállítás</v-card-title>
+    <v-form @submit.prevent="handlePasswordReset">
+      <v-text-field
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :type="visible ? 'text' : 'password'"
+        density="compact"
+        prepend-inner-icon="mdi-lock-outline"
+        variant="outlined"
+        label="Jelszó"
+        @click:append-inner="visible = !visible"
+        v-model="newPassword"
+      ></v-text-field>
+      <v-text-field
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :type="visible ? 'text' : 'password'"
+        density="compact"
+        prepend-inner-icon="mdi-lock-outline"
+        variant="outlined"
+        label="Jelszó"
+        @click:append-inner="visible = !visible"
+        v-model="confirmPassword"
+      ></v-text-field>
+      <v-card-actions>
+        <v-btn type="submit">Jelszó visszaállítása</v-btn>
+      </v-card-actions>
+    </v-form>
+  </v-card>
 </template>
