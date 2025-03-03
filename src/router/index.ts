@@ -9,6 +9,7 @@ import MegtekintesView from '@/views/MegtekintesView.vue'
 import ForgotView from '@/views/ForgotView.vue'
 import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import FeleletView from '@/views/FeleletView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,10 @@ const router = createRouter({
       component: ResetPasswordView,
       meta:{requiresGuest: true}
     },
+    { path: '/:pathMatch(.*)*', 
+      name: 'NotFound', 
+      component: NotFoundView, 
+    },
   ],
 })
 
@@ -93,11 +98,11 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // if (to.meta.requiresAuth) {
-  //   if (!userData || !userRole) {
-  //     return next('/home');
-  //   }
-  // }
+  if (to.meta.requiresAuth) {
+    if (!userRole) {
+      return next('/home');
+    }
+  }
 
     next();
   })
