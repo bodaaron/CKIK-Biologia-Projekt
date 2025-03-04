@@ -20,11 +20,12 @@ const areas = ref<any[]>([]);
 const naturalWidth = ref<number | null>(null);
 const naturalHeight = ref<number | null>(null);
 const dialog2 = ref(false);
+const dialog3 = ref(false);
 const vegeredmeny = ref(false);
-const kivalasztottErtek = ref<string>('');
 const activeArea = ref<any>(null);
 const answers = ref<Record<string, string>>({});  
 const answer = ref<string>('');
+var items2 = [ {helyesValasz:'',id:0}]
 
 const updateAnswers = () => {
   if (!adatok.value) return;
@@ -83,9 +84,12 @@ watchEffect(() => {
 });
 
 const handleClick = (area: any) => {
+  if(!adatok.value) return
+  items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
+  console.log(items2)
   activeArea.value = area;
   answer.value = answers.value[area.id] || '';
-  dialog2.value = true;
+  dialog3.value = true;
 };
 
 const handleEllenorzes = () =>{
@@ -170,6 +174,29 @@ document.onclick = function(e) {
       ></v-text-field>
     </v-card>
   </v-dialog>
+
+  <v-dialog max-width="500" v-model="dialog3" transition="dialog-bottom-transition">
+    <v-card>
+      <v-card-title class="d-flex">Válasz kiválasztása
+        <v-spacer></v-spacer>
+        <v-btn
+          icon="mdi-close"
+          @click="dialog3 = false"
+        ></v-btn>
+      </v-card-title>
+      <v-select
+        v-if="activeArea"
+        variant="outlined"
+        v-model="answer"
+        :items="items2"
+        item-title="helyesValasz"
+        item-value="helyesValasz"
+        @blur="handleAnswerChange(answer)"
+        @change="handleAnswerChange(answer)"
+      ></v-select>
+    </v-card>
+  </v-dialog>
+
 
   <v-btn
     class="mb-8"
