@@ -1,6 +1,5 @@
 import HomePageView from '@/views/HomePageView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
-
 import { createRouter, createWebHistory } from 'vue-router'
 import TanuloView from '@/views/TanuloView.vue'
 import TanarView from '@/views/TanarView.vue'
@@ -83,7 +82,8 @@ router.beforeEach(async (to, from, next) => {
     if (!to.meta.roles.includes(userRole)) {
       if (userRole == 1) {
         return next('/tanar');
-      } else if (userRole == 0) {
+      } 
+      else if (userRole == 0) {
         return next('/tanulo');
       }
       else if (!userRole) {
@@ -93,13 +93,16 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.requiresGuest) {
-    if (userData && userRole) {
-      return next(userRole === 1 ? '/tanar' : '/tanulo');
+    if (userRole == 1) {
+      return next('/tanar');
+    } 
+    else if (userRole == 0) {
+      return next('/tanulo');
     }
   }
 
   if (to.meta.requiresAuth) {
-    if (!userRole) {
+    if (!userData) {
       return next('/home');
     }
   }

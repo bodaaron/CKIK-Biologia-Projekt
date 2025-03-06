@@ -264,6 +264,7 @@ const handleKereses = async () => {
 
     return classMatches && nameMatches
   })
+  filteredUsers.value = filteredUsers.value.filter(user => user.id !== data.value?.id);
 
   if (filteredUsers.value.length == 0) {
     error2.value = 'Nincs ilyen felhasználó'
@@ -613,7 +614,8 @@ const handleKijelentkezés= async () =>{
         <tr v-for="(valasz,index) in valaszok":key="valasz.id">
           <td>{{ index+1 }}</td>
           <td>{{ valasz.valasz || 'Nem adott választ' }}</td>
-          <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td>
+          <!-- <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td> -->
+          <td><v-checkbox>Elfogadás</v-checkbox></td>
         </tr>
       </tbody>
       </v-table>  
