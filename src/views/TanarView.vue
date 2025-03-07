@@ -399,8 +399,8 @@ const handleKijelentkezés= async () =>{
     </v-dialog>
 
     <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Felhasználók
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
@@ -425,7 +425,7 @@ const handleKijelentkezés= async () =>{
         </v-card-actions>
         <v-table>
           <thead>
-            <tr>
+            <tr class="tablaFejResz">
               <th class="text-left">Név</th>
               <th class="text-left">E-mail cím</th>
               <th class="text-left">Osztály</th>
@@ -446,12 +446,12 @@ const handleKijelentkezés= async () =>{
                   @click="handleUserFeleletek(user.id)"
                 ></v-btn>
                 <v-btn
-                  class="ms-auto torlesGomb"
+                  class="ms-auto feleletKiosztGomb"
                   text="Felelet kiosztása"
                   @click="handleTesztKiosztDiak(user.nev,user.id)"
                 ></v-btn>
                 <v-btn
-                  class="ms-auto torlesGomb"
+                  class="ms-auto jogosultsagAdasGomb"
                   text="Tanári jogosultság adása"
                   @click="handleJogosultsagAdas(user.nev,user.id)"
                 ></v-btn>
@@ -468,7 +468,7 @@ const handleKijelentkezés= async () =>{
     </v-dialog>
 
     <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="500">
-      <v-card>
+      <v-card class="alul">
         <v-card-title class="d-flex"
           >Felelet kiosztása osztálynak
           <v-spacer></v-spacer>
@@ -495,7 +495,7 @@ const handleKijelentkezés= async () =>{
               required
             ></v-select>
           </v-card-actions>
-          <v-btn type="submit">Teszt kiosztása</v-btn>
+          <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
         </v-form>
       </v-card>
     </v-dialog>
@@ -687,5 +687,17 @@ const handleKijelentkezés= async () =>{
 .feleletGomb {
   background-color: #2e8b57;
   color: #dcedc8;
+}
+.tablaFejResz{
+  font-style: oblique;
+  color: black;
+}
+.feleletKiosztGomb {
+  background-color: #E65100;
+  color: #FFF3E0;
+}
+.jogosultsagAdasGomb{
+  background-color: #1976D2;
+  color: #E3F2FD;
 }
 </style>
