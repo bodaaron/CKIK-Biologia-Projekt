@@ -80,3 +80,14 @@ export const useGetValaszok = () =>{
         mutationFn: (id: number) => getValaszok(id)
     })
 }
+
+const kijavitas = async (data: Valaszok) => {
+    const response = await axiosClient.post(`http://localhost:3000/valaszok/javitas`,data)
+    return response.data
+}
+
+export const useKijavitas = () =>{
+    return useMutation({
+        mutationFn: (data: Valaszok) => kijavitas(data)
+    })
+}

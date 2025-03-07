@@ -6,9 +6,12 @@ class ValaszService {
         return await ValaszRepository.createValasz(valasz)
     } 
 
-    async getValaszok(id)
-    {
+    async getValaszok(id){
         return await ValaszRepository.getValaszok(id);
+    }
+
+    async kijavitValasz(id,elfogadotte){
+        return await ValaszRepository.kijavitValasz(id,elfogadotte);
     }
 }
 

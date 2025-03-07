@@ -9,7 +9,8 @@ import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
 import type { DiaknakFeleletData, Felelet, OsztalynakFeleletData, Valaszok } from '@/api/felelet/felelet'
-import { useDiakFelelet, useGetDiakFeleletek, useGetValaszok } from '@/api/felelet/feleletQuery'
+import { useDiakFelelet, useGetDiakFeleletek, useGetValaszok, useKijavitas } from '@/api/felelet/feleletQuery'
+import type { Adat } from '@/api/kep/kep'
 
 const slides = [
   '../public/kepek/delfin.jpg',
@@ -31,6 +32,8 @@ const { mutate: deleteUser} = useDeleteUser();
 const { mutate: giveJogToUser} = useGiveJogToUser();
 const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
 const { mutateAsync: getValaszok} = useGetValaszok();
+const {mutateAsync: getAdatok} = useGetAdatok();
+const {mutateAsync: kijavitas} = useKijavitas();
 const { push } = useRouter()
 
 const userData = ref<ChangeData>({
@@ -67,6 +70,7 @@ const selectedDeleteDiakId = ref<number | null>(null)
 const selectedJogosultsagDiakId = ref<number | null>(null)
 const feleletek = ref<Felelet[]>([]);
 const valaszok = ref<Valaszok[]>([]);
+const adatok = ref<Adat[]>([]);
 const eltunt = ref(false)
 
 watchEffect(() => {
@@ -300,14 +304,22 @@ const handleUserFeleletek = async (id: number) =>{
   feleletek.value = await getDiakFeleletek(id);
 }
 
-const handleValaszokMegtekint= async (id: Number) =>{
+const handleValaszokMegtekint= async (id: Number, kepId: Number) =>{
   dialog8.value = true;
   valaszok.value = await getValaszok(Number(id));
+  adatok.value = await getAdatok(Number(kepId));
 }
 
 const handleKijelentkezés= async () =>{
   localStorage.clear();
   push({name:'home'});
+}
+
+const handleKijavitasDB = async () =>{
+  for(var i = 0; i < valaszok.value.length; i++){
+    kijavitas(valaszok.value[i]);
+  }
+  alert("A kipipált válaszok ellettek fogadva")
 }
 
 
@@ -581,7 +593,7 @@ const handleKijelentkezés= async () =>{
                 <v-btn v-if="felelet.kitoltesDatum != null"
                   class="ms-auto"
                   text="Válaszok megtekintése"
-                  @click="handleValaszokMegtekint(felelet.id)"
+                  @click="handleValaszokMegtekint(felelet.id,felelet.kepId)"
                 ></v-btn>
               </td>
             </tr>
@@ -594,6 +606,12 @@ const handleKijelentkezés= async () =>{
     <v-card>
       <v-card-title class="d-flex">Válaszok
         <v-spacer></v-spacer>
+        <v-tooltip text="Minden kipipált válasz ellesz fogadva">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" @click="handleKijavitasDB()">Kijavítás</v-btn>
+          </template>
+        </v-tooltip>
+        <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="dialog8 = false"></v-btn>
       </v-card-title>
       <v-table>
@@ -601,6 +619,9 @@ const handleKijelentkezés= async () =>{
         <tr>
           <th class="text-left">
             Sorszám
+          </th>
+          <th class="text-left">
+            Helyes válasz
           </th>
           <th class="text-left">
             Felhasználó válasza
@@ -612,10 +633,10 @@ const handleKijelentkezés= async () =>{
       </thead>
       <tbody>
         <tr v-for="(valasz,index) in valaszok":key="valasz.id">
-          <td>{{ index+1 }}</td>
+          <td>{{ adatok[index].adatSorszam }}</td>
+          <td>{{ adatok[index].helyesValasz }}</td>
           <td>{{ valasz.valasz || 'Nem adott választ' }}</td>
-          <!-- <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td> -->
-          <td><v-checkbox>Elfogadás</v-checkbox></td>
+          <td><v-checkbox v-model="valasz.elfogadotte">Elfogadás</v-checkbox></td>
         </tr>
       </tbody>
       </v-table>  

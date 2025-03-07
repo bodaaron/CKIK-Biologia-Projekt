@@ -316,7 +316,7 @@ const handleKijelentkezés= async () =>{
         <tr v-for="(valasz,index) in valaszok":key="valasz.id">
           <td>{{ index+1 }}</td>
           <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
-          <td>{{ valasz.elfogadotte || 'Még nem lett kijavítva' }}</td>
+          <td>{{ Boolean(valasz.elfogadotte) === true ? 'Elfogadott' : Boolean(valasz.elfogadotte) === false ? 'Nem elfogadott' : 'Még nem lett kijavítva'}}</td>
         </tr>
       </tbody>
       </v-table>  

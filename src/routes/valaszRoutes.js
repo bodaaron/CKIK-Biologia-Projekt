@@ -8,4 +8,6 @@ router.post("/valasz",valaszController.createValasz);
 
 router.get("/:id",valaszController.getValaszok)
 
+router.post("/javitas",valaszController.kijavitValasz)
+
 module.exports = router;

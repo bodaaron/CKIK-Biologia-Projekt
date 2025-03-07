@@ -28,5 +28,24 @@ class ValaszRepository
             }
         );
     }
+
+    async kijavitValasz(id,elfogadotte)
+    {
+        const felelet = await this.valaszok.findOne
+        (
+            {
+                where:
+                {
+                    id: id,
+                }
+            }
+        )
+
+        felelet.set({
+            elfogadotte: elfogadotte === true ? true : false
+        });
+
+        await felelet.save();
+    }
 }
 module.exports = new ValaszRepository(db);
