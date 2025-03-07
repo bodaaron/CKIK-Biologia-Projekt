@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const {mutateAsync: getAdatok} = useGetAdatok();
 
 const kep = ref<string>('');
 kep.value = String(route.params.fajlnev);
@@ -11,7 +13,8 @@ kep.value = String(route.params.fajlnev);
 const adat = ref<number>();
 adat.value = Number(route.params.id);
 
-const { data: adatok, isLoading } = useGetAdatok(Number(adat.value));
+
+const adatok = ref<Adat[]>([]);
 const {back} = useRouter();
 
 const imgElement = ref<HTMLImageElement | null>(null);
@@ -38,7 +41,8 @@ const updateAreas = () => {
   }));
 };
 
-onMounted(() => {
+onMounted(async () => {
+  adatok.value = await getAdatok(Number(adat.value))
   if (!imgElement.value) return;
 
   imgElement.value?.addEventListener('load', () => {

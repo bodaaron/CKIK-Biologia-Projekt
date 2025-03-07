@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Valasz } from '@/api/felelet/felelet';
 import { useFeleletDateUpdate, useValaszLeadas } from '@/api/felelet/feleletQuery';
+import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -8,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 
 const { push } = useRouter()
+const {mutateAsync: getAdatok} = useGetAdatok();
 
 const kep = ref<string>('');  
 kep.value = String(route.params.tesztId);
@@ -18,8 +20,7 @@ adat.value = Number(route.params.id);
 const felelet = ref<number>();
 felelet.value = Number(route.params.feleletId);
 
-const { data: adatok, isLoading } = useGetAdatok(adat.value);
-
+const adatok = ref<Adat[]>([]);
 const { mutate: valaszLeadas } = useValaszLeadas()
 
 const { mutate: feleletDateUpdate } = useFeleletDateUpdate() 
@@ -64,7 +65,8 @@ const updateAreas = () => {
   }));
 };
 
-onMounted(() => {
+onMounted(async () => {
+  adatok.value = await getAdatok(Number(adat.value))
   if (!imgElement.value) return;
 
   imgElement.value?.addEventListener('load', () => {

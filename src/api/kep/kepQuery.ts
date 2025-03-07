@@ -1,5 +1,5 @@
 import axiosClient from "@/lib/axios"
-import { useQuery } from "@tanstack/vue-query"
+import { useMutation, useQuery } from "@tanstack/vue-query"
 import type { Adat } from "./kep"
 
 const getAdatok = async (id:number): Promise<Adat[]> => {
@@ -7,10 +7,8 @@ const getAdatok = async (id:number): Promise<Adat[]> => {
     return response.data
 }
 
-export const useGetAdatok = (id: number) => {
-    return useQuery({
-        queryKey: ["getAdatok", id],
-        queryFn: () => getAdatok(id),
-        enabled: !!id
-    });
+export const useGetAdatok = () => {
+    return useMutation({
+        mutationFn: (id: number) => getAdatok(id)
+    })
 };
