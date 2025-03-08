@@ -30,9 +30,9 @@ module.exports = (sequelize, DataTypes) =>
             {
                 type: DataTypes.DATE,
             },
-            helyesValaszok:
+            feleletMod:
             {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BOOLEAN,
             },
         },
 

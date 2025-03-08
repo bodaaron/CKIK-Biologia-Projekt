@@ -1,12 +1,14 @@
 export type OsztalynakFeleletData = {
-    selectedTeszt: string,
+    selectedTeszt: number,
     selectedOsztaly: string,
+    feleletMod: boolean,
 }
 
 export type DiaknakFeleletData = {
     diakId: number,
     tanarId: number,
     kepId: number,
+    feleletMod: boolean,
 }
 
 export type Felelet = {

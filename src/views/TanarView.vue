@@ -44,14 +44,16 @@ const userData = ref<ChangeData>({
 })
 
 const osztalyTesztData = ref<OsztalynakFeleletData>({
-  selectedTeszt: '',
+  selectedTeszt: undefined as unknown as number,
   selectedOsztaly: '',
+  feleletMod: undefined as unknown as boolean,
 })
 
 const diakTesztData = ref<DiaknakFeleletData>({
   diakId: 0,
   tanarId: 0,
   kepId: undefined as unknown as number,
+  feleletMod: undefined as unknown as boolean,
 })
 
 const dialog = ref(false)
@@ -116,10 +118,12 @@ const rules = {
 const tesztRulesOsztaly = {
   selectedOsztaly: { required: helpers.withMessage('Osztály kiválasztása kötelező!', required) },
   selectedTeszt: { required: helpers.withMessage('Teszt kiválasztása kötelező', required) },
+  feleletMod: { required: helpers.withMessage('Felelet mód kiválasztása kötelező', required) },
 }
 
 const tesztRulesDiak = {
   kepId: { required: helpers.withMessage('Teszt kiválasztása kötelező', required) },
+  feleletMod: { required: helpers.withMessage('Felelet mód kiválasztása kötelező', required) },
 }
 
 const items = [
@@ -142,6 +146,11 @@ const items = [
 ]
 
 var items2 = [ {nev:'',id:0}]
+
+const items3 = ref([
+  { text: "Választós", value: 0},
+  { text: "Saját válasz", value: 1}
+]);
 
 const v$ = useVuelidate(rules, userData.value)
 const v$2 = useVuelidate(tesztRulesOsztaly, osztalyTesztData)
@@ -190,6 +199,7 @@ const handleEltunes = async () => {
 }
 
 const filteredUsers = ref<User[]>([])
+const kivalasztottOsztaly = ref<User[]>([])
 
 const feltolt = async () => {
   if (!users.value) return
@@ -217,28 +227,22 @@ const handleTesztKiosztDiak = async (nev: string,id: number) => {
 const handleKiosztOsztalyDB = async () => {
   const isValid = await v$2.value.$validate()
 
+  console.log(osztalyTesztData.value.selectedOsztaly)
   if (isValid) {
+    if (!users.value) return
+    kivalasztottOsztaly.value = users.value.filter((user) => osztalyTesztData.value.selectedOsztaly == user.osztaly && user.jogosultsag == 0)
   }
 
-  // if (isValid) {
-  //   await change(userData.value, {
-  //     onError: (err: any) => {
-  //       error.value = err.response.data.error
-  //       if (userData.value.email !== data.value?.email) {
-  //         userData.value.email = String(data.value?.email)
-  //       }
-  //     },
-  //     onSuccess() {
-  //       if (userData.value.email !== data.value?.email) {
-  //         alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
-  //         push({ name: 'home' })
-  //       } else {
-  //         alert('Sikeres adatmódosítás!')
-  //         window.location.reload()
-  //       }
-  //     },
-  //   })
-  // }
+  Object.entries(kivalasztottOsztaly.value).forEach(async ([key, value]) => {
+   var diak: DiaknakFeleletData = {
+    diakId: value.id,
+    kepId: osztalyTesztData.value.selectedTeszt,
+    feleletMod: osztalyTesztData.value.feleletMod,
+    tanarId: Number(data.value?.id)
+  }
+    await diakFelelet(diak)});
+  alert("Felelt sikeresn kioszva az osztálynak");
+  dialog3.value = false;
 }
 
 const handleKiosztDiakDB = async () => {
@@ -479,7 +483,7 @@ const handleKijavitasDB = async () =>{
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="500">
+    <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="800">
       <v-card class="alul">
         <v-card-title class="d-flex"
           >Felelet kiosztása osztálynak
@@ -491,6 +495,8 @@ const handleKijavitasDB = async () =>{
             <v-select
               label="Kiosztható tesztek"
               :items="items2"
+              item-title="nev"
+              item-value="id"
               :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
               v-model="osztalyTesztData.selectedTeszt"
               @blur="v$2.selectedTeszt.$touch"
@@ -506,7 +512,30 @@ const handleKijavitasDB = async () =>{
               @change="v$2.selectedOsztaly.$touch"
               required
             ></v-select>
+            <v-select
+              label="Teszt mód"
+              :items="items3"
+              v-model="osztalyTesztData.feleletMod"
+              item-title="text"
+              item-value="value"
+              :error-messages="v$2.feleletMod.$errors.map((e) => String(e.$message))"
+              @blur="v$2.feleletMod.$touch"
+              @change="v$2.feleletMod.$touch"
+              required>
+            </v-select>
           </v-card-actions>
+          <v-card-text>
+            <v-list>
+              <v-list-item>
+                  <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+                    <v-list-item-subtitle>A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle>
+              </v-list-item>
+              <v-list-item>
+                  <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+                    <v-list-item-subtitle>A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
           <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
         </v-form>
       </v-card>
@@ -532,7 +561,30 @@ const handleKijavitasDB = async () =>{
               @change="v$3.kepId.$touch"
               required
             ></v-select>
+            <v-select
+              label="Teszt mód"
+              :items="items3"
+              v-model="diakTesztData.feleletMod"
+              item-title="text"
+              item-value="value"
+              :error-messages="v$3.feleletMod.$errors.map((e) => String(e.$message))"
+              @blur="v$3.feleletMod.$touch"
+              @change="v$3.feleletMod.$touch"
+              required>
+            </v-select>
           </v-card-actions>
+          <v-card-text>
+            <v-list>
+              <v-list-item>
+                  <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+                    <v-list-item-subtitle>A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle>
+              </v-list-item>
+              <v-list-item>
+                  <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+                    <v-list-item-subtitle>A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
           <v-btn type="submit">Teszt kiosztása</v-btn>
         </v-form>
       </v-card>

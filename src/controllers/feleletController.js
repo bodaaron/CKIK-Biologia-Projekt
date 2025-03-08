@@ -2,14 +2,14 @@ const { DATE } = require('sequelize');
 const FeleletService = require('../services/feleletService')
 
 exports.createFeleletDiak = async (req, res, next) => {
-    const { diakId, kepId, tanarId } = req.body
+    const { diakId, kepId, tanarId, feleletMod } = req.body
 
     const newFelelet = {
         diakId: diakId,
         kepId: kepId,
         tanarId: tanarId,
         kitoltesDatum: null,
-        helyesValaszok: 0,
+        feleletMod: feleletMod,
     }
 
     const result = await FeleletService.createFelelet(newFelelet);
