@@ -38,7 +38,7 @@ const router = createRouter({
       meta:{requiresAuth: true, roles:[1]}
     },
     {
-      path: '/teszt/:id/:tesztId',
+      path: '/teszt/:id/:tesztId/:tesztMod',
       name: 'teszt',
       component: TesztPageView,
       meta:{requiresAuth: true}

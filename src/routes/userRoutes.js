@@ -18,6 +18,8 @@ router.delete('/delete/:id', userController.deleteUser)
 
 router.post('/jog/:id', userController.giveJogToUser)
 
+router.post('/jog/elvesz/:id', userController.takeJogFromUser)
+
 router.post('/jelszo/:email', userController.jelszoValtoztatUser)
 
 module.exports = router

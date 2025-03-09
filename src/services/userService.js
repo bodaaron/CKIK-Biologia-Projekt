@@ -25,6 +25,10 @@ class UserService {
     return await userRepository.giveJogToUser(id)
   }
 
+  async takeJogFromUser(id) {
+    return await userRepository.takeJogFromUser(id)
+  }
+
   async jelszoValtoztatUser(email, newPW) {
     return await userRepository.jelszoValtoztatUser(email, newPW)
   }

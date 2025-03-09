@@ -15,6 +15,9 @@ kep.value = String(route.params.tesztId);
 const adat = ref<number>();
 adat.value = Number(route.params.id);
 
+const tesztMod = ref<number>();
+tesztMod.value = Number(route.params.tesztMod)
+
 const adatok = ref<Adat[]>([]);
 
 const imgElement = ref<HTMLImageElement | null>(null);
@@ -92,7 +95,12 @@ const handleClick = (area: any) => {
   console.log(items2)
   activeArea.value = area;
   answer.value = answers.value[area.id] || '';
-  dialog3.value = true;
+  if(tesztMod.value == 0){
+    dialog3.value = true;
+  }
+  else if(tesztMod.value == 1){
+    dialog2.value = true;
+  }
 };
 
 const handleEllenorzes = () =>{

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ChangeData, User } from '@/api/profile/profile'
-import { usechange, useDeleteUser, useGetKepek, useGetLoggedUser, useGetUserek, useGiveJogToUser } from '@/api/profile/profileQuery'
+import { usechange, useDeleteUser, useGetKepek, useGetLoggedUser, useGetUserek, useGiveJogToUser, useTakeJogFromUser } from '@/api/profile/profileQuery'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
@@ -30,6 +30,7 @@ const { mutate: change, isPending } = usechange()
 const { mutate: diakFelelet} = useDiakFelelet()
 const { mutate: deleteUser} = useDeleteUser();
 const { mutate: giveJogToUser} = useGiveJogToUser();
+const { mutate: takeJogFromUser} = useTakeJogFromUser();
 const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
 const { mutateAsync: getValaszok} = useGetValaszok();
 const {mutateAsync: getAdatok} = useGetAdatok();
@@ -64,6 +65,7 @@ const dialog5 = ref(false)
 const dialog6 = ref(false)
 const dialog7 = ref(false)
 const dialog8 = ref(false)
+const dialog9 = ref(false)
 const selectedOsztaly = ref<string | null>(null)
 const selectedDiak = ref<string | null>(null)
 const selectedTesztOsztaly = ref<string | null>(null)
@@ -303,6 +305,18 @@ const handleJogosultsagIgen = async () =>{
   window.location.reload();
 }
 
+const handleJogosultsagElvet = async (nev: string, id: number) => {
+  dialog9.value = true;
+  selectedDiak.value = nev
+  selectedJogosultsagDiakId.value = id;
+}
+
+const handleJogosultsagElvetIgen = async () =>{
+  takeJogFromUser(Number(selectedJogosultsagDiakId.value));
+  alert("A felhasználó mostantól nem rendelkezik tanári jogosultságokkal")
+  window.location.reload();
+}
+
 const handleUserFeleletek = async (id: number) =>{
   dialog7.value = true;
   feleletek.value = await getDiakFeleletek(id);
@@ -357,7 +371,7 @@ const handleKijavitasDB = async () =>{
             @input="v$.email.$touch"
           ></v-text-field>
 
-          <v-select
+          <v-select 
             v-model="userData.osztaly"
             :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
             label="Osztály"
@@ -456,20 +470,25 @@ const handleKijavitasDB = async () =>{
               <td>{{ user.osztaly }}</td>
               <td>{{ user.jogosultsag === 1 ? 'Tanár' : 'Tanuló' }}</td>
               <td>
-                <v-btn
+                <v-btn v-if="user.jogosultsag == 0"
                   class="ms-auto feleletGomb"
                   text="Feleletek"
                   @click="handleUserFeleletek(user.id)"
                 ></v-btn>
-                <v-btn
+                <v-btn v-if="user.jogosultsag == 0"
                   class="ms-auto feleletKiosztGomb"
                   text="Felelet kiosztása"
                   @click="handleTesztKiosztDiak(user.nev,user.id)"
                 ></v-btn>
-                <v-btn
+                <v-btn v-if="user.jogosultsag == 0"
                   class="ms-auto jogosultsagAdasGomb"
                   text="Tanári jogosultság adása"
                   @click="handleJogosultsagAdas(user.nev,user.id)"
+                ></v-btn>
+                <v-btn v-if="user.jogosultsag == 1"
+                  class="ms-auto jogosultsagAdasGomb"
+                  text="Tanári jogosultság elvétele"
+                  @click="handleJogosultsagElvet(user.nev,user.id)"
                 ></v-btn>
                 <v-btn
                   class="ms-auto torlesGomb"
@@ -694,6 +713,20 @@ const handleKijavitasDB = async () =>{
       </v-table>  
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex"
+          >Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending">Igen</v-btn>
+          <v-btn @click="dialog6=false">Nem</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-carousel
       class="full-background-carousel behind"

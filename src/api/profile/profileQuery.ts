@@ -72,6 +72,17 @@ export const useGiveJogToUser = () => {
   })
 }
 
+const takeJogFromUser = async (id: number) => {
+  await axiosClient.post(`http://localhost:3000/users/jog/elvesz/${id}`)
+}
+
+export const useTakeJogFromUser= () => {
+  return useMutation({
+    mutationFn: (id: number) => takeJogFromUser(id),
+  })
+}
+
+
 const jelszoValtoztatas = async (data: JelszoValtoztato) => {
   await axiosClient.post(`http://localhost:3000/users/jelszo/${data.email}`, data)
 }

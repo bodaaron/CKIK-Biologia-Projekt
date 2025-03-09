@@ -83,6 +83,11 @@ exports.giveJogToUser = async (req, res, next) => {
   res.status(200).send(await userService.giveJogToUser(id))
 }
 
+exports.takeJogFromUser = async (req, res, next) => {
+  const { id } = req.params
+  res.status(200).send(await userService.takeJogFromUser(id))
+}
+
 exports.jelszoValtoztatUser = async (req, res, next) => {
   const { email, jelszo } = req.body
   var newPW = ''

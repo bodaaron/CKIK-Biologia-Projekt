@@ -66,6 +66,20 @@ class UserRepository {
     await user.save()
   }
 
+  async takeJogFromUser(id) {
+    const user = await this.felhasznalo.findOne({
+      where: {
+        id: id,
+      },
+    })
+
+    user.set({
+      jogosultsag: 0,
+    })
+
+    await user.save()
+  }
+
   async jelszoValtoztatUser(email, newPW) {
     const user = await this.felhasznalo.findOne({
       where: {
