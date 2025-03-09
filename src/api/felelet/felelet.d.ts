@@ -16,6 +16,7 @@ export type Felelet = {
     kepId: number,
     tanarId: number,
     kitoltesDatum: Date,
+    feleletMod: boolean,
 }
 
 export type Valasz = {

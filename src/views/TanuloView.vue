@@ -91,8 +91,8 @@ const handleKitoltes = async () =>{
   }
 }
 
-const handleKitoltFeleletClick = (id: number, tesztId: number, feleletId: number) => {
-  push({ name: 'felelet', params: { id: id, tesztId: tesztId, feleletId: feleletId } })
+const handleKitoltFeleletClick = (id: number, tesztId: number, feleletId: number, tesztMod: number) => {
+  push({ name: 'felelet', params: { id: id, tesztId: tesztId, feleletId: feleletId, tesztMod: tesztMod} })
 }
 
 const rules = {
@@ -287,6 +287,7 @@ const handleKijelentkezés= async () =>{
               <th class="text-left">Név</th>
               <th class="text-left">Sorszám</th>
               <th class="text-left">Tanár</th>
+              <th class="text-left">Teszt mód</th>
               <th class="text-left">Kitöltve</th>
               <th class="text-left">Műveletek</th>
             </tr>
@@ -296,13 +297,14 @@ const handleKijelentkezés= async () =>{
               <td>{{ kepek.find(k => k.id == felelet.kepId)?.nev }}</td>
               <td>{{ kepek.find(k => k.id == felelet.kepId)?.fajlnev }}</td>
               <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
+              <td>{{ felelet.feleletMod  === true ? 'Saját válasz' : 'Választós' }}</td>
               <td>{{ felelet.kitoltesDatum ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', { 
                   weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Ez a felelet még nincs kitöltve'}}</td>
               <td>
                 <v-btn v-if="felelet.kitoltesDatum == null"
                   class="ms-auto kitoltes"
                   text="Kitöltés"
-                  @click="handleKitoltFeleletClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev), Number(felelet.id))"
+                  @click="handleKitoltFeleletClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev), Number(felelet.id), Number(felelet.feleletMod))"
                 ></v-btn>
                 <v-btn v-if="felelet.kitoltesDatum != null"
                   class="ms-auto"
@@ -340,7 +342,7 @@ const handleKijelentkezés= async () =>{
         <tr v-for="(valasz,index) in valaszok":key="valasz.id">
           <td>{{ index+1 }}</td>
           <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
-          <td>{{ Boolean(valasz.elfogadotte) === true ? 'Elfogadott' : Boolean(valasz.elfogadotte) === false ? 'Nem elfogadott' : 'Még nem lett kijavítva'}}</td>
+          <td>{{ valasz.elfogadotte === 1 ? 'Elfogadott' : valasz.elfogadotte === 0 ? 'Nem elfogadott' : valasz.elfogadotte === null ? 'Még nem lett kijavítva' : ''}}</td>
         </tr>
       </tbody>
       </v-table>  

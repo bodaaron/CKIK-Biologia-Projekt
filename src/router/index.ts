@@ -44,7 +44,7 @@ const router = createRouter({
       meta:{requiresAuth: true}
     },
     {
-      path: '/felelet/:id/:tesztId/:feleletId',
+      path: '/felelet/:id/:tesztId/:feleletId/:tesztMod',
       name: 'felelet',
       component: FeleletView,
       meta:{requiresAuth: true}

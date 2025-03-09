@@ -92,7 +92,6 @@ watchEffect(() => {
 const handleClick = (area: any) => {
   if(!adatok.value) return
   items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
-  console.log(items2)
   activeArea.value = area;
   answer.value = answers.value[area.id] || '';
   if(tesztMod.value == 0){
