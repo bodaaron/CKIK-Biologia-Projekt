@@ -67,12 +67,13 @@ const handleRegistration = async () => {
         error.value = await err.response.data.error
       },
       onSuccess() {
-        alert('Sikeres regisztráció!')
+        // Sikeres regisztráció után átirányítjuk a felhasználót a home oldalra
         push({ name: 'home' })
       },
     })
   }
 }
+
 </script>
 <template>
   <v-container class="d-flex align-center justify-center fill-height">
