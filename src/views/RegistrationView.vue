@@ -67,7 +67,7 @@ const handleRegistration = async () => {
         error.value = await err.response.data.error
       },
       onSuccess() {
-        // Sikeres regisztráció után átirányítjuk a felhasználót a home oldalra
+      
         push({ name: 'home' })
       },
     })
