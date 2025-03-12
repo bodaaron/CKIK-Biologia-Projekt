@@ -1,70 +1,112 @@
 <script lang="ts" setup>
 import { jwtDecode } from 'jwt-decode'
-import axiosClient from '@/lib/axios'
 import { ref } from 'vue'
 import type { JelszoValtoztato } from '@/api/profile/profile'
 import { UseJelszoValtoztatas } from '@/api/profile/profileQuery'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
-const JelszoValtoztatoData = ref<JelszoValtoztato>({
+const visible = ref(false)
+const { push } = useRouter()
+const route = useRoute()
+const token = route.params.token
+
+const jelszoValtoztatoData = ref<JelszoValtoztato>({
   email: '',
   jelszo: '',
 })
 
-const route = useRoute()
-
-const { mutate: jelszoValtoztatas } = UseJelszoValtoztatas()
-const newPassword = ref<string | null>(null)
-const confirmPassword = ref<string | null>(null)
-const email = ref<string | null>(null)
-const token = route.params.token
-const visible = ref(false)
+const newPassword = ref<string>('')
+const confirmPassword = ref<string>('')
+const error = ref<string | null>(null)
+const { mutate: jelszoValtoztatas, isPending } = UseJelszoValtoztatas()
 
 const decode = () => {
-  const decoded = jwtDecode(String(token))
-  email.value = decoded.email
+  const decoded = jwtDecode<{ email: string }>(String(token))
+  jelszoValtoztatoData.value.email = decoded.email
 }
 
 decode()
 
 const handlePasswordReset = () => {
-  if (newPassword.value != confirmPassword.value) {
-    alert('A jelszavak nem egyeznek')
+  error.value = null
+  if (!newPassword.value || !confirmPassword.value) {
+    error.value = 'Minden mezőt ki kell tölteni.'
     return
-  } else {
-    JelszoValtoztatoData.value.email = String(email.value)
-    JelszoValtoztatoData.value.jelszo = String(newPassword.value)
-    jelszoValtoztatas(JelszoValtoztatoData.value)
   }
+  if (newPassword.value !== confirmPassword.value) {
+    error.value = 'A jelszavak nem egyeznek.'
+    return
+  }
+  jelszoValtoztatoData.value.jelszo = newPassword.value
+  jelszoValtoztatas(jelszoValtoztatoData.value, {
+    onSuccess: () => {
+      push('/home')
+    },
+    onError: (err: any) => {
+      error.value = err.response.data.error
+    },
+  })
 }
 </script>
+
 <template>
-  <v-card>
-    <v-card-title>Jelszó visszaállítás</v-card-title>
-    <v-form @submit.prevent="handlePasswordReset">
+  <v-container class="d-flex align-center justify-center fill-height">
+    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+      <v-card-title class="text-center">Jelszó visszaállítás</v-card-title>
+
       <v-text-field
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
         density="compact"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
-        label="Jelszó"
+        label="Új jelszó"
         @click:append-inner="visible = !visible"
         v-model="newPassword"
       ></v-text-field>
+
       <v-text-field
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
         density="compact"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
-        label="Jelszó"
+        label="Jelszó megerősítése"
         @click:append-inner="visible = !visible"
         v-model="confirmPassword"
       ></v-text-field>
-      <v-card-actions>
-        <v-btn type="submit">Jelszó visszaállítása</v-btn>
-      </v-card-actions>
-    </v-form>
-  </v-card>
+
+      <v-btn
+        class="mb-8"
+        size="large"
+        variant="elevated"
+        @click="handlePasswordReset"
+        :loading="isPending"
+        block
+      >
+        Jelszó visszaállítása
+      </v-btn>
+
+      <v-alert v-if="error" type="error" dismissible>
+        {{ error }}
+      </v-alert>
+    </v-card>
+  </v-container>
 </template>
+
+<style scoped>
+.v-card-title {
+  color: #009688;
+}
+.v-card {
+  background-color: #e0f2f1;
+  width: 100%;
+}
+.v-text-field {
+  color: #004d40;
+}
+.v-btn {
+  background-color: #006663;
+  color: #ece7e2;
+}
+</style>
