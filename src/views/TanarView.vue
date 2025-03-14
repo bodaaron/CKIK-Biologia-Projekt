@@ -560,9 +560,9 @@ const handleKijavitasDB = async () =>{
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
-      <v-card>
-        <v-card-title class="d-flex"
+    <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500" >
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Felelet kiosztása {{ selectedDiak }} tanulónak
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
@@ -592,9 +592,9 @@ const handleKijavitasDB = async () =>{
               required>
             </v-select>
           </v-card-actions>
-          <v-card-text>
+          <v-card-text >
             <v-list>
-              <v-list-item>
+              <v-list-item >
                   <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
                     <v-list-item-subtitle>A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle>
               </v-list-item>
@@ -604,7 +604,7 @@ const handleKijavitasDB = async () =>{
               </v-list-item>
             </v-list>
           </v-card-text>
-          <v-btn type="submit">Teszt kiosztása</v-btn>
+          <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
         </v-form>
       </v-card>
     </v-dialog>
@@ -623,7 +623,7 @@ const handleKijavitasDB = async () =>{
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="500">
+    <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
       <v-card>
         <v-card-title class="d-flex"
           >Bíztosan szeretne tanári jogosultságot adni {{ selectedDiak }} felhasználónak?
@@ -806,4 +806,5 @@ const handleKijavitasDB = async () =>{
   background-color: #1976D2;
   color: #E3F2FD;
 }
+
 </style>
