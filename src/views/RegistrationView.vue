@@ -122,7 +122,7 @@ const handleRegistration = async () => {
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="show1 = show1"
+            @click:append-inner="show1 = !show1"
           ></v-text-field>
 
           <v-text-field
