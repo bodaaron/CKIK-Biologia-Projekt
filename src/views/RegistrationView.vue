@@ -31,15 +31,11 @@ const rules = {
   jelszo: { required: helpers.withMessage('Jelszó megadása kötelező!', required) },
   jelszoMeg: {
     required: helpers.withMessage('Jelszó megerősítése kötelező!', required),
-<<<<<<< HEAD
     sameAsJelszo: helpers.withMessage(
       'A két jelszó nem egyezik!',
       sameAs(computed(() => registrationDataRef.value.jelszo)),
     ),
   },
-=======
-    sameAsJelszo: helpers.withMessage('A két jelszó nem egyezik!',sameAs(computed(()=> registrationDataRef.value.jelszo)))},
->>>>>>> 25c61f015c56b16aba663cb345c6221971cc484d
 }
 
 const items = [
@@ -64,41 +60,24 @@ const items = [
 const v$ = useVuelidate(rules, registrationDataRef.value)
 
 const error = ref<string | null>(null)
-<<<<<<< HEAD
 const successMessage = ref<string | null>(null)
 const handleRegistration = async () => {
   error.value = null
   const isValid = await v$.value.$validate()
   successMessage.value = null
-=======
-
-const handleRegistration = async () => {
-  error.value = null
-  const isValid = await v$.value.$validate()
-
->>>>>>> 25c61f015c56b16aba663cb345c6221971cc484d
   if (isValid) {
     await registration(registrationDataRef.value, {
       onError: async (err: any) => {
         error.value = await err.response.data.error
       },
       onSuccess() {
-<<<<<<< HEAD
         successMessage.value = 'Sikeres regisztráció! Regisztráció után újra be kell jelentkezni!'
         localStorage.clear()
         setTimeout(() => push({ name: 'home' }), 3000)
-=======
-      
-        push({ name: 'home' })
->>>>>>> 25c61f015c56b16aba663cb345c6221971cc484d
       },
     })
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 25c61f015c56b16aba663cb345c6221971cc484d
 </script>
 <template>
   <v-container class="d-flex align-center justify-center fill-height">
@@ -107,7 +86,6 @@ const handleRegistration = async () => {
       <v-card-text>
         <v-form @submit.prevent="handleRegistration">
           <v-text-field
-<<<<<<< HEAD
             v-model="registrationDataRef.nev"
             :error-messages="v$.nev.$errors.map((e) => String(e.$message))"
             :counter="40"
@@ -144,7 +122,7 @@ const handleRegistration = async () => {
             prepend-inner-icon="mdi-lock-outline"
             variant="outlined"
             :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="show1 = !show1"
+            @click:append-inner="show1 = show1"
           ></v-text-field>
 
           <v-text-field
@@ -203,94 +181,6 @@ const handleRegistration = async () => {
           }
         "
       >
-=======
-          v-model="registrationDataRef.nev"
-          :error-messages="v$.nev.$errors.map((e) => String(e.$message))"
-          :counter="40"
-          label="Név"
-          required
-          @blur="v$.nev.$touch"
-          @input="v$.nev.$touch"
-          variant="outlined"
-          density="compact"
-          prepend-inner-icon="mdi-account-outline"
-          ></v-text-field>
-          
-          <v-text-field
-          v-model="registrationDataRef.email"
-          :error-messages="v$.email.$errors.map((e) => String(e.$message))"
-          label="Email"
-          required
-          @blur="v$.email.$touch"
-          @input="v$.email.$touch"
-          density="compact"
-          prepend-inner-icon="mdi-email-outline"
-          variant="outlined"
-          ></v-text-field>
-          
-          <v-text-field
-          v-model="registrationDataRef.jelszo"
-          :error-messages="v$.jelszo.$errors.map((e) => String(e.$message))"
-          label="Jelszó"
-          required
-          :type="show1 ? 'text' : 'password'"
-          @blur="v$.jelszo.$touch"
-          @input="v$.jelszo.$touch"
-          density="compact"
-          prepend-inner-icon="mdi-lock-outline"
-          variant="outlined"
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          @click:append-inner="show1 = !show1"
-          ></v-text-field>
-          
-          <v-text-field
-          v-model="registrationDataRef.jelszoMeg"
-          :error-messages="v$.jelszoMeg.$errors.map((e) => String(e.$message))"
-          label="Jelszó megerősítés"
-          required
-          :type="show2 ? 'text' : 'password'"
-          @blur="v$.jelszoMeg.$touch"
-          @input="v$.jelszoMeg.$touch"
-          density="compact"
-          prepend-inner-icon="mdi-lock-outline"
-          variant="outlined"
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          @click:append-inner="show2 = !show2"
-          ></v-text-field>
-
-          <v-select
-          v-model="registrationDataRef.osztaly"
-          :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
-          label="Osztály"
-          :items="items"
-          required
-          @blur="v$.osztaly.$touch"
-          @change="v$.osztaly.$touch"
-          density="compact"
-          variant="outlined"
-          ></v-select>
-          
-          <v-card-actions>
-            <v-btn
-            class="mb-8"
-            size="large"
-            variant="elevated"
-            :loading="isPending"
-            type="submit"
-            block
-            >
-            Regisztráció
-          </v-btn>
-        </v-card-actions>
-      </v-form>
-    </v-card-text>
-    <v-alert v-if="error" type="error" dismissible>
-      {{ error }}
-    </v-alert>
-    <v-card-text
-    class="text-center"
-    @click="() => {push({ name: 'home' })}">
->>>>>>> 25c61f015c56b16aba663cb345c6221971cc484d
         <a class="text-green text-decoration-none" rel="noopener noreferrer">
           Már van fiókom
           <v-icon icon="mdi-chevron-right"> </v-icon>
