@@ -35,6 +35,7 @@ const feleletek = ref<Felelet[]>([]);
 const feleletMod = ref(null);
 const kivalTesztId = ref<number>();
 const kivalTesztTeszId = ref<number>();
+const message = ref<string | null>(null);
 
 const userData = ref<ChangeData>({
   id: 0,
@@ -47,6 +48,7 @@ const dialog = ref(false)
 const dialog2 = ref(false)
 const dialog3 = ref(false)
 const dialog4 = ref(false)
+const dialog5 = ref(false)
 const eltunt = ref(false)
 
 const items2 = ref([
@@ -148,11 +150,14 @@ const handleChange = async () => {
       },
       onSuccess() {
         if (userData.value.email !== data.value?.email) {
-          alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
-          push({ name: 'home' })
+          message.value = "Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!"
+          dialog5.value = true;
+          localStorage.clear();
+          setTimeout(() => {push('/home')}, 2000)
         } else {
-          alert('Sikeres adatmódosítás!')
-          window.location.reload()
+          message.value = "Sikeres adatmódosítás!"
+          dialog5.value = true;
+          setTimeout(() => {window.location.reload()}, 2000)
         }
       },
     })
@@ -385,6 +390,14 @@ const handleKijelentkezés= async () =>{
           <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
         </v-card-actions>
       </v-form>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-text>
+          {{message}}
+        </v-card-text>
       </v-card>
     </v-dialog>
 

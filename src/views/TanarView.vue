@@ -67,6 +67,7 @@ const dialog7 = ref(false)
 const dialog8 = ref(false)
 const dialog9 = ref(false)
 const dialog10 = ref(false)
+const alertModal = ref(false)
 const selectedOsztaly = ref<string | null>(null)
 const selectedDiak = ref<string | null>(null)
 const selectedTesztOsztaly = ref<string | null>(null)
@@ -82,6 +83,7 @@ const kivalTesztId = ref<number>();
 const kivalTesztTeszId = ref<number>();
 const LogUser = JSON.parse(localStorage.getItem('userData') || '{}');
 const userRole = LogUser.jogosultsag;
+const message = ref<string | null>(null);
 
 
 const items4 = ref([
@@ -208,12 +210,14 @@ const handleChange = async () => {
       },
       onSuccess() {
         if (userData.value.email !== data.value?.email) {
-          alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
+          message.value = "Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!"
+          alertModal.value = true;
           localStorage.clear();
-          push({ name: 'home' })
+          setTimeout(() => {push('/home')}, 2000)
         } else {
-          alert('Sikeres adatmódosítás!')
-          window.location.reload()
+          message.value = "Sikeres adatmódosítás!"
+          alertModal.value = true;
+          setTimeout(() => {window.location.reload()}, 2000)
         }
       },
     })
@@ -276,8 +280,9 @@ const handleKiosztOsztalyDB = async () => {
     tanarId: Number(data.value?.id)
   }
     await diakFelelet(diak)});
-  alert("Felelt sikeresn kioszva az osztálynak");
+  message.value = "Felelet sikeresen kiosztva az osztálynak!"
   dialog3.value = false;
+  alertModal.value = true;
 }
 
 const handleKiosztDiakDB = async () => {
@@ -288,8 +293,9 @@ const handleKiosztDiakDB = async () => {
   if (isValid) {
     await diakFelelet(diakTesztData.value,{
       onSuccess(){
-        alert('Felelet sikeresen kiosztva!')
+        message.value = "Felelet sikeresen kiosztva!"
         dialog4.value = false;
+        alertModal.value = true;
       }
     })
   }
@@ -322,8 +328,9 @@ const handleTorles = async (nev: string, id: number) => {
 
 const handleTorlesIgen = async () =>{
   deleteUser(Number(selectedDeleteDiakId.value));
-  alert("A felhasználó törölve lett")
-  window.location.reload();
+  message.value = "A felhasználó törölve lett!"
+  alertModal.value = true;
+  setTimeout(() => {window.location.reload()}, 2000)
 }
 
 const handleJogosultsagAdas = async (nev: string, id: number) => {
@@ -334,8 +341,9 @@ const handleJogosultsagAdas = async (nev: string, id: number) => {
 
 const handleJogosultsagIgen = async () =>{
   giveJogToUser(Number(selectedJogosultsagDiakId.value));
-  alert("A felhasználó mostantól rendelkezik tanári jogosultságokkal")
-  window.location.reload();
+  message.value = "A felhasználó mostantól rendelkezik tanári jogosultságokkal!"
+  alertModal.value = true;
+  setTimeout(() => {window.location.reload()}, 2000)
 }
 
 const handleJogosultsagElvet = async (nev: string, id: number) => {
@@ -346,8 +354,9 @@ const handleJogosultsagElvet = async (nev: string, id: number) => {
 
 const handleJogosultsagElvetIgen = async () =>{
   takeJogFromUser(Number(selectedJogosultsagDiakId.value));
-  alert("A felhasználó mostantól nem rendelkezik tanári jogosultságokkal")
-  window.location.reload();
+  message.value = "A felhasználó mostantól nem rendelkezik tanári jogosultságokkal!"
+  alertModal.value = true;
+  setTimeout(() => {window.location.reload()}, 2000)
 }
 
 const handleUserFeleletek = async (id: number) =>{
@@ -370,7 +379,8 @@ const handleKijavitasDB = async () =>{
   for(var i = 0; i < valaszok.value.length; i++){
     kijavitas(valaszok.value[i]);
   }
-  alert("A kipipált válaszok ellettek fogadva")
+  message.value = "A kipipált válaszok ellettek fogadva!"
+  alertModal.value = true;
 }
 
 
@@ -756,7 +766,7 @@ const handleKijavitasDB = async () =>{
         </v-card-title>
         <v-card-actions>
           <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending">Igen</v-btn>
-          <v-btn @click="dialog6=false">Nem</v-btn>
+          <v-btn @click="dialog9=false">Nem</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -797,6 +807,19 @@ const handleKijavitasDB = async () =>{
           <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
         </v-card-actions>
       </v-form>
+      </v-card>
+    </v-dialog>
+
+    
+    <v-dialog v-model="alertModal" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex"> Értesítés
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="alertModal = false"></v-btn>
+        </v-card-title>
+        <v-card-text>
+          {{message}}
+        </v-card-text>
       </v-card>
     </v-dialog>
 

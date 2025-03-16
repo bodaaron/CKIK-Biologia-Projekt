@@ -18,6 +18,7 @@ const jelszoValtoztatoData = ref<JelszoValtoztato>({
 const newPassword = ref<string>('')
 const confirmPassword = ref<string>('')
 const error = ref<string | null>(null)
+const dialog = ref(false);
 const { mutate: jelszoValtoztatas, isPending } = UseJelszoValtoztatas()
 
 const decode = () => {
@@ -40,7 +41,10 @@ const handlePasswordReset = () => {
   jelszoValtoztatoData.value.jelszo = newPassword.value
   jelszoValtoztatas(jelszoValtoztatoData.value, {
     onSuccess: () => {
-      push('/home')
+      dialog.value = true
+      setTimeout(() => {
+        push('/home')
+      }, 2000)
     },
     onError: (err: any) => {
       error.value = err.response.data.error
@@ -92,6 +96,14 @@ const handlePasswordReset = () => {
       </v-alert>
     </v-card>
   </v-container>
+
+  <v-dialog v-model="dialog" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-text>
+          Sikeres jelszóváltoztatás!
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>
