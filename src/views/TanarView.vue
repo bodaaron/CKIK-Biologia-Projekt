@@ -66,6 +66,7 @@ const dialog6 = ref(false)
 const dialog7 = ref(false)
 const dialog8 = ref(false)
 const dialog9 = ref(false)
+const dialog10 = ref(false)
 const selectedOsztaly = ref<string | null>(null)
 const selectedDiak = ref<string | null>(null)
 const selectedTesztOsztaly = ref<string | null>(null)
@@ -76,6 +77,18 @@ const feleletek = ref<Felelet[]>([]);
 const valaszok = ref<Valaszok[]>([]);
 const adatok = ref<Adat[]>([]);
 const eltunt = ref(false)
+const feleletMod = ref(null);
+const kivalTesztId = ref<number>();
+const kivalTesztTeszId = ref<number>();
+const LogUser = JSON.parse(localStorage.getItem('userData') || '{}');
+const userRole = LogUser.jogosultsag;
+
+
+const items4 = ref([
+  { text: "Választós", value: 0},
+  { text: "Saját válasz", value: 1}
+]);
+
 
 watchEffect(() => {
   if (data.value) {
@@ -95,6 +108,21 @@ const hasChanges = computed(() => {
   )
 })
 
+const handleKitoltClick = (id: number, tesztId: number) => {
+  dialog10.value = true
+  kivalTesztId.value = id;
+  kivalTesztTeszId.value = tesztId
+}
+
+
+const handleKitoltes = async () =>{
+  const isValid = await v$4.value.$validate()
+  if(isValid){
+    sessionStorage.setItem('exist','1');
+    push({ name: 'teszt', params: { id: kivalTesztId.value, tesztId: kivalTesztTeszId.value, tesztMod: feleletMod.value } })
+  }
+}
+
 const handleGyakorloKitoltes = async () => {
   dialog.value = true
 }
@@ -104,9 +132,6 @@ const handleUserek = async () => {
   feltolt()
 }
 
-const handleKitoltClick = (id: number, tesztId: number) => {
-  push({ name: 'teszt', params: { id: id, tesztId: tesztId } })
-}
 
 const rules = {
   nev: { required: helpers.withMessage('Név megadása kötelező!', required) },
@@ -127,6 +152,11 @@ const tesztRulesDiak = {
   kepId: { required: helpers.withMessage('Teszt kiválasztása kötelező', required) },
   feleletMod: { required: helpers.withMessage('Felelet mód kiválasztása kötelező', required) },
 }
+
+const tesztKioltRules = {
+  feleletMod: {required: helpers.withMessage('Teszt mód kiválasztása kötelező',required)}
+}
+
 
 const items = [
   '13.A',
@@ -157,6 +187,7 @@ const items3 = ref([
 const v$ = useVuelidate(rules, userData.value)
 const v$2 = useVuelidate(tesztRulesOsztaly, osztalyTesztData)
 const v$3 = useVuelidate(tesztRulesDiak, diakTesztData)
+const v$4 = useVuelidate(tesztKioltRules,{feleletMod})
 
 const error = ref<string | null>(null)
 const error2 = ref<string | null>(null)
@@ -178,6 +209,7 @@ const handleChange = async () => {
       onSuccess() {
         if (userData.value.email !== data.value?.email) {
           alert('Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!')
+          localStorage.clear();
           push({ name: 'home' })
         } else {
           alert('Sikeres adatmódosítás!')
@@ -189,6 +221,7 @@ const handleChange = async () => {
 }
 
 const handleMegtekintes = async (id: number, fajlnev: number) => {
+  sessionStorage.setItem('exist','1');
   push({ name: 'megtekintes', params: { id: id, fajlnev: fajlnev } })
 }
 
@@ -371,7 +404,7 @@ const handleKijavitasDB = async () =>{
             @input="v$.email.$touch"
           ></v-text-field>
 
-          <v-select 
+          <v-select v-if="userRole == 0"
             v-model="userData.osztaly"
             :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
             label="Osztály"
@@ -467,7 +500,7 @@ const handleKijavitasDB = async () =>{
             <tr v-for="user in filteredUsers" :key="user.id">
               <td>{{ user.nev }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.osztaly }}</td>
+              <td>{{ user.jogosultsag === 1 ? 'Tanár' : user.osztaly }}</td>
               <td>{{ user.jogosultsag === 1 ? 'Tanár' : 'Tanuló' }}</td>
               <td>
                 <v-btn v-if="user.jogosultsag == 0"
@@ -725,6 +758,45 @@ const handleKijavitasDB = async () =>{
           <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending">Igen</v-btn>
           <v-btn @click="dialog6=false">Nem</v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+    <v-dialog v-model="dialog10" transition="dialog-bottom-transition" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex">Teszt mód kiválasztása
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog10 = false"></v-btn>
+        </v-card-title>
+        <v-form @submit.prevent="handleKitoltes()">
+        <v-card-actions>
+            <v-select
+              label="Teszt mód"
+              :items="items4"
+              v-model="feleletMod"
+              item-title="text"
+              item-value="value"
+            :error-messages="v$4.feleletMod.$errors.map((e) => String(e.$message))"
+              @blur="v$4.feleletMod.$touch"
+              @change="v$4.feleletMod.$touch"
+              required>
+            </v-select>
+        </v-card-actions>
+        <v-card-text>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+              <v-list-item-subtitle>Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+              <v-list-item-subtitle>Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
+        </v-card-actions>
+      </v-form>
       </v-card>
     </v-dialog>
 

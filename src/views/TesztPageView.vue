@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
-import { computed, onMounted, ref, watchEffect } from 'vue';
+import { computed, nextTick, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -63,22 +63,30 @@ const updateAreas = () => {
 };
 
 onMounted(async () => {
-  adatok.value = await getAdatok(Number(adat.value))
-  if (!imgElement.value) return;
+  adatok.value = await getAdatok(Number(adat.value));
+  if(!imgElement.value) return
+ 
 
-  imgElement.value?.addEventListener('load', () => {
-    if(imgElement.value?.naturalWidth == 3024){
+  const handleImageLoad = () => {
+    if (imgElement.value?.naturalWidth === 3024) {
       naturalWidth.value = 1903;
       naturalHeight.value = 2537;
-    }
-    else if(imgElement.value?.naturalWidth == 4032){
+    } else if (imgElement.value?.naturalWidth === 4032) {
       naturalWidth.value = 1903;
       naturalHeight.value = 1427;
     }
     updateAreas();
     updateAnswers();
-  });
+  };
+
+  if (imgElement.value.complete) {
+    handleImageLoad();
+  } 
+  else {
+    imgElement.value.addEventListener("load", handleImageLoad);
+  }
 });
+
 
 watchEffect(() => {
   const handleResize = () => updateAreas();
@@ -107,11 +115,16 @@ const handleEllenorzes = () =>{
 }
 
 document.onclick = function(e) {
+
   var x = e.pageX;
   var y = e.pageY;
   console.log("X is "+x+" and Y is "+y);
-  console.log(areas);
 };
+
+const handleNincsIlyen = () =>{
+  push({name:'tanulo'})
+}
+
 </script>
 
 <template>
@@ -120,6 +133,7 @@ document.onclick = function(e) {
     ref="imgElement"
     usemap="#dynamic-map"
     style="max-width: 100%; height: auto;"
+    @error="handleNincsIlyen"
   />
   <map name="dynamic-map">
     <area
@@ -138,7 +152,7 @@ document.onclick = function(e) {
       <v-card-title class="d-flex">Végeredmény
         <v-spacer></v-spacer>
         <v-btn
-        @click="back()">
+        @click="push({name: 'tanulo'})">
         Vissza a főoldalra
         </v-btn>
       </v-card-title>

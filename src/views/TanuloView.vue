@@ -249,7 +249,7 @@ const handleKijelentkezés= async () =>{
           <thead>
             <tr>
               <th class="text-left">Név</th>
-              <th class="text-left">Sorszám</th>
+              <th class="text-left">Kép sorszám</th>
               <th class="text-left">Műveletek</th>
             </tr>
           </thead>
@@ -285,7 +285,7 @@ const handleKijelentkezés= async () =>{
           <thead>
             <tr>
               <th class="text-left">Név</th>
-              <th class="text-left">Sorszám</th>
+              <th class="text-left">Kép sorszám</th>
               <th class="text-left">Tanár</th>
               <th class="text-left">Teszt mód</th>
               <th class="text-left">Kitöltve</th>

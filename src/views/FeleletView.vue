@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Valasz } from '@/api/felelet/felelet';
-import { useFeleletDateUpdate, useValaszLeadas } from '@/api/felelet/feleletQuery';
+import type { Felelet, Valasz } from '@/api/felelet/felelet';
+import { useFeleletDateUpdate, useGetDiakFeleletek, useValaszLeadas } from '@/api/felelet/feleletQuery';
 import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
 import { computed, onMounted, ref, watchEffect } from 'vue';
@@ -27,6 +27,7 @@ const adatok = ref<Adat[]>([]);
 const { mutate: valaszLeadas } = useValaszLeadas()
 
 const { mutate: feleletDateUpdate } = useFeleletDateUpdate() 
+const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
 
 const imgElement = ref<HTMLImageElement | null>(null);
 const areas = ref<any[]>([]);
@@ -36,8 +37,10 @@ const dialog2 = ref(false);
 const dialog3 = ref(false);
 const dialog4 = ref(false);
 const activeArea = ref<any>(null);
+const feleletek = ref<Felelet[]>([]);
 const answers = ref<Record<string, string>>({});  
 const answer = ref<string>('');
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 var items2 = [ {helyesValasz:'',id:0}]
 
 const updateAnswers = () => {
@@ -70,22 +73,38 @@ const updateAreas = () => {
   }));
 };
 
-onMounted(async () => {
-  adatok.value = await getAdatok(Number(adat.value))
-  if (!imgElement.value) return;
+const Ellenorzes = () =>{
+  const thisFelelet = feleletek.value.find((f) => f.id == felelet.value)
+  if(thisFelelet?.kitoltesDatum != null || thisFelelet?.diakId != userData.id ){
+  push({name:'tanulo'});
+  }
+}
 
-  imgElement.value?.addEventListener('load', () => {
-    if(imgElement.value?.naturalWidth == 3024){
+onMounted(async () => {
+  feleletek.value = await getDiakFeleletek(userData.id);
+  Ellenorzes()
+  adatok.value = await getAdatok(Number(adat.value));
+  if(!imgElement.value) return
+ 
+
+  const handleImageLoad = () => {
+    if (imgElement.value?.naturalWidth === 3024) {
       naturalWidth.value = 1903;
       naturalHeight.value = 2537;
-    }
-    else if(imgElement.value?.naturalWidth == 4032){
+    } else if (imgElement.value?.naturalWidth === 4032) {
       naturalWidth.value = 1903;
       naturalHeight.value = 1427;
     }
     updateAreas();
     updateAnswers();
-  });
+  };
+
+  if (imgElement.value.complete) {
+    handleImageLoad();
+  } 
+  else {
+    imgElement.value.addEventListener("load", handleImageLoad);
+  }
 });
 
 watchEffect(() => {
@@ -113,7 +132,6 @@ document.onclick = function(e) {
   var x = e.pageX;
   var y = e.pageY;
   console.log("X is "+x+" and Y is "+y);
-  console.log(areas);
 };
 
 const handleBekuldes = () =>{
@@ -132,6 +150,10 @@ const handleBekuldesDB = async () => {
   push({name: 'tanulo'})
 };
 
+const handleNincsIlyen = () =>{
+  push({name:'tanulo'})
+}
+
 </script>
 
 <template>
@@ -140,6 +162,7 @@ const handleBekuldesDB = async () => {
     ref="imgElement"
     usemap="#dynamic-map"
     style="max-width: 100%; height: auto;"
+    @error="handleNincsIlyen"
   />
   <map name="dynamic-map">
     <area

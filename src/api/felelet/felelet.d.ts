@@ -15,6 +15,7 @@ export type Felelet = {
     id: number,
     kepId: number,
     tanarId: number,
+    diakId: number,
     kitoltesDatum: Date,
     feleletMod: boolean,
 }

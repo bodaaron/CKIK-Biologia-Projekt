@@ -53,7 +53,7 @@ const router = createRouter({
       path: '/megtekintes/:id/:fajlnev',
       name: 'megtekintes',
       component: MegtekintesView,
-      meta:{requiresAuth: true}
+      meta:{requiresAuth: true,}
     },
     {
       path: '/elfelejtettjelszo',

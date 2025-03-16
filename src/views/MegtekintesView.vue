@@ -15,7 +15,7 @@ adat.value = Number(route.params.id);
 
 
 const adatok = ref<Adat[]>([]);
-const {back} = useRouter();
+const {back, push} = useRouter();
 
 const imgElement = ref<HTMLImageElement | null>(null);
 const areas = ref<any[]>([]);
@@ -82,6 +82,11 @@ document.onclick = function(e){
   console.log(areas);
 };
 
+const handleBack = () =>{
+  push({name:'home'})
+  sessionStorage.setItem('exist','0')
+}
+
 </script>
 
 <template>
@@ -123,7 +128,7 @@ document.onclick = function(e){
     size="large"
     variant="elevated"
     block
-    @click="back()">
+    @click="handleBack()">
     Vissza a főoldalra
   </v-btn>
 </template>
