@@ -13,14 +13,14 @@ import type { Felelet, Valaszok } from '@/api/felelet/felelet'
 import type { UseQueryReturnType } from '@tanstack/vue-query'
 
 const slides = [
-  '../public/kepek/delfin.jpg',
-  '../public/kepek/bagoly.jpg',
-  '../public/kepek/teknos.jpg',
-  '../public/kepek/labdasdelfin.jpg',
-  '../public/kepek/meduza.jpg',
-  '../public/kepek/kacsa.jpg',
-  '../public/kepek/siraly.jpg',
-  '../public/kepek/zsolti.jpg',
+  '../public/kepek/hatter/delfin.jpg',
+  '../public/kepek/hatter/bagoly.jpg',
+  '../public/kepek/hatter/teknos.jpg',
+  '../public/kepek/hatter/labdasdelfin.jpg',
+  '../public/kepek/hatter/meduza.jpg',
+  '../public/kepek/hatter/kacsa.jpg',
+  '../public/kepek/hatter/siraly.jpg',
+  '../public/kepek/hatter/zsolti.jpg',
 ]
 
 const { data } = useGetLoggedUser()

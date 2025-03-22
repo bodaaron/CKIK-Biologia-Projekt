@@ -129,7 +129,7 @@ const handleNincsIlyen = () =>{
 
 <template>
   <img
-    :src="`/public/kepek/${kep}.jpg`"
+    :src="`/public/kepek/tesztKepek/${kep}.jpg`"
     ref="imgElement"
     usemap="#dynamic-map"
     style="max-width: 100%; height: auto;"
