@@ -128,13 +128,27 @@ const handleNincsIlyen = () =>{
 </script>
 
 <template>
-  <img
-    :src="`/public/kepek/tesztKepek/${kep}.jpg`"
-    ref="imgElement"
-    usemap="#dynamic-map"
-    style="max-width: 100%; height: auto;"
-    @error="handleNincsIlyen"
-  />
+  <v-container>
+    <v-card>
+      <img
+        :src="`/public/kepek/tesztKepek/${kep}.jpg`"
+        ref="imgElement"
+        usemap="#dynamic-map"
+        style="max-width: 100%; height: auto;"
+        @error="handleNincsIlyen"
+      />
+      <v-card-actions>
+        <v-btn
+          class="mb-8"
+          size="large"
+          variant="elevated"
+          block
+          @click="handleEllenorzes()">
+          Ellenőrzés
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
   <map name="dynamic-map">
     <area
       v-for="(area, index) in areas"
@@ -220,14 +234,4 @@ const handleNincsIlyen = () =>{
       ></v-select>
     </v-card>
   </v-dialog>
-
-
-  <v-btn
-    class="mb-8"
-    size="large"
-    variant="elevated"
-    block
-    @click="handleEllenorzes()">
-    Ellenőrzés
-  </v-btn>
 </template>
