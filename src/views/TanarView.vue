@@ -757,7 +757,7 @@ const handleKijavitasDB = async () =>{
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="500">
+  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
       <v-card>
         <v-card-title class="d-flex"
           >Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
