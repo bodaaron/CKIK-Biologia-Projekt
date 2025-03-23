@@ -443,7 +443,7 @@ const handleKijavitasDB = async () =>{
         </v-card-title>
         <v-table>
           <thead>
-            <tr>
+            <tr class="tablaFejResz">
               <th class="text-left">Név</th>
               <th class="text-left">Sorszám</th>
               <th class="text-left">Műveletek</th>
@@ -653,29 +653,29 @@ const handleKijavitasDB = async () =>{
     </v-dialog>
 
     <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Bíztosan törölni szeretné {{ selectedDiak }} felhasználót?
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
         </v-card-title>
         <v-card-actions>
-          <v-btn @click="handleTorlesIgen()" :loading="isPending">Igen</v-btn>
-          <v-btn @click="dialog5=false">Nem</v-btn>
+          <v-btn @click="handleTorlesIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
+          <v-btn @click="dialog5=false" class="nemGomb">Nem</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Bíztosan szeretne tanári jogosultságot adni {{ selectedDiak }} felhasználónak?
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
         </v-card-title>
         <v-card-actions>
-          <v-btn @click="handleJogosultsagIgen()" :loading="isPending">Igen</v-btn>
-          <v-btn @click="dialog6=false">Nem</v-btn>
+          <v-btn @click="handleJogosultsagIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
+          <v-btn @click="dialog6=false" class="nemGomb">Nem</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -688,7 +688,7 @@ const handleKijavitasDB = async () =>{
         </v-card-title>
         <v-table>
           <thead>
-            <tr>
+            <tr class="tablaFejResz">
               <th class="text-left">Név</th>
               <th class="text-left">Sorszám</th>
               <th class="text-left">Tanár</th>
@@ -730,7 +730,7 @@ const handleKijavitasDB = async () =>{
       </v-card-title>
       <v-table>
       <thead>
-        <tr>
+        <tr class="tablaFejResz">
           <th class="text-left">
             Sorszám
           </th>
@@ -758,15 +758,15 @@ const handleKijavitasDB = async () =>{
   </v-dialog>
 
   <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
-      <v-card>
-        <v-card-title class="d-flex"
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle"
           >Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
         </v-card-title>
         <v-card-actions>
-          <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending">Igen</v-btn>
-          <v-btn @click="dialog9=false">Nem</v-btn>
+          <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
+          <v-btn @click="dialog9=false" class="nemGomb">Nem</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -901,5 +901,10 @@ const handleKijavitasDB = async () =>{
   background-color: #1976D2;
   color: #E3F2FD;
 }
-
+.igenGomb{
+  color: #1976D2;
+}
+.nemGomb{
+  color: #558b2f;
+}
 </style>

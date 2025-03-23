@@ -252,7 +252,7 @@ const handleKijelentkezés= async () =>{
         </v-card-title>
         <v-table>
           <thead>
-            <tr>
+            <tr class="tablaFejResz">
               <th class="text-left">Név</th>
               <th class="text-left">Kép sorszám</th>
               <th class="text-left">Műveletek</th>
@@ -288,7 +288,7 @@ const handleKijelentkezés= async () =>{
         </v-card-title>
         <v-table>
           <thead>
-            <tr>
+            <tr class="tablaFejResz">
               <th class="text-left">Név</th>
               <th class="text-left">Kép sorszám</th>
               <th class="text-left">Tanár</th>
@@ -330,7 +330,7 @@ const handleKijelentkezés= async () =>{
         <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
       </v-card-title>
       <v-table>
-      <thead>
+      <thead class="tablaFejResz">
         <tr>
           <th class="text-left">
             Sorszám
@@ -458,5 +458,9 @@ const handleKijelentkezés= async () =>{
 .hattergomb{
   background-color: #006663;
   color: #ece7e2;
+}
+.tablaFejResz{
+  font-style: oblique;
+  color: black;
 }
 </style>

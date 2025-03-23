@@ -129,7 +129,7 @@ const handleNincsIlyen = () =>{
 
 <template>
   <v-container>
-    <v-card>
+    <v-card class="alul">
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
@@ -172,7 +172,7 @@ const handleNincsIlyen = () =>{
       </v-card-title>
       <v-table>
       <thead>
-        <tr>
+        <tr class="tablaFejResz">
           <th class="text-left">
             Sorszám
           </th>
@@ -250,5 +250,13 @@ const handleNincsIlyen = () =>{
 .hattergomb{
   background-color: #006663;
   color: #ece7e2;
+}
+.tablaFejResz{
+  font-style: oblique;
+  color: black;
+}
+.v-container{
+background-color: #009688;
+border: #006663 solid 10px;
 }
 </style>

@@ -95,7 +95,7 @@ const handleNincsIlyen = () =>{
 
 <template>
   <v-container>
-    <v-card>
+    <v-card class="alul">
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
@@ -148,5 +148,12 @@ const handleNincsIlyen = () =>{
 .hattergomb{
   background-color: #006663;
   color: #ece7e2;
+}
+.v-container{
+background-color: #009688;
+border: #006663 solid 10px;
+}
+.alul{
+  background-color: #e0f2f1;
 }
 </style>
