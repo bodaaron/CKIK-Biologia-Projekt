@@ -139,7 +139,7 @@ const handleNincsIlyen = () =>{
       />
       <v-card-actions>
         <v-btn
-          class="mb-8"
+          class="mb-8 hattergomb"
           size="large"
           variant="elevated"
           block
@@ -162,11 +162,11 @@ const handleNincsIlyen = () =>{
   </map>
 
   <v-dialog max-width="500" v-model="vegeredmeny" transition="dialog-bottom-transition" fullscreen>
-    <v-card>
-      <v-card-title class="d-flex">Végeredmény
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">Végeredmény
         <v-spacer></v-spacer>
         <v-btn
-        @click="push({name: 'tanulo'})">
+        @click="push({name: 'tanulo'})" class="hattergomb">
         Vissza a főoldalra
         </v-btn>
       </v-card-title>
@@ -235,3 +235,20 @@ const handleNincsIlyen = () =>{
     </v-card>
   </v-dialog>
 </template>
+<style scoped>
+.v-table{
+  background-color: #558B2F; 
+  color: #ece7e2;
+}
+.alul{
+  background-color: #e0f2f1;
+}
+.tesztTitle{
+  color: #009688;
+  background-color: #e0f2f1;
+}
+.hattergomb{
+  background-color: #006663;
+  color: #ece7e2;
+}
+</style>

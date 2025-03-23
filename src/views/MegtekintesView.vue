@@ -105,7 +105,7 @@ const handleNincsIlyen = () =>{
       />
       <v-card-actions>
         <v-btn
-          class="mb-8"
+          class="mb-8 hattergomb"
           size="large"
           variant="elevated"
           block
@@ -143,3 +143,10 @@ const handleNincsIlyen = () =>{
   </v-dialog>
 
 </template>
+<style scoped>
+
+.hattergomb{
+  background-color: #006663;
+  color: #ece7e2;
+}
+</style>

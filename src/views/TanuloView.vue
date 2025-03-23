@@ -355,8 +355,8 @@ const handleKijelentkezés= async () =>{
   </v-dialog>
 
   <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
-      <v-card>
-        <v-card-title class="d-flex">Teszt mód kiválasztása
+      <v-card class="alul">
+        <v-card-title class="d-flex tesztTitle">Teszt mód kiválasztása
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
         </v-card-title>
