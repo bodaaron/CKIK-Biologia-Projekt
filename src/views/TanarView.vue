@@ -654,11 +654,13 @@ const handleKijavitasDB = async () =>{
 
     <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
       <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Bíztosan törölni szeretné {{ selectedDiak }} felhasználót?
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
-        </v-card-title>
+        <v-card-title class="d-flex tesztTitle">Törlés
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
+      </v-card-title>
+      <v-card-text> 
+          Bíztosan törölni szeretné {{ selectedDiak }} felhasználót?
+        </v-card-text>
         <v-card-actions>
           <v-btn @click="handleTorlesIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
           <v-btn @click="dialog5=false" class="nemGomb">Nem</v-btn>
@@ -668,11 +670,13 @@ const handleKijavitasDB = async () =>{
 
     <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
       <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Bíztosan szeretne tanári jogosultságot adni {{ selectedDiak }} felhasználónak?
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
-        </v-card-title>
+        <v-card-title class="d-flex tesztTitle">Jogosultság
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
+      </v-card-title>
+      <v-card-text>
+        Bíztosan szeretne tanári jogosultságo adni {{ selectedDiak }} felhasználónak?
+        </v-card-text>
         <v-card-actions>
           <v-btn @click="handleJogosultsagIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
           <v-btn @click="dialog6=false" class="nemGomb">Nem</v-btn>
@@ -759,11 +763,13 @@ const handleKijavitasDB = async () =>{
 
   <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
       <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
+        <v-card-title class="d-flex tesztTitle">Jogosultság
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
         </v-card-title>
+        <v-card-text>
+          Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
+        </v-card-text>
         <v-card-actions>
           <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
           <v-btn @click="dialog9=false" class="nemGomb">Nem</v-btn>
