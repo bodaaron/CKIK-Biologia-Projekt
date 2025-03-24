@@ -460,473 +460,492 @@ const handleKijavitasDB = async () => {
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek"
-          >Felhasználók</v-btn
-        >
-
-        <v-btn
-          color="info"
-          variant="elevated"
-          :loading="isPending"
-          @click="handleTesztKiosztOsztaly"
-          >Felelet kiosztása osztálynak</v-btn
-        >
-
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
-          >Gyakorló teszt kitöltés</v-btn
-        >
-
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés"
-          >Kijelentkezés</v-btn
-        >
+        <v-container>
+          <v-btn
+            class="my-2"
+            color="info"
+            block
+            variant="elevated"
+            :loading="isPending"
+            @click="handleUserek"
+            >Felhasználók</v-btn
+          >
+          <v-btn
+            class="my-2"
+            color="info"
+            block
+            variant="elevated"
+            :loading="isPending"
+            @click="handleTesztKiosztOsztaly"
+            >Felelet kiosztása osztálynak</v-btn
+          >
+          <v-btn
+            class="my-2"
+            color="info"
+            block
+            variant="elevated"
+            :loading="isPending"
+            @click="handleGyakorloKitoltes"
+            >Gyakorló teszt kitöltés</v-btn
+          >
+          <v-btn
+            class="my-2"
+            color="info"
+            block
+            variant="elevated"
+            :loading="isPending"
+            @click="handleKijelentkezés"
+            >Kijelentkezés</v-btn
+          >
+        </v-container>
       </v-card-actions>
     </v-card>
+  </v-container>
 
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Teszt kiválasztása
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-        </v-card-title>
-        <v-table>
-          <thead>
-            <tr class="tablaFejResz">
-              <th class="text-left">Név</th>
-              <th class="text-left">Sorszám</th>
-              <th class="text-left">Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="kep in kepek" :key="kep.id">
-              <td>{{ kep.nev }}</td>
-              <td>{{ kep.fajlnev }}</td>
-              <td>
-                <v-btn
-                  class="ms-auto kitoltes"
-                  text="Kitöltés"
-                  @click="handleKitoltClick(kep.id, kep.fajlnev)"
-                ></v-btn>
-                <v-btn
-                  class="ms-auto megtekintes"
-                  text="Megtekintés"
-                  @click="handleMegtekintes(kep.id, kep.fajlnev)"
-                ></v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-dialog>
+  <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Teszt kiválasztása
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+      </v-card-title>
+      <v-table>
+        <thead>
+          <tr class="tablaFejResz">
+            <th class="text-left">Név</th>
+            <th class="text-left">Sorszám</th>
+            <th class="text-left">Műveletek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="kep in kepek" :key="kep.id">
+            <td>{{ kep.nev }}</td>
+            <td>{{ kep.fajlnev }}</td>
+            <td>
+              <v-btn
+                class="ms-auto kitoltes"
+                text="Kitöltés"
+                @click="handleKitoltClick(kep.id, kep.fajlnev)"
+              ></v-btn>
+              <v-btn
+                class="ms-auto megtekintes"
+                text="Megtekintés"
+                @click="handleMegtekintes(kep.id, kep.fajlnev)"
+              ></v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-card>
+  </v-dialog>
 
-    <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Felhasználók
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
-        </v-card-title>
+  <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Felhasználók
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
+      </v-card-title>
+      <v-card-actions>
+        <v-select
+          label="Keresés osztály alapján"
+          :items="items"
+          v-model="selectedOsztaly"
+          @blur="handleKereses"
+        ></v-select>
+        <v-text-field
+          label="Keresés név alapján"
+          v-model="nameSearch"
+          @input="handleKereses"
+        ></v-text-field>
+      </v-card-actions>
+      <v-card-actions>
+        <v-alert v-if="error2" type="error">
+          {{ error2 }}
+        </v-alert>
+      </v-card-actions>
+      <v-table>
+        <thead>
+          <tr class="tablaFejResz">
+            <th class="text-left">Név</th>
+            <th class="text-left">E-mail cím</th>
+            <th class="text-left">Osztály</th>
+            <th class="text-left">Jogosultság</th>
+            <th class="text-left">Műveletek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in filteredUsers" :key="user.id">
+            <td>{{ user.nev }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.jogosultsag === 1 ? 'Tanár' : user.osztaly }}</td>
+            <td>{{ user.jogosultsag === 1 ? 'Tanár' : 'Tanuló' }}</td>
+            <td>
+              <v-btn
+                v-if="user.jogosultsag == 0"
+                class="ms-auto feleletGomb"
+                text="Feleletek"
+                @click="handleUserFeleletek(user.id)"
+              ></v-btn>
+              <v-btn
+                v-if="user.jogosultsag == 0"
+                class="ms-auto feleletKiosztGomb"
+                text="Felelet kiosztása"
+                @click="handleTesztKiosztDiak(user.nev, user.id)"
+              ></v-btn>
+              <v-btn
+                v-if="user.jogosultsag == 0"
+                class="ms-auto jogosultsagAdasGomb"
+                text="Tanári jogosultság adása"
+                @click="handleJogosultsagAdas(user.nev, user.id)"
+              ></v-btn>
+              <v-btn
+                v-if="user.jogosultsag == 1"
+                class="ms-auto jogosultsagAdasGomb"
+                text="Tanári jogosultság elvétele"
+                @click="handleJogosultsagElvet(user.nev, user.id)"
+              ></v-btn>
+              <v-btn
+                class="ms-auto torlesGomb"
+                text="Törlés"
+                @click="handleTorles(user.nev, user.id)"
+              ></v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="800">
+    <v-card class="alul">
+      <v-card-title class="d-flex"
+        >Felelet kiosztása osztálynak
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
+      </v-card-title>
+      <v-form @submit.prevent="handleKiosztOsztalyDB">
         <v-card-actions>
           <v-select
-            label="Keresés osztály alapján"
-            :items="items"
-            v-model="selectedOsztaly"
-            @blur="handleKereses"
+            label="Kiosztható tesztek"
+            :items="items2"
+            item-title="nev"
+            item-value="id"
+            :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
+            v-model="osztalyTesztData.selectedTeszt"
+            @blur="v$2.selectedTeszt.$touch"
+            @change="v$2.selectedTeszt.$touch"
+            required
           ></v-select>
-          <v-text-field
-            label="Keresés név alapján"
-            v-model="nameSearch"
-            @input="handleKereses"
-          ></v-text-field>
-        </v-card-actions>
-        <v-card-actions>
-          <v-alert v-if="error2" type="error">
-            {{ error2 }}
-          </v-alert>
-        </v-card-actions>
-        <v-table>
-          <thead>
-            <tr class="tablaFejResz">
-              <th class="text-left">Név</th>
-              <th class="text-left">E-mail cím</th>
-              <th class="text-left">Osztály</th>
-              <th class="text-left">Jogosultság</th>
-              <th class="text-left">Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in filteredUsers" :key="user.id">
-              <td>{{ user.nev }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.jogosultsag === 1 ? 'Tanár' : user.osztaly }}</td>
-              <td>{{ user.jogosultsag === 1 ? 'Tanár' : 'Tanuló' }}</td>
-              <td>
-                <v-btn
-                  v-if="user.jogosultsag == 0"
-                  class="ms-auto feleletGomb"
-                  text="Feleletek"
-                  @click="handleUserFeleletek(user.id)"
-                ></v-btn>
-                <v-btn
-                  v-if="user.jogosultsag == 0"
-                  class="ms-auto feleletKiosztGomb"
-                  text="Felelet kiosztása"
-                  @click="handleTesztKiosztDiak(user.nev, user.id)"
-                ></v-btn>
-                <v-btn
-                  v-if="user.jogosultsag == 0"
-                  class="ms-auto jogosultsagAdasGomb"
-                  text="Tanári jogosultság adása"
-                  @click="handleJogosultsagAdas(user.nev, user.id)"
-                ></v-btn>
-                <v-btn
-                  v-if="user.jogosultsag == 1"
-                  class="ms-auto jogosultsagAdasGomb"
-                  text="Tanári jogosultság elvétele"
-                  @click="handleJogosultsagElvet(user.nev, user.id)"
-                ></v-btn>
-                <v-btn
-                  class="ms-auto torlesGomb"
-                  text="Törlés"
-                  @click="handleTorles(user.nev, user.id)"
-                ></v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog3" transition="dialog-bottom-transition" max-width="800">
-      <v-card class="alul">
-        <v-card-title class="d-flex"
-          >Felelet kiosztása osztálynak
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
-        </v-card-title>
-        <v-form @submit.prevent="handleKiosztOsztalyDB">
-          <v-card-actions>
-            <v-select
-              label="Kiosztható tesztek"
-              :items="items2"
-              item-title="nev"
-              item-value="id"
-              :error-messages="v$2.selectedTeszt.$errors.map((e) => String(e.$message))"
-              v-model="osztalyTesztData.selectedTeszt"
-              @blur="v$2.selectedTeszt.$touch"
-              @change="v$2.selectedTeszt.$touch"
-              required
-            ></v-select>
-            <v-select
-              label="Osztály választása"
-              :items="items"
-              v-model="osztalyTesztData.selectedOsztaly"
-              :error-messages="v$2.selectedOsztaly.$errors.map((e) => String(e.$message))"
-              @blur="v$2.selectedOsztaly.$touch"
-              @change="v$2.selectedOsztaly.$touch"
-              required
-            ></v-select>
-            <v-select
-              label="Teszt mód"
-              :items="items3"
-              v-model="osztalyTesztData.feleletMod"
-              item-title="text"
-              item-value="value"
-              :error-messages="v$2.feleletMod.$errors.map((e) => String(e.$message))"
-              @blur="v$2.feleletMod.$touch"
-              @change="v$2.feleletMod.$touch"
-              required
-            >
-            </v-select>
-          </v-card-actions>
-          <v-card-text>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
-                <v-list-item-subtitle
-                  >A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
-                <v-list-item-subtitle
-                  >A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
-        </v-form>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Felelet kiosztása {{ selectedDiak }} tanulónak
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
-        </v-card-title>
-        <v-form @submit.prevent="handleKiosztDiakDB">
-          <v-card-actions>
-            <v-select
-              label="Kiosztható tesztek"
-              :items="items2"
-              v-model="diakTesztData.kepId"
-              item-title="nev"
-              item-value="id"
-              :error-messages="v$3.kepId.$errors.map((e) => String(e.$message))"
-              @blur="v$3.kepId.$touch"
-              @change="v$3.kepId.$touch"
-              required
-            ></v-select>
-            <v-select
-              label="Teszt mód"
-              :items="items3"
-              v-model="diakTesztData.feleletMod"
-              item-title="text"
-              item-value="value"
-              :error-messages="v$3.feleletMod.$errors.map((e) => String(e.$message))"
-              @blur="v$3.feleletMod.$touch"
-              @change="v$3.feleletMod.$touch"
-              required
-            >
-            </v-select>
-          </v-card-actions>
-          <v-card-text>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
-                <v-list-item-subtitle
-                  >A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
-                <v-list-item-subtitle
-                  >A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
-        </v-form>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Törlés
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
-        </v-card-title>
-        <v-card-text> Bíztosan törölni szeretné {{ selectedDiak }} felhasználót? </v-card-text>
-        <v-card-actions>
-          <v-btn @click="handleTorlesIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
-          <v-btn @click="dialog5 = false" class="nemGomb">Nem</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Jogosultság
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
-        </v-card-title>
-        <v-card-text>
-          Bíztosan szeretne tanári jogosultságo adni {{ selectedDiak }} felhasználónak?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click="handleJogosultsagIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
-          <v-btn @click="dialog6 = false" class="nemGomb">Nem</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog7" transition="dialog-bottom-transition" fullscreen>
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Teszt kiválasztása
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog7 = false"></v-btn>
-        </v-card-title>
-        <v-table>
-          <thead>
-            <tr class="tablaFejResz">
-              <th class="text-left">Név</th>
-              <th class="text-left">Sorszám</th>
-              <th class="text-left">Tanár</th>
-              <th class="text-left">Kitöltve</th>
-              <th class="text-left">Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="felelet in feleletek" :key="felelet.id" v-if="kepek">
-              <td>{{ kepek.find((k) => k.id == felelet.kepId)?.nev }}</td>
-              <td>{{ kepek.find((k) => k.id == felelet.kepId)?.fajlnev }}</td>
-              <td>{{ users?.find((u) => u.id == felelet.tanarId)?.nev }}</td>
-              <td>
-                {{
-                  felelet.kitoltesDatum
-                    ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })
-                    : 'Ez a felelet még nincs kitöltve'
-                }}
-              </td>
-              <td>
-                <v-btn
-                  v-if="felelet.kitoltesDatum != null"
-                  class="ms-auto"
-                  text="Válaszok megtekintése"
-                  @click="handleValaszokMegtekint(felelet.id, felelet.kepId)"
-                ></v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog max-width="500" v-model="dialog8" transition="dialog-bottom-transition" fullscreen>
-      <v-card>
-        <v-card-title class="d-flex"
-          >Válaszok
-          <v-spacer></v-spacer>
-          <v-tooltip text="Minden kipipált válasz ellesz fogadva">
-            <template v-slot:activator="{ props }">
-              <v-btn v-bind="props" @click="handleKijavitasDB()">Kijavítás</v-btn>
-            </template>
-          </v-tooltip>
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog8 = false"></v-btn>
-        </v-card-title>
-        <v-table>
-          <thead>
-            <tr class="tablaFejResz">
-              <th class="text-left">Sorszám</th>
-              <th class="text-left">Helyes válasz</th>
-              <th class="text-left">Felhasználó válasza</th>
-              <th class="text-left">Elfogadva</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(valasz, index) in valaszok" :key="valasz.id">
-              <td>{{ adatok[index].adatSorszam }}</td>
-              <td>{{ adatok[index].helyesValasz }}</td>
-              <td>{{ valasz.valasz || 'Nem adott választ' }}</td>
-              <td><v-checkbox v-model="valasz.elfogadotte">Elfogadás</v-checkbox></td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Jogosultság
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
-        </v-card-title>
-        <v-card-text>
-          Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb"
-            >Igen</v-btn
+          <v-select
+            label="Osztály választása"
+            :items="items"
+            v-model="osztalyTesztData.selectedOsztaly"
+            :error-messages="v$2.selectedOsztaly.$errors.map((e) => String(e.$message))"
+            @blur="v$2.selectedOsztaly.$touch"
+            @change="v$2.selectedOsztaly.$touch"
+            required
+          ></v-select>
+          <v-select
+            label="Teszt mód"
+            :items="items3"
+            v-model="osztalyTesztData.feleletMod"
+            item-title="text"
+            item-value="value"
+            :error-messages="v$2.feleletMod.$errors.map((e) => String(e.$message))"
+            @blur="v$2.feleletMod.$touch"
+            @change="v$2.feleletMod.$touch"
+            required
           >
-          <v-btn @click="dialog9 = false" class="nemGomb">Nem</v-btn>
+          </v-select>
         </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog10" transition="dialog-bottom-transition" max-width="500">
-      <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle"
-          >Teszt mód kiválasztása
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="dialog10 = false"></v-btn>
-        </v-card-title>
-        <v-form @submit.prevent="handleKitoltes()">
-          <v-card-actions>
-            <v-select
-              label="Teszt mód"
-              :items="items4"
-              v-model="feleletMod"
-              item-title="text"
-              item-value="value"
-              :error-messages="v$4.feleletMod.$errors.map((e) => String(e.$message))"
-              @blur="v$4.feleletMod.$touch"
-              @change="v$4.feleletMod.$touch"
-              required
-            >
-            </v-select>
-          </v-card-actions>
-          <v-card-text>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
-                <v-list-item-subtitle
-                  >Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
-                <v-list-item-subtitle
-                  >Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle
-                >
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="alertModal" transition="dialog-bottom-transition" max-width="500">
-      <v-card>
-        <v-card-title class="d-flex">
-          Értesítés
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="alertModal = false"></v-btn>
-        </v-card-title>
         <v-card-text>
-          {{ message }}
+          <v-list>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+              <v-list-item-subtitle
+                >A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+              <v-list-item-subtitle
+                >A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+          </v-list>
         </v-card-text>
-      </v-card>
-    </v-dialog>
+        <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
+      </v-form>
+    </v-card>
+  </v-dialog>
 
-    <v-carousel
-      class="full-background-carousel behind"
-      :show-arrows="false"
-      cycle
-      hide-delimiter-background
-      height="100%"
-    >
-      <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet
-          :style="{
-            backgroundImage: 'url(' + slide + ')',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }"
-          height="100%"
+  <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Felelet kiosztása {{ selectedDiak }} tanulónak
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
+      </v-card-title>
+      <v-form @submit.prevent="handleKiosztDiakDB">
+        <v-card-actions>
+          <v-select
+            label="Kiosztható tesztek"
+            :items="items2"
+            v-model="diakTesztData.kepId"
+            item-title="nev"
+            item-value="id"
+            :error-messages="v$3.kepId.$errors.map((e) => String(e.$message))"
+            @blur="v$3.kepId.$touch"
+            @change="v$3.kepId.$touch"
+            required
+          ></v-select>
+          <v-select
+            label="Teszt mód"
+            :items="items3"
+            v-model="diakTesztData.feleletMod"
+            item-title="text"
+            item-value="value"
+            :error-messages="v$3.feleletMod.$errors.map((e) => String(e.$message))"
+            @blur="v$3.feleletMod.$touch"
+            @change="v$3.feleletMod.$touch"
+            required
+          >
+          </v-select>
+        </v-card-actions>
+        <v-card-text>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+              <v-list-item-subtitle
+                >A diáknak egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+              <v-list-item-subtitle
+                >A diáknak saját magától kell megadnia a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
+      </v-form>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Törlés
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
+      </v-card-title>
+      <v-card-text> Bíztosan törölni szeretné {{ selectedDiak }} felhasználót? </v-card-text>
+      <v-card-actions>
+        <v-btn @click="handleTorlesIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
+        <v-btn @click="dialog5 = false" class="nemGomb">Nem</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Jogosultság
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
+      </v-card-title>
+      <v-card-text>
+        Bíztosan szeretne tanári jogosultságo adni {{ selectedDiak }} felhasználónak?
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="handleJogosultsagIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
+        <v-btn @click="dialog6 = false" class="nemGomb">Nem</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog7" transition="dialog-bottom-transition" fullscreen>
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Teszt kiválasztása
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog7 = false"></v-btn>
+      </v-card-title>
+      <v-table>
+        <thead>
+          <tr class="tablaFejResz">
+            <th class="text-left">Név</th>
+            <th class="text-left">Sorszám</th>
+            <th class="text-left">Tanár</th>
+            <th class="text-left">Kitöltve</th>
+            <th class="text-left">Műveletek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="felelet in feleletek" :key="felelet.id" v-if="kepek">
+            <td>{{ kepek.find((k) => k.id == felelet.kepId)?.nev }}</td>
+            <td>{{ kepek.find((k) => k.id == felelet.kepId)?.fajlnev }}</td>
+            <td>{{ users?.find((u) => u.id == felelet.tanarId)?.nev }}</td>
+            <td>
+              {{
+                felelet.kitoltesDatum
+                  ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : 'Ez a felelet még nincs kitöltve'
+              }}
+            </td>
+            <td>
+              <v-btn
+                v-if="felelet.kitoltesDatum != null"
+                class="ms-auto"
+                text="Válaszok megtekintése"
+                @click="handleValaszokMegtekint(felelet.id, felelet.kepId)"
+              ></v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog max-width="500" v-model="dialog8" transition="dialog-bottom-transition" fullscreen>
+    <v-card>
+      <v-card-title class="d-flex"
+        >Válaszok
+        <v-spacer></v-spacer>
+        <v-tooltip text="Minden kipipált válasz ellesz fogadva">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" @click="handleKijavitasDB()">Kijavítás</v-btn>
+          </template>
+        </v-tooltip>
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog8 = false"></v-btn>
+      </v-card-title>
+      <v-table>
+        <thead>
+          <tr class="tablaFejResz">
+            <th class="text-left">Sorszám</th>
+            <th class="text-left">Helyes válasz</th>
+            <th class="text-left">Felhasználó válasza</th>
+            <th class="text-left">Elfogadva</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(valasz, index) in valaszok" :key="valasz.id">
+            <td>{{ adatok[index].adatSorszam }}</td>
+            <td>{{ adatok[index].helyesValasz }}</td>
+            <td>{{ valasz.valasz || 'Nem adott választ' }}</td>
+            <td><v-checkbox v-model="valasz.elfogadotte">Elfogadás</v-checkbox></td>
+          </tr>
+        </tbody>
+      </v-table>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Jogosultság
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
+      </v-card-title>
+      <v-card-text>
+        Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb"
+          >Igen</v-btn
         >
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
-  </v-container>
+        <v-btn @click="dialog9 = false" class="nemGomb">Nem</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialog10" transition="dialog-bottom-transition" max-width="500">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
+        >Teszt mód kiválasztása
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="dialog10 = false"></v-btn>
+      </v-card-title>
+      <v-form @submit.prevent="handleKitoltes()">
+        <v-card-actions>
+          <v-select
+            label="Teszt mód"
+            :items="items4"
+            v-model="feleletMod"
+            item-title="text"
+            item-value="value"
+            :error-messages="v$4.feleletMod.$errors.map((e) => String(e.$message))"
+            @blur="v$4.feleletMod.$touch"
+            @change="v$4.feleletMod.$touch"
+            required
+          >
+          </v-select>
+        </v-card-actions>
+        <v-card-text>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+              <v-list-item-subtitle
+                >Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+              <v-list-item-subtitle
+                >Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle
+              >
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="alertModal" transition="dialog-bottom-transition" max-width="500">
+    <v-card>
+      <v-card-title class="d-flex">
+        Értesítés
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="alertModal = false"></v-btn>
+      </v-card-title>
+      <v-card-text>
+        {{ message }}
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+
+  <v-carousel
+    class="full-background-carousel behind"
+    :show-arrows="false"
+    cycle
+    hide-delimiter-background
+    height="100%"
+  >
+    <v-carousel-item v-for="(slide, i) in slides" :key="i">
+      <v-sheet
+        :style="{
+          backgroundImage: 'url(' + slide + ')',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }"
+        height="100%"
+      >
+      </v-sheet>
+    </v-carousel-item>
+  </v-carousel>
 </template>
 <style scoped>
 .behind {

@@ -252,15 +252,32 @@ const handleKijelentkezés = async () => {
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKitoltes"
-          >Teszt kitöltés</v-btn
-        >
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
-          >Gyakorló teszt kitöltés</v-btn
-        >
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés"
-          >Kijelentkezés</v-btn
-        >
+        <v-container>
+          <v-btn
+            class="my-2"
+            color="info"
+            variant="elevated"
+            :loading="isPending"
+            @click="handleTesztKitoltes"
+            >Teszt kitöltés</v-btn
+          >
+          <v-btn
+            class="my-2"
+            color="info"
+            variant="elevated"
+            :loading="isPending"
+            @click="handleGyakorloKitoltes"
+            >Gyakorló teszt kitöltés</v-btn
+          >
+          <v-btn
+            class="my-2"
+            color="info"
+            variant="elevated"
+            :loading="isPending"
+            @click="handleKijelentkezés"
+            >Kijelentkezés</v-btn
+          >
+        </v-container>
       </v-card-actions>
     </v-card>
 
