@@ -28,14 +28,14 @@ const { data: kepek, isLoading } = useGetKepek()
 const { data: users } = useGetUserek()
 const { mutate: change, isPending } = usechange()
 const { push } = useRouter()
-const { mutateAsync: getValaszok} = useGetValaszok();
-const valaszok = ref<Valaszok[]>([]);
-const { mutateAsync: getDiakFeleletek} = useGetDiakFeleletek();
-const feleletek = ref<Felelet[]>([]);
-const feleletMod = ref(null);
-const kivalTesztId = ref<number>();
-const kivalTesztTeszId = ref<number>();
-const message = ref<string | null>(null);
+const { mutateAsync: getValaszok } = useGetValaszok()
+const valaszok = ref<Valaszok[]>([])
+const { mutateAsync: getDiakFeleletek } = useGetDiakFeleletek()
+const feleletek = ref<Felelet[]>([])
+const feleletMod = ref(null)
+const kivalTesztId = ref<number>()
+const kivalTesztTeszId = ref<number>()
+const message = ref<string | null>(null)
 
 const userData = ref<ChangeData>({
   id: 0,
@@ -52,11 +52,9 @@ const dialog5 = ref(false)
 const eltunt = ref(false)
 
 const items2 = ref([
-  { text: "Választós", value: 0},
-  { text: "Saját válasz", value: 1}
-]);
-
-
+  { text: 'Választós', value: 0 },
+  { text: 'Saját válasz', value: 1 },
+])
 
 watchEffect(() => {
   if (data.value) {
@@ -82,19 +80,34 @@ const handleGyakorloKitoltes = async () => {
 
 const handleKitoltClick = (id: number, tesztId: number) => {
   dialog4.value = true
-  kivalTesztId.value = id;
+  kivalTesztId.value = id
   kivalTesztTeszId.value = tesztId
 }
 
-const handleKitoltes = async () =>{
+const handleKitoltes = async () => {
   const isValid = await v$2.value.$validate()
-  if(isValid){
-    push({ name: 'teszt', params: { id: kivalTesztId.value, tesztId: kivalTesztTeszId.value, tesztMod: feleletMod.value } })
+  if (isValid) {
+    push({
+      name: 'teszt',
+      params: {
+        id: kivalTesztId.value,
+        tesztId: kivalTesztTeszId.value,
+        tesztMod: feleletMod.value,
+      },
+    })
   }
 }
 
-const handleKitoltFeleletClick = (id: number, tesztId: number, feleletId: number, tesztMod: number) => {
-  push({ name: 'felelet', params: { id: id, tesztId: tesztId, feleletId: feleletId, tesztMod: tesztMod} })
+const handleKitoltFeleletClick = (
+  id: number,
+  tesztId: number,
+  feleletId: number,
+  tesztMod: number,
+) => {
+  push({
+    name: 'felelet',
+    params: { id: id, tesztId: tesztId, feleletId: feleletId, tesztMod: tesztMod },
+  })
 }
 
 const rules = {
@@ -107,7 +120,7 @@ const rules = {
 }
 
 const tesztKioltRules = {
-  feleletMod: {required: helpers.withMessage('Teszt mód kiválasztása kötelező',required)}
+  feleletMod: { required: helpers.withMessage('Teszt mód kiválasztása kötelező', required) },
 }
 
 const items = [
@@ -130,7 +143,7 @@ const items = [
 ]
 
 const v$ = useVuelidate(rules, userData.value)
-const v$2 = useVuelidate(tesztKioltRules,{feleletMod});
+const v$2 = useVuelidate(tesztKioltRules, { feleletMod })
 
 const error = ref<string | null>(null)
 
@@ -150,14 +163,19 @@ const handleChange = async () => {
       },
       onSuccess() {
         if (userData.value.email !== data.value?.email) {
-          message.value = "Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!"
-          dialog5.value = true;
-          localStorage.clear();
-          setTimeout(() => {push('/home')}, 2000)
+          message.value =
+            'Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!'
+          dialog5.value = true
+          localStorage.clear()
+          setTimeout(() => {
+            push('/home')
+          }, 2000)
         } else {
-          message.value = "Sikeres adatmódosítás!"
-          dialog5.value = true;
-          setTimeout(() => {window.location.reload()}, 2000)
+          message.value = 'Sikeres adatmódosítás!'
+          dialog5.value = true
+          setTimeout(() => {
+            window.location.reload()
+          }, 2000)
         }
       },
     })
@@ -176,30 +194,27 @@ const handleEltunes = async () => {
   }
 }
 
-const handleTesztKitoltes = async () =>{
-  dialog2.value = true;
-  feleletek.value = await getDiakFeleletek(Number(data.value?.id));
-  console.log(feleletek);
+const handleTesztKitoltes = async () => {
+  dialog2.value = true
+  feleletek.value = await getDiakFeleletek(Number(data.value?.id))
+  console.log(feleletek)
 }
 
-const handleValaszokMegtekint= async (id: Number) =>{
-  dialog3.value = true;
-  valaszok.value = await getValaszok(Number(id));
+const handleValaszokMegtekint = async (id: Number) => {
+  dialog3.value = true
+  valaszok.value = await getValaszok(Number(id))
 }
 
-
-const handleKijelentkezés= async () =>{
-  localStorage.clear();
-  push({name:'home'});
+const handleKijelentkezés = async () => {
+  localStorage.clear()
+  push({ name: 'home' })
 }
-
-
 </script>
 <template>
   <v-btn @click="handleEltunes" class="hattergomb">Háttér megtekintése</v-btn>
   <v-container class="d-flex align-center justify-center fill-height">
-    <v-card v-show="!eltunt">
-      <v-card-title> Tanulói Felület </v-card-title>
+    <v-card v-show="!eltunt" class="alul">
+      <v-card-title class="tesztTitle"> Tanulói Felület </v-card-title>
       <v-card-text>
         <v-alert v-if="error" type="error" dismissible>
           {{ error }}
@@ -237,9 +252,15 @@ const handleKijelentkezés= async () =>{
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKitoltes">Teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés">Kijelentkezés</v-btn>
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKitoltes"
+          >Teszt kitöltés</v-btn
+        >
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes"
+          >Gyakorló teszt kitöltés</v-btn
+        >
+        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés"
+          >Kijelentkezés</v-btn
+        >
       </v-card-actions>
     </v-card>
 
@@ -282,7 +303,8 @@ const handleKijelentkezés= async () =>{
 
     <v-dialog v-model="dialog2" transition="dialog-bottom-transition" fullscreen>
       <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle">Teszt kiválasztása
+        <v-card-title class="d-flex tesztTitle"
+          >Teszt kiválasztása
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog2 = false"></v-btn>
         </v-card-title>
@@ -299,19 +321,40 @@ const handleKijelentkezés= async () =>{
           </thead>
           <tbody>
             <tr v-for="felelet in feleletek" :key="felelet.id" v-if="kepek">
-              <td>{{ kepek.find(k => k.id == felelet.kepId)?.nev }}</td>
-              <td>{{ kepek.find(k => k.id == felelet.kepId)?.fajlnev }}</td>
-              <td>{{ users?.find(u => u.id == felelet.tanarId)?.nev}}</td>
-              <td>{{ felelet.feleletMod  === true ? 'Saját válasz' : 'Választós' }}</td>
-              <td>{{ felelet.kitoltesDatum ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', { 
-                  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Ez a felelet még nincs kitöltve'}}</td>
+              <td>{{ kepek.find((k) => k.id == felelet.kepId)?.nev }}</td>
+              <td>{{ kepek.find((k) => k.id == felelet.kepId)?.fajlnev }}</td>
+              <td>{{ users?.find((u) => u.id == felelet.tanarId)?.nev }}</td>
+              <td>{{ felelet.feleletMod === true ? 'Saját válasz' : 'Választós' }}</td>
               <td>
-                <v-btn v-if="felelet.kitoltesDatum == null"
+                {{
+                  felelet.kitoltesDatum
+                    ? new Date(felelet.kitoltesDatum).toLocaleString('hu-HU', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : 'Ez a felelet még nincs kitöltve'
+                }}
+              </td>
+              <td>
+                <v-btn
+                  v-if="felelet.kitoltesDatum == null"
                   class="ms-auto kitoltes"
                   text="Kitöltés"
-                  @click="handleKitoltFeleletClick(Number(kepek.find(k => k.id == felelet.kepId)?.id), Number(kepek.find(k => k.id == felelet.kepId)?.fajlnev), Number(felelet.id), Number(felelet.feleletMod))"
+                  @click="
+                    handleKitoltFeleletClick(
+                      Number(kepek.find((k) => k.id == felelet.kepId)?.id),
+                      Number(kepek.find((k) => k.id == felelet.kepId)?.fajlnev),
+                      Number(felelet.id),
+                      Number(felelet.feleletMod),
+                    )
+                  "
                 ></v-btn>
-                <v-btn v-if="felelet.kitoltesDatum != null"
+                <v-btn
+                  v-if="felelet.kitoltesDatum != null"
                   class="ms-auto"
                   text="Válaszok megtekintése"
                   @click="handleValaszokMegtekint(felelet.id)"
@@ -324,79 +367,90 @@ const handleKijelentkezés= async () =>{
     </v-dialog>
 
     <v-dialog max-width="500" v-model="dialog3" transition="dialog-bottom-transition" fullscreen>
-    <v-card>
-      <v-card-title class="d-flex">Válaszok
-        <v-spacer></v-spacer>
-        <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
-      </v-card-title>
-      <v-table>
-      <thead class="tablaFejResz">
-        <tr>
-          <th class="text-left">
-            Sorszám
-          </th>
-          <th class="text-left">
-            Válaszod
-          </th>
-          <th class="text-left">
-            Elfogadva
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(valasz,index) in valaszok":key="valasz.id">
-          <td>{{ index+1 }}</td>
-          <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
-          <td>{{ valasz.elfogadotte === 1 ? 'Elfogadott' : valasz.elfogadotte === 0 ? 'Nem elfogadott' : valasz.elfogadotte === null ? 'Még nem lett kijavítva' : ''}}</td>
-        </tr>
-      </tbody>
-      </v-table>  
-    </v-card>
-  </v-dialog>
+      <v-card>
+        <v-card-title class="d-flex"
+          >Válaszok
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="dialog3 = false"></v-btn>
+        </v-card-title>
+        <v-table>
+          <thead class="tablaFejResz">
+            <tr>
+              <th class="text-left">Sorszám</th>
+              <th class="text-left">Válaszod</th>
+              <th class="text-left">Elfogadva</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(valasz, index) in valaszok" :key="valasz.id">
+              <td>{{ index + 1 }}</td>
+              <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
+              <td>
+                {{
+                  valasz.elfogadotte === 1
+                    ? 'Elfogadott'
+                    : valasz.elfogadotte === 0
+                      ? 'Nem elfogadott'
+                      : valasz.elfogadotte === null
+                        ? 'Még nem lett kijavítva'
+                        : ''
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-dialog>
 
-  <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
+    <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
       <v-card class="alul">
-        <v-card-title class="d-flex tesztTitle">Teszt mód kiválasztása
+        <v-card-title class="d-flex tesztTitle"
+          >Teszt mód kiválasztása
           <v-spacer></v-spacer>
           <v-btn icon="mdi-close" @click="dialog4 = false"></v-btn>
         </v-card-title>
         <v-form @submit.prevent="handleKitoltes()">
-        <v-card-actions>
+          <v-card-actions>
             <v-select
               label="Teszt mód"
               :items="items2"
               v-model="feleletMod"
               item-title="text"
               item-value="value"
-            :error-messages="v$2.feleletMod.$errors.map((e) => String(e.$message))"
+              :error-messages="v$2.feleletMod.$errors.map((e) => String(e.$message))"
               @blur="v$2.feleletMod.$touch"
               @change="v$2.feleletMod.$touch"
-              required>
+              required
+            >
             </v-select>
-        </v-card-actions>
-        <v-card-text>
-          <v-list>
-            <v-list-item>
-              <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
-              <v-list-item-subtitle>Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
-              <v-list-item-subtitle>Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
-        </v-card-actions>
-      </v-form>
+          </v-card-actions>
+          <v-card-text>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
+                <v-list-item-subtitle
+                  >Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle
+                >
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
+                <v-list-item-subtitle
+                  >Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle
+                >
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn type="submit" class="hattergomb">Kitöltés</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
       <v-card>
         <v-card-text>
-          {{message}}
+          {{ message }}
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -436,30 +490,30 @@ const handleKijelentkezés= async () =>{
 .v-container {
   z-index: 1;
 }
-.tesztTitle{
+.tesztTitle {
   color: #009688;
   background-color: #e0f2f1;
 }
-.kitoltes{
+.kitoltes {
   background-color: #800020;
   color: #ece7e2;
 }
-.megtekintes{
+.megtekintes {
   background-color: #2e8b57;
-  color:#ece7e2;
-}
-.v-table{
-  background-color: #558B2F; 
   color: #ece7e2;
 }
-.alul{
+.v-table {
+  background-color: #558b2f;
+  color: #ece7e2;
+}
+.alul {
   background-color: #e0f2f1;
 }
-.hattergomb{
+.hattergomb {
   background-color: #006663;
   color: #ece7e2;
 }
-.tablaFejResz{
+.tablaFejResz {
   font-style: oblique;
   color: black;
 }
