@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
+import { useGetKepek } from '@/api/profile/profileQuery';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const {mutateAsync: getAdatok} = useGetAdatok();
+const { data: kepek, isLoading } = useGetKepek()
 
 const kep = ref<string>('');
 kep.value = String(route.params.fajlnev);
@@ -13,6 +15,9 @@ kep.value = String(route.params.fajlnev);
 const adat = ref<number>();
 adat.value = Number(route.params.id);
 
+
+const title = ref<string | undefined>('');
+title.value = kepek.value?.find((kep) => kep.id == adat.value)?.nev
 
 const adatok = ref<Adat[]>([]);
 const {back, push} = useRouter();
@@ -30,7 +35,6 @@ const updateAreas = () => {
 
   const currentWidth = imgElement.value.clientWidth;
   const currentHeight = imgElement.value.clientHeight;
-
   const scaleX = currentWidth / naturalWidth.value;
   const scaleY = currentHeight / naturalHeight.value;
 
@@ -39,6 +43,7 @@ const updateAreas = () => {
     coords: `${item.x * scaleX},${item.y * scaleY},${item.size * scaleX}`,
     ertek: item.helyesValasz
   }));
+  console.log(areas.value);
 };
 
 onMounted(async () => {
@@ -47,17 +52,16 @@ onMounted(async () => {
 
   imgElement.value?.addEventListener('load', () => {
     if(imgElement.value?.naturalWidth == 3024){
-      naturalWidth.value = 1903;
-      naturalHeight.value = 2537;
+      naturalWidth.value = 1748;
+      naturalHeight.value = 2331;
     }
     else if(imgElement.value?.naturalWidth == 4032){
-      console.log(imgElement.value.clientWidth);
-      console.log(imgElement.value.clientHeight);
-      naturalWidth.value = 1903;
-      naturalHeight.value = 1427;
+      naturalWidth.value = 1748;
+      naturalHeight.value = 1311;
     }
     updateAreas();
   }); 
+  updateAreas();
 });
 
 watchEffect(() => {
@@ -71,15 +75,16 @@ watchEffect(() => {
 
 
 const handleClick = (area: any) => {
-    kivalasztottErtek.value = area.ertek
-    dialog2.value = true;
+  kivalasztottErtek.value = area.ertek
+  dialog2.value = true;
 };
 
 document.onclick = function(e){
-  var x = e.pageX;
-  var y = e.pageY;
+  if(!imgElement.value) return
+  const rect = imgElement.value.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
   console.log("X is "+x+" and Y is "+y);
-  console.log(areas);
 };
 
 const handleBack = () =>{
@@ -96,6 +101,7 @@ const handleNincsIlyen = () =>{
 <template>
   <v-container>
     <v-card class="alul">
+    <v-card-title class="text-center">{{ title }}</v-card-title>
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
@@ -103,6 +109,17 @@ const handleNincsIlyen = () =>{
         style="max-width: 100%; height: auto;"
         @error="handleNincsIlyen"
       />
+      <map name="dynamic-map">
+        <area
+          v-for="(area, index) in areas"
+          :key="index"
+          :shape="area.shape"
+          :coords="area.coords"
+          :ertek="area.ertek"
+          :href="''"
+          @click.prevent="handleClick(area)"
+        />
+      </map>
       <v-card-actions>
         <v-btn
           class="mb-8 hattergomb"
@@ -115,17 +132,6 @@ const handleNincsIlyen = () =>{
       </v-card-actions>
     </v-card>
   </v-container>
-  <map name="dynamic-map">
-    <area
-      v-for="(area, index) in areas"
-      :key="index"
-      :shape="area.shape"
-      :coords="area.coords"
-      :ertek="area.ertek"
-      :href="''"
-      @click.prevent="handleClick(area)"
-    />
-  </map>
 
     <v-dialog max-width="500" v-model="dialog2" transition="dialog-bottom-transition">
     <v-card>

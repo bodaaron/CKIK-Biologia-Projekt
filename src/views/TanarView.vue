@@ -1,14 +1,6 @@
 <script lang="ts" setup>
 import type { ChangeData, User } from '@/api/profile/profile'
-import {
-  usechange,
-  useDeleteUser,
-  useGetKepek,
-  useGetLoggedUser,
-  useGetUserek,
-  useGiveJogToUser,
-  useTakeJogFromUser,
-} from '@/api/profile/profileQuery'
+import { usechange, useDeleteUser, useGetKepek, useGetLoggedUser, useGetUserek, useGiveJogToUser, useTakeJogFromUser, } from '@/api/profile/profileQuery'
 import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
@@ -16,18 +8,8 @@ import { email, helpers, required } from '@vuelidate/validators'
 import { getTsBuildInfoEmitOutputFilePath } from 'typescript'
 import type { ComputedRefSymbol } from '@vue/reactivity'
 import { useGetAdatok } from '@/api/kep/kepQuery'
-import type {
-  DiaknakFeleletData,
-  Felelet,
-  OsztalynakFeleletData,
-  Valaszok,
-} from '@/api/felelet/felelet'
-import {
-  useDiakFelelet,
-  useGetDiakFeleletek,
-  useGetValaszok,
-  useKijavitas,
-} from '@/api/felelet/feleletQuery'
+import type {DiaknakFeleletData, Felelet, OsztalynakFeleletData, Valaszok, } from '@/api/felelet/felelet'
+import { useDiakFelelet, useGetDiakFeleletek, useGetValaszok, useKijavitas, } from '@/api/felelet/feleletQuery'
 import type { Adat } from '@/api/kep/kep'
 
 const slides = [

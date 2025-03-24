@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
+import { useGetKepek } from '@/api/profile/profileQuery';
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -8,6 +9,8 @@ const route = useRoute();
 
 const { push, back } = useRouter()
 const {mutateAsync: getAdatok} = useGetAdatok();
+const { data: kepek, isLoading } = useGetKepek()
+
 
 const kep = ref<string>('');  
 kep.value = String(route.params.tesztId);
@@ -17,6 +20,10 @@ adat.value = Number(route.params.id);
 
 const tesztMod = ref<number>();
 tesztMod.value = Number(route.params.tesztMod)
+
+const title = ref<string | undefined>('');
+title.value = kepek.value?.find((kep) => kep.id == adat.value)?.nev
+
 
 const adatok = ref<Adat[]>([]);
 
@@ -64,16 +71,16 @@ const updateAreas = () => {
 
 onMounted(async () => {
   adatok.value = await getAdatok(Number(adat.value));
-  if(!imgElement.value) return
+    if(!imgElement.value) return
  
 
   const handleImageLoad = () => {
     if (imgElement.value?.naturalWidth === 3024) {
-      naturalWidth.value = 1903;
-      naturalHeight.value = 2537;
+      naturalWidth.value = 1748;
+      naturalHeight.value = 2331;
     } else if (imgElement.value?.naturalWidth === 4032) {
-      naturalWidth.value = 1903;
-      naturalHeight.value = 1427;
+      naturalWidth.value = 1748;
+      naturalHeight.value = 1311;
     }
     updateAreas();
     updateAnswers();
@@ -130,6 +137,7 @@ const handleNincsIlyen = () =>{
 <template>
   <v-container>
     <v-card class="alul">
+      <v-card-title class="text-center">{{title }}</v-card-title>
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
