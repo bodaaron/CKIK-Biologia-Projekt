@@ -427,12 +427,15 @@ const handleKijavitasDB = async () =>{
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleUserek">Felhasználók</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleTesztKiosztOsztaly">Felelet kiosztása osztálynak</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
-        <v-btn color="info" variant="elevated" :loading="isPending" @click="handleKijelentkezés">Kijelentkezés</v-btn>
+        <v-container>
+          <v-btn class="my-2" color="info" block variant="elevated" :loading="isPending" @click="handleUserek">Felhasználók</v-btn>
+          <v-btn class="my-2" color="info" block variant="elevated" :loading="isPending" @click="handleTesztKiosztOsztaly">Felelet kiosztása osztálynak</v-btn>
+          <v-btn class="my-2" color="info" block variant="elevated" :loading="isPending" @click="handleGyakorloKitoltes">Gyakorló teszt kitöltés</v-btn>
+          <v-btn class="my-2" color="info" block variant="elevated" :loading="isPending" @click="handleKijelentkezés">Kijelentkezés</v-btn>
+        </v-container>
       </v-card-actions>
     </v-card>
+  </v-container>
 
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
       <v-card class="alul">
@@ -848,7 +851,6 @@ const handleKijavitasDB = async () =>{
         </v-sheet>
       </v-carousel-item>
     </v-carousel>
-  </v-container>
 </template>
 <style scoped>
 .behind {
