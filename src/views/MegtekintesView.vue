@@ -47,21 +47,27 @@ const updateAreas = () => {
 };
 
 onMounted(async () => {
-  adatok.value = await getAdatok(Number(adat.value))
-  if (!imgElement.value) return;
+  adatok.value = await getAdatok(Number(adat.value));
+    if(!imgElement.value) return
+ 
 
-  imgElement.value?.addEventListener('load', () => {
-    if(imgElement.value?.naturalWidth == 3024){
+  const handleImageLoad = () => {
+    if (imgElement.value?.naturalWidth === 3024) {
       naturalWidth.value = 1748;
       naturalHeight.value = 2331;
-    }
-    else if(imgElement.value?.naturalWidth == 4032){
+    } else if (imgElement.value?.naturalWidth === 4032) {
       naturalWidth.value = 1748;
       naturalHeight.value = 1311;
     }
     updateAreas();
-  }); 
-  updateAreas();
+  };
+
+  if (imgElement.value.complete) {
+    handleImageLoad();
+  } 
+  else {
+    imgElement.value.addEventListener("load", handleImageLoad);
+  }
 });
 
 watchEffect(() => {
