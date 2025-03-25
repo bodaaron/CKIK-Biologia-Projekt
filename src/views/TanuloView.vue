@@ -351,7 +351,7 @@ const handleKijelentkezés = async () => {
                 ></v-btn>
                 <v-btn
                   v-if="felelet.kitoltesDatum != null"
-                  class="ms-auto"
+                  class="ms-auto hattergomb"
                   text="Válaszok megtekintése"
                   @click="handleValaszokMegtekint(felelet.id)"
                 ></v-btn>

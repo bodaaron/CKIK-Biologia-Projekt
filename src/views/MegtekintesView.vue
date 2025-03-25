@@ -107,7 +107,7 @@ const handleNincsIlyen = () =>{
 <template>
   <v-container>
     <v-card class="alul">
-    <v-card-title class="text-center">{{ title }}</v-card-title>
+    <v-card-title class="text-center tesztTitle">{{ title }}</v-card-title>
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
@@ -166,6 +166,10 @@ background-color: #009688;
 border: #006663 solid 10px;
 }
 .alul{
+  background-color: #e0f2f1;
+}
+.tesztTitle{
+  color: #009688;
   background-color: #e0f2f1;
 }
 </style>

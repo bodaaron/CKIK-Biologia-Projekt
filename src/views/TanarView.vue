@@ -787,7 +787,7 @@ const handleKijavitasDB = async () => {
             <td>
               <v-btn
                 v-if="felelet.kitoltesDatum != null"
-                class="ms-auto"
+                class="ms-auto hattergomb"
                 text="Válaszok megtekintése"
                 @click="handleValaszokMegtekint(felelet.id, felelet.kepId)"
               ></v-btn>
@@ -799,13 +799,13 @@ const handleKijavitasDB = async () => {
   </v-dialog>
 
   <v-dialog max-width="500" v-model="dialog8" transition="dialog-bottom-transition" fullscreen>
-    <v-card>
-      <v-card-title class="d-flex"
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle"
         >Válaszok
         <v-spacer></v-spacer>
         <v-tooltip text="Minden kipipált válasz ellesz fogadva">
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" @click="handleKijavitasDB()">Kijavítás</v-btn>
+            <v-btn class="hattergomb" v-bind="props" @click="handleKijavitasDB()">Kijavítás</v-btn>
           </template>
         </v-tooltip>
         <v-spacer></v-spacer>
@@ -897,8 +897,8 @@ const handleKijavitasDB = async () => {
   </v-dialog>
 
   <v-dialog v-model="alertModal" transition="dialog-bottom-transition" max-width="500">
-    <v-card>
-      <v-card-title class="d-flex">
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">
         Értesítés
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="alertModal = false"></v-btn>

@@ -165,8 +165,8 @@ const handleNincsIlyen = () =>{
 
 <template>
   <v-container>
-    <v-card>
-      <v-card-title class="text-center">{{title }}</v-card-title>
+    <v-card class="alul">
+      <v-card-title class="text-center tesztTitle">{{title }}</v-card-title>
       <img
         :src="`/public/kepek/tesztKepek/${kep}.jpg`"
         ref="imgElement"
@@ -176,7 +176,7 @@ const handleNincsIlyen = () =>{
       />
       <v-card-actions>
         <v-btn
-          class="mb-8"
+          class="mb-8 hattergomb"
           size="large"
           variant="elevated"
           block
@@ -199,8 +199,8 @@ const handleNincsIlyen = () =>{
   </map>
 
   <v-dialog max-width="500" transition="dialog-bottom-transition" fullscreen>
-    <v-card>
-      <v-card-title class="d-flex">Végeredmény
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">Végeredmény
         <v-spacer></v-spacer>
         <v-btn
         @click="() => {push({ name: 'tanulo' })}">
@@ -233,8 +233,8 @@ const handleNincsIlyen = () =>{
   </v-dialog>
 
   <v-dialog max-width="500" v-model="dialog2" transition="dialog-bottom-transition">
-    <v-card>
-      <v-card-title class="d-flex">Válasz megadása
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">Válasz megadása
         <v-spacer></v-spacer>
         <v-btn
           icon="mdi-close"
@@ -251,8 +251,8 @@ const handleNincsIlyen = () =>{
   </v-dialog>
 
   <v-dialog max-width="500" v-model="dialog4" transition="dialog-bottom-transition">
-    <v-card>
-      <v-card-title class="d-flex">Válasz kiválasztása
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">Válasz kiválasztása
         <v-spacer></v-spacer>
         <v-btn
           icon="mdi-close"
@@ -274,17 +274,40 @@ const handleNincsIlyen = () =>{
 
 
   <v-dialog max-width="500" v-model="dialog3" transition="dialog-bottom-transition">
-    <v-card>
-      <v-card-title class="d-flex">Bíztosan beküldöd ezeket a válaszokat?
+    <v-card class="alul">
+      <v-card-title class="d-flex tesztTitle">Bíztosan beküldöd ezeket a válaszokat?
       </v-card-title>
       <v-card-actions>
-        <v-btn
+        <v-btn class="nemGomb"
           @click="dialog3 = false"
         >Mégsem</v-btn>
-        <v-btn
+        <v-btn class="igenGomb"
           @click="handleBekuldesDB()"
         >Igen</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
+<style scoped>
+.alul{
+  background-color: #e0f2f1;
+}
+.tesztTitle{
+  color: #009688;
+  background-color: #e0f2f1;
+}
+.v-container{
+background-color: #009688;
+border: #006663 solid 10px;
+}
+.hattergomb{
+  background-color: #006663;
+  color: #ece7e2;
+}
+.igenGomb {
+  color: #1976d2;
+}
+.nemGomb {
+  color: #558b2f;
+}
+</style>
