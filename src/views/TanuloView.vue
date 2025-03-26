@@ -280,7 +280,7 @@ const handleKijelentkezés = async () => {
               <td>{{ kep.nev }}</td>
               <td>{{ kep.fajlnev }}</td>
               <td>
-                <v-btn
+                <v-btn v-if="kep.vanAdat"
                   class="ms-auto kitoltes"
                   text="Kitöltés"
                   @click="handleKitoltClick(kep.id, kep.fajlnev)"

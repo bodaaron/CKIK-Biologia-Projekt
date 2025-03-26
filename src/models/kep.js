@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) =>
             {
                 type: DataTypes.STRING(60),
             },
+            vanAdat:
+            {
+                type: DataTypes.BOOLEAN,
+            },
         },
 
         {

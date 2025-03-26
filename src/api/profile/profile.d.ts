@@ -17,6 +17,7 @@ export type Kep = {
   id: number
   nev: string
   fajlnev: number
+  vanAdat: number
 }
 
 export type User = {

@@ -181,7 +181,7 @@ const items = [
   '9.C',
 ]
 
-var items2 = [{ nev: '', id: 0 }]
+var items2 = [{ nev: '', id: 0, vanAdat: 0 }]
 
 const items3 = ref([
   { text: 'Választós', value: 0 },
@@ -258,7 +258,8 @@ const nameSearch = ref('')
 const handleTesztKiosztOsztaly = async () => {
   dialog3.value = true
   if (!kepek.value) return
-  items2 = kepek.value.map((item) => ({ nev: item.nev, id: item.id }))
+  items2 = kepek.value.map((item) => ({ nev: item.nev, id: item.id, vanAdat: item.vanAdat }))
+  items2 = items2.filter((item) => item.vanAdat == 1)
 }
 
 const handleTesztKiosztDiak = async (nev: string, id: number) => {
@@ -266,7 +267,8 @@ const handleTesztKiosztDiak = async (nev: string, id: number) => {
   selectedDiak.value = nev
   diakTesztData.value.diakId = id
   if (!kepek.value) return
-  items2 = kepek.value.map((item) => ({ nev: item.nev, id: item.id }))
+  items2 = kepek.value.map((item) => ({ nev: item.nev, id: item.id, vanAdat: item.vanAdat }))
+  items2 = items2.filter((item) => item.vanAdat == 1)
 }
 
 const handleKiosztOsztalyDB = async () => {
@@ -504,7 +506,7 @@ const handleKijavitasDB = async () => {
             <td>{{ kep.nev }}</td>
             <td>{{ kep.fajlnev }}</td>
             <td>
-              <v-btn
+              <v-btn v-if="kep.vanAdat"
                 class="ms-auto kitoltes"
                 text="Kitöltés"
                 @click="handleKitoltClick(kep.id, kep.fajlnev)"
