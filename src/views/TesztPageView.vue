@@ -2,8 +2,10 @@
 import type { Adat } from '@/api/kep/kep';
 import { useGetAdatok } from '@/api/kep/kepQuery';
 import { useGetKepek } from '@/api/profile/profileQuery';
+import bcrypt from 'bcryptjs';
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
 
 const route = useRoute();
 
@@ -24,8 +26,8 @@ tesztMod.value = Number(route.params.tesztMod)
 const title = ref<string | undefined>('');
 title.value = kepek.value?.find((kep) => kep.id == adat.value)?.nev
 
-
 const adatok = ref<Adat[]>([]);
+
 
 const imgElement = ref<HTMLImageElement | null>(null);
 const areas = ref<any[]>([]);
@@ -64,7 +66,7 @@ const updateAreas = () => {
   areas.value = adatok.value.map((item: any) => ({
     shape: 'circle',
     coords: `${item.x * scaleX},${item.y * scaleY},${item.size * scaleX}`,
-    ertek: item.helyesValasz,
+    ertek: bcrypt.hash(item.helyesValasz,10),
     id: item.id
   }));
 };
@@ -75,6 +77,9 @@ onMounted(async () => {
  
 
   const handleImageLoad = () => {
+    if(!adatok.value) return
+    items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
+    items2 = items2.sort(() => Math.random() - 0.5)
     if (imgElement.value?.naturalWidth === 3024) {
       naturalWidth.value = 1748;
       naturalHeight.value = 2331;
@@ -105,8 +110,6 @@ watchEffect(() => {
 });
 
 const handleClick = (area: any) => {
-  if(!adatok.value) return
-  items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
   activeArea.value = area;
   answer.value = answers.value[area.id] || '';
   if(tesztMod.value == 0){

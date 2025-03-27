@@ -95,6 +95,9 @@ onMounted(async () => {
  
 
   const handleImageLoad = () => {
+    if(!adatok.value) return
+    items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
+    items2 = items2.sort(() => Math.random() - 0.5)
     if (imgElement.value?.naturalWidth === 3024) {
       naturalWidth.value = 1748;
       naturalHeight.value = 2331;
@@ -126,7 +129,6 @@ watchEffect(() => {
 const handleClick = (area: any) => {
   activeArea.value = area;
   answer.value = answers.value[area.id] || '';
-  items2 = adatok.value.map(item => ({ helyesValasz: item.helyesValasz, id: item.id }));
   if(tesztMod.value == 0){
     dialog4.value = true;
   }
