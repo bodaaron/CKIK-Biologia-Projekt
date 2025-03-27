@@ -5,10 +5,10 @@ import TanuloView from '@/views/TanuloView.vue'
 import TanarView from '@/views/TanarView.vue'
 import TesztPageView from '@/views/TesztPageView.vue'
 import MegtekintesView from '@/views/MegtekintesView.vue'
-import ForgotView from '@/views/ForgotView.vue'
 import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import FeleletView from '@/views/FeleletView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import ForgotPWView from '@/views/ForgotPWView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,7 +58,7 @@ const router = createRouter({
     {
       path: '/elfelejtettjelszo',
       name: 'eljelejtettjelszo',
-      component: ForgotView,
+      component: ForgotPWView,
       meta:{requiresGuest: true}
     },
     {

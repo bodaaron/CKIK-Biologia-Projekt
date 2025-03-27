@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue'
 import axios from 'axios'
 import { useGetUserek } from '@/api/profile/profileQuery'
@@ -13,6 +13,7 @@ const sendEmail = async () => {
     message.value = 'Kérlek, adj meg egy e-mail címet!'
     return
   }
+  if(!users.value) return
   const userExists = users.value.some((user) => user.email === email.value)
 
   if (!userExists) {
@@ -29,7 +30,7 @@ const sendEmail = async () => {
     })
 
     message.value = response.data.message
-  } catch (error) {
+  } catch (error : any) {
     message.value =
       'Hiba történt az e-mail küldése során: ' + (error.response?.data?.error || error.message)
   } finally {
