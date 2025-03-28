@@ -383,9 +383,9 @@ const handleKijelentkezés = async () => {
               <td>{{ valasz.valasz || 'Nem adtál választ' }}</td>
               <td>
                 {{
-                  valasz.elfogadotte === 1
+                  valasz.elfogadotte === true
                     ? 'Elfogadott'
-                    : valasz.elfogadotte === 0
+                    : valasz.elfogadotte === false
                       ? 'Nem elfogadott'
                       : valasz.elfogadotte === null
                         ? 'Még nem lett kijavítva'

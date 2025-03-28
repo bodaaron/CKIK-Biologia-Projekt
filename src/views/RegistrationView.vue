@@ -173,19 +173,6 @@ const handleRegistration = async () => {
           <v-icon icon="mdi-chevron-right"> </v-icon>
         </a>
       </v-card-text>
-      <v-card-text
-        class="text-center"
-        @click="
-          () => {
-            push({ name: 'home' })
-          }
-        "
-      >
-        <a class="text-green text-decoration-none" rel="noopener noreferrer">
-          Ha már van fiókja itt bejelentkezhet
-          <v-icon icon="mdi-chevron-right"> </v-icon>
-        </a>
-      </v-card-text>
     </v-card>
   </v-container>
 </template>

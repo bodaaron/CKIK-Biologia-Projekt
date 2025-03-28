@@ -28,5 +28,5 @@ export type Valasz = {
 export type Valaszok = {
     id: number,
     valasz: string,
-    elfogadotte: number,
+    elfogadotte: boolean,
 }

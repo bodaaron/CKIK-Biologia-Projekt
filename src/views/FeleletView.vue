@@ -280,12 +280,12 @@ const handleNincsIlyen = () =>{
       <v-card-title class="d-flex tesztTitle">Bíztosan beküldöd ezeket a válaszokat?
       </v-card-title>
       <v-card-actions>
-        <v-btn class="nemGomb"
-          @click="dialog3 = false"
-        >Mégsem</v-btn>
         <v-btn class="igenGomb"
           @click="handleBekuldesDB()"
         >Igen</v-btn>
+        <v-btn class="nemGomb"
+          @click="dialog3 = false"
+        >Mégsem</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
