@@ -166,7 +166,7 @@ const handleChange = async () => {
           message.value =
             'Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!'
           dialog5.value = true
-          localStorage.clear()
+          sessionStorage.clear()
           setTimeout(() => {
             push('/home')
           }, 2000)
@@ -206,7 +206,7 @@ const handleValaszokMegtekint = async (id: Number) => {
 }
 
 const handleKijelentkezés = async () => {
-  localStorage.clear()
+  sessionStorage.clear()
   push({ name: 'home' })
 }
 </script>

@@ -47,7 +47,7 @@ const activeArea = ref<any>(null);
 const feleletek = ref<Felelet[]>([]);
 const answers = ref<Record<string, string>>({});  
 const answer = ref<string>('');
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
 var items2 = [ {helyesValasz:'',id:0}]
 
 const updateAnswers = () => {

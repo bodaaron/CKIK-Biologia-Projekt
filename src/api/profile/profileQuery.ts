@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/vue-query'
 import type { ChangeData, JelszoValtoztato, Kep, Profile, User } from './profile'
 
 const getLoggedUser = async (): Promise<Profile> => {
-  const email = localStorage.getItem('email')
+  const email = sessionStorage.getItem('email')
   const response = await axiosClient.get(`http://localhost:3000/users/user/${email}`)
   return response.data
 }

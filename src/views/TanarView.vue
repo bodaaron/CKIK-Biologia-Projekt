@@ -81,7 +81,7 @@ const eltunt = ref(false)
 const feleletMod = ref(null)
 const kivalTesztId = ref<number>()
 const kivalTesztTeszId = ref<number>()
-const LogUser = JSON.parse(localStorage.getItem('userData') || '{}')
+const LogUser = JSON.parse(sessionStorage.getItem('userData') || '{}')
 const userRole = LogUser.jogosultsag
 const message = ref<string | null>(null)
 
@@ -215,7 +215,7 @@ const handleChange = async () => {
           message.value =
             'Sikeres adatmódosítás! E-mail cím megváltoztatás után újra be kell jelentkezni!'
           alertModal.value = true
-          localStorage.clear()
+          sessionStorage.clear()
           setTimeout(() => {
             push('/home')
           }, 2000)
@@ -388,7 +388,7 @@ const handleValaszokMegtekint = async (id: Number, kepId: Number) => {
 }
 
 const handleKijelentkezés = async () => {
-  localStorage.clear()
+  sessionStorage.clear()
   push({ name: 'home' })
 }
 
