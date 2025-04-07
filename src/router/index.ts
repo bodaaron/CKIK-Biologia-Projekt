@@ -17,97 +17,95 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomePageView,
-      meta:{requiresGuest: true}
+      meta: { requiresGuest: true },
     },
     {
       path: '/registration',
       name: 'registration',
       component: RegistrationView,
-      meta:{requiresGuest: true}
+      meta: { requiresGuest: true },
     },
     {
       path: '/tanulo',
       name: 'tanulo',
       component: TanuloView,
-      meta:{requiresAuth: true, roles:[0]}
+      meta: { requiresAuth: true, roles: [0] },
     },
     {
       path: '/tanar',
       name: 'tanar',
       component: TanarView,
-      meta:{requiresAuth: true, roles:[1]}
+      meta: { requiresAuth: true, roles: [1] },
     },
     {
       path: '/teszt/:id/:tesztId/:tesztMod',
       name: 'teszt',
       component: TesztPageView,
-      meta:{requiresAuth: true}
+      meta: { requiresAuth: true },
     },
     {
       path: '/felelet/:id/:tesztId/:feleletId/:tesztMod',
       name: 'felelet',
       component: FeleletView,
-      meta:{requiresAuth: true}
+      meta: { requiresAuth: true },
     },
     {
       path: '/megtekintes/:id/:fajlnev',
       name: 'megtekintes',
       component: MegtekintesView,
-      meta:{requiresAuth: true,}
+      meta: { requiresAuth: true },
     },
     {
       path: '/elfelejtettjelszo',
       name: 'eljelejtettjelszo',
       component: ForgotPWView,
-      meta:{requiresGuest: true}
+      meta: { requiresGuest: true },
     },
     {
       path: '/jelszo-visszaallitas/:token',
       name: 'resetPassword',
       component: ResetPasswordView,
-      meta:{requiresGuest: true}
+      meta: { requiresGuest: true },
     },
-    { path: '/:pathMatch(.*)*', 
-      name: 'NotFound', 
-      component: NotFoundView, 
-    },
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView },
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
-   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-   const userRole = userData.jogosultsag;
+  const userData = JSON.parse(sessionStorage.getItem('userData') || '{}')
+  const userRole = userData.jogosultsag
 
-   if (to.meta.roles && Array.isArray(to.meta.roles)) {
+  if (to.meta.roles && Array.isArray(to.meta.roles)) {
     if (!to.meta.roles.includes(userRole)) {
       if (userRole == 1) {
-        return next('/tanar');
-      } 
-      else if (userRole == 0) {
-        return next('/tanulo');
-      }
-      else if (!userRole) {
-        return next('/home');
+        return next('/tanar')
+      } else if (userRole == 0) {
+        return next('/tanulo')
+      } else if (!userRole) {
+        return next('/home')
       }
     }
   }
 
   if (to.meta.requiresGuest) {
     if (userRole == 1) {
-      return next('/tanar');
-    } 
-    else if (userRole == 0) {
-      return next('/tanulo');
+      return next('/tanar')
+    } else if (userRole == 0) {
+      return next('/tanulo')
     }
   }
 
   if (to.meta.requiresAuth) {
     if (!userData) {
-      return next('/home');
+      return next('/home')
     }
   }
 
-    next();
-  })
+  if (to.path === '/') {
+    next('/home')
+  }
+
+  next()
+})
 
 export default router
