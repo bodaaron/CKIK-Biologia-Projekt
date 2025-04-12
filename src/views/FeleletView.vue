@@ -258,7 +258,7 @@ const handleNincsIlyen = () =>{
         <v-spacer></v-spacer>
         <v-btn
           icon="mdi-close"
-          @click="dialog3 = false"
+          @click="dialog4 = false"
         ></v-btn>
       </v-card-title>
       <v-select
