@@ -45,21 +45,85 @@ npm run lint
 ```
 ### Database Setup
 ```sh
-INSERT INTO kep values(null,"Gerinctelenek",064);
-INSERT INTO kepAdat values(null,1,"Álláb",1645,540,21,1);
-INSERT INTO kepAdat values(null,2,"Mag",1642,609,21,1);
-INSERT INTO kepAdat values(null,3,"Vacuolum",1644,679,21,1);
-INSERT INTO kepAdat values(null,4,"Cilia",1579,2099,21,1);
-INSERT INTO kepAdat values(null,5,"Zárványtest",1506,2131,21,1);
-INSERT INTO kepAdat values(null,6,"Emésztő rendszer",1431,2146,21,1);
-INSERT INTO kepAdat values(null,7,"Láb vacuolum",1359,2193,21,1);
-INSERT INTO kepAdat values(null,8,"Gullet",1285,2227,21,1);
-INSERT INTO kepAdat values(null,9,"Szájnyílás",1220,2251,21,1);
-INSERT INTO kepAdat values(null,10,"Cilia",479,1747,21,1);
-INSERT INTO kepAdat values(null,11,"Összehúzódó vacuolumok",547,1715,21,1);
-INSERT INTO kepAdat values(null,12,"Kiválasztó nyílás",629,1700,21,1);
-INSERT INTO kepAdat values(null,13,"Láb vacuolum",708,1667,21,1);
-INSERT INTO kepAdat values(null,14,"Nagymag",782,1640,21,1);
-INSERT INTO kepAdat values(null,15,"Kismag",853,1619,21,1); 
-INSERT INTO felhasznalo (nev, email, jelszo, osztaly, jogosultsag)   VALUES ('Kiss Péter', 'kiss.peter@gmail.com', '$2b$10$IU65XRxR7h1Ah9TiuD65pexc/MYhbo/0Neb.Tsz0.q8g7Tx2TpmGe', '10.A', 'tanulo'); 
+INSERT INTO kep VALUES(null,"A kutya anatómiája",1,1);
+INSERT INTO kep VALUES(null,"A mindenevő állat emésztőrendszere",2,1);
+INSERT INTO kep VALUES(null,"A növényevő állat emésztőrendszere",3,1);
+INSERT INTO kep VALUES(null,"A növényevő állat légzőrendszere",4,1);
+INSERT INTO kep VALUES(null,"A szarvas csontváza",5,1);
+INSERT INTO kep VALUES(null,"Gerincesek szíve",6,1);
+
+INSERT INTO kepadat VALUES(null,19,"Fej",587,71,30,1);
+INSERT INTO kepadat VALUES(null,20,"Gerincvelő",643,131,30,1);
+INSERT INTO kepadat VALUES(null,21,"Csigolya",698,193,30,1);
+INSERT INTO kepadat VALUES(null,22,"Aorta",740,252,30,1);
+INSERT INTO kepadat VALUES(null,23,"Vese",789,315,30,1);
+INSERT INTO kepadat VALUES(null,24,"Epehólyag",1228,1221,30,1);
+INSERT INTO kepadat VALUES(null,25,"Vékonybél",1165,1217,30,1);
+INSERT INTO kepadat VALUES(null,26,"Hasnyálmirigy",1090,1218,30,1);
+INSERT INTO kepadat VALUES(null,27,"Lép",1014,1219,30,1);
+INSERT INTO kepadat VALUES(null,28,"Gyomor",949,1218,30,1);
+INSERT INTO kepadat VALUES(null,29,"Máj",528,1122,30,1);
+INSERT INTO kepadat VALUES(null,30,"Rekeszizom",481,1070,30,1);
+INSERT INTO kepadat VALUES(null,31,"Szív",436,1010,30,1);
+INSERT INTO kepadat VALUES(null,32,"Tüdők",378,956,30,1);
+INSERT INTO kepadat VALUES(null,33,"Légcső",325,899,30,1);
+INSERT INTO kepadat VALUES(null,34,"Nyelőcső",266,844,30,1);
+INSERT INTO kepadat VALUES(null,35,"Nyakizmok",211,784,30,1);
+
+
+INSERT INTO kepadat VALUES(null,8,"Nyelőcső",1583,145,35,2);
+INSERT INTO kepadat VALUES(null,9,"Gyomor",1583,314,35,2);
+INSERT INTO kepadat VALUES(null,10,"Hasnyálmirigy",1563,1001,35,2);
+INSERT INTO kepadat VALUES(null,11,"Leszálló vastagbél",1557,1172,35,2);
+INSERT INTO kepadat VALUES(null,12,"Vékonybél",1549,1344,35,2);
+INSERT INTO kepadat VALUES(null,13,"Végbél",706,2192,35,2);
+INSERT INTO kepadat VALUES(null,14,"Féregnyúlvány",561,2080,35,2);
+INSERT INTO kepadat VALUES(null,15,"Vakbél",217,1626,35,2);
+INSERT INTO kepadat VALUES(null,16,"Felszálló vastagbél",213,1465,35,2);
+INSERT INTO kepadat VALUES(null,17,"Patkóbél",212,1287,35,2);
+INSERT INTO kepadat VALUES(null,18,"Epehólyag",209,1129,35,2);
+INSERT INTO kepadat VALUES(null,19,"Máj",205,965,35,2);
+
+INSERT INTO kepadat VALUES(null,1,"Hálózat",1647,699,35,3);
+INSERT INTO kepadat VALUES(null,2,"Omasum",1641,841,35,3);
+INSERT INTO kepadat VALUES(null,3,"Abomasum",1635,985,35,3);
+INSERT INTO kepadat VALUES(null,4,"Bél",153,1240,35,3);
+INSERT INTO kepadat VALUES(null,5,"Bendő",200,68,35,3);
+INSERT INTO kepadat VALUES(null,6,"Vezeték",352,77,35,3);
+INSERT INTO kepadat VALUES(null,7,"Nyelőcső",518,71,35,3);
+
+INSERT INTO kepadat VALUES(null,20,"Hörgőcskék",1512,767,35,4);
+INSERT INTO kepadat VALUES(null,21,"Tüdők",265,767,35,4);
+INSERT INTO kepadat VALUES(null,22,"Légcső",273,559,35,4);
+INSERT INTO kepadat VALUES(null,23,"Gége",275,356,35,4);
+INSERT INTO kepadat VALUES(null,24,"Gégefedő",268,145,35,4);
+
+INSERT INTO kepadat VALUES(null,1,"Szemüreg",1641,367,35,5);
+INSERT INTO kepadat VALUES(null,2,"Felső állkapocscsont",1640,464,35,5);
+INSERT INTO kepadat VALUES(null,3,"Alsó állkapocscsont",1398,749,35,5);
+INSERT INTO kepadat VALUES(null,4,"Lapocka",1317,812,35,5);
+INSERT INTO kepadat VALUES(null,5,"Karcsont",1242,889,35,5);
+INSERT INTO kepadat VALUES(null,6,"Orsócsont",1207,977,35,5);
+INSERT INTO kepadat VALUES(null,7,"Ujjpercek",1207,1068,35,5);
+INSERT INTO kepadat VALUES(null,8,"Pata",1199,1161,35,5);
+INSERT INTO kepadat VALUES(null,9,"Lábközépcsont",113,1145,35,5);
+INSERT INTO kepadat VALUES(null,10,"Lábtőcsont",110,1052,35,5);
+INSERT INTO kepadat VALUES(null,11,"Tíbia",107,960,35,5);
+INSERT INTO kepadat VALUES(null,12,"Térdkalács",106,879,35,5);
+INSERT INTO kepadat VALUES(null,13,"Combcsont",108,784,35,5);
+INSERT INTO kepadat VALUES(null,14,"Medence",636,352,35,5);
+INSERT INTO kepadat VALUES(null,15,"Bordák",733,351,35,5);
+INSERT INTO kepadat VALUES(null,16,"Csigolya",840,347,35,5);
+INSERT INTO kepadat VALUES(null,17,"Atlas (Első nyakcsigolya)",928,345,35,5);
+INSERT INTO kepadat VALUES(null,18,"Agancs",927,260,35,5);
+
+INSERT INTO kepadat VALUES(null,25,"Függőér",1188,185,35,6);
+INSERT INTO kepadat VALUES(null,26,"Tüdőverőerek",1365,186,35,6);
+INSERT INTO kepadat VALUES(null,27,"Tüdővénák",1666,1126,35,6);
+INSERT INTO kepadat VALUES(null,28,"Kéthegű billentyű",1656,1287,35,6);
+INSERT INTO kepadat VALUES(null,29,"Bal kamra",1647,1456,35,6);
+INSERT INTO kepadat VALUES(null,30,"Üreg utáni véna",121,585,35,6);
+INSERT INTO kepadat VALUES(null,31,"Háromhegű billentyű",253,461,35,6);
+INSERT INTO kepadat VALUES(null,32,"Jobb pitvar",364,339,35,6);
+INSERT INTO kepadat VALUES(null,33,"Üreg előtti véna",489,221,35,6);
 ```
