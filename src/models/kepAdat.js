@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) =>
             },
             adatSorszam:
             {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING(60),
             },
             helyesValasz:
             {

@@ -1,5 +1,5 @@
 export type Adat = {
     id: number,
-    adatSorszam: number,
+    adatSorszam: string,
     helyesValasz: string,
 }
