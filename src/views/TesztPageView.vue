@@ -23,8 +23,8 @@ adat.value = Number(route.params.id);
 const tesztMod = ref<number>();
 tesztMod.value = Number(route.params.tesztMod)
 
-const title = ref<string | undefined>('');
-title.value = kepek.value?.find((kep) => kep.id == adat.value)?.nev
+const title = computed(() => kepek.value?.find((kep) => kep.id == adat.value)?.nev);
+
 
 const adatok = ref<Adat[]>([]);
 
