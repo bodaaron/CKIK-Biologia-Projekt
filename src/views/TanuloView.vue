@@ -168,7 +168,7 @@ const handleChange = async () => {
           dialog5.value = true
           sessionStorage.clear()
           setTimeout(() => {
-            push('/home')
+            push('/')
           }, 2000)
         } else {
           message.value = 'Sikeres adatmódosítás!'

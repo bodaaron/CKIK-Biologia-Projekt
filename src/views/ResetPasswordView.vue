@@ -43,7 +43,7 @@ const handlePasswordReset = () => {
     onSuccess: () => {
       dialog.value = true
       setTimeout(() => {
-        push('/home')
+        push('/')
       }, 2000)
     },
     onError: (err: any) => {

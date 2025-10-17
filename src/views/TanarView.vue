@@ -217,7 +217,7 @@ const handleChange = async () => {
           alertModal.value = true
           sessionStorage.clear()
           setTimeout(() => {
-            push('/home')
+            push('/')
           }, 2000)
         } else {
           message.value = 'Sikeres adatmódosítás!'
