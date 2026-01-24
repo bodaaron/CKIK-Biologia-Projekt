@@ -50,26 +50,25 @@ const handleLogin = () => {
         @click:append-inner="visible = !visible"
         v-model="loginParam.jelszo"
       ></v-text-field>
-
+      
       <v-btn
-        class="mb-8"
-        size="large"
-        variant="elevated"
-        @click="handleLogin"
-        :loading="isPending"
-        block
+      class="mb-2"
+      size="large"
+      variant="elevated"
+      @click="handleLogin"
+      :loading="isPending"
+      block
       >
-        Bejelentkezés
-      </v-btn>
-
+      Bejelentkezés
+    </v-btn>
+    
+    <v-alert class="mb-2" v-if="error" type="error" dismissible>
+      {{ error }}
+    </v-alert>
+    
       <v-card-text
         class="text-center"
-        @click="
-          () => {
-            push({ name: 'registration' })
-          }
-        "
-      >
+        @click="() => {push({ name: 'registration' })}">
         <a class="text-green text-decoration-none" rel="noopener noreferrer">
           Ha még nincs fiókja, itt regisztrálhat
           <v-icon icon="mdi-chevron-right"> </v-icon>
@@ -77,20 +76,12 @@ const handleLogin = () => {
       </v-card-text>
       <v-card-text
         class="text-center"
-        @click="
-          () => {
-            push({ name: 'eljelejtettjelszo' })
-          }
-        "
-      >
+        @click="() => {push({ name: 'eljelejtettjelszo' })}">
         <a class="text-green text-decoration-none" rel="noopener noreferrer">
           Elfelejtettem a jelszavamat
           <v-icon icon="mdi-chevron-right"> </v-icon>
         </a>
       </v-card-text>
-      <v-alert v-if="error" type="error" dismissible>
-        {{ error }}
-      </v-alert>
     </v-card>
   </v-container>
 </template>
