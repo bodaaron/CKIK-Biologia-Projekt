@@ -857,8 +857,7 @@ const handleKijavitasDB = async () => {
         Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni?
       </v-card-text>
       <v-card-actions class="justify-center">
-        <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb"
-          >Igen</v-btn
+        <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb">Igen</v-btn
         >
         <v-btn @click="dialog9 = false" class="nemGomb">Nem</v-btn>
       </v-card-actions>
