@@ -6,7 +6,7 @@ const sendMail = require('./src/emailsender')
 require('./src/database/dbContext')
 require('dotenv').config()
 
-app.use(cors())
+app.use(cors({origin: '*'}))
 app.use(bodyParser.json())
 
 app.post('/send-email', async (req, res) => {
