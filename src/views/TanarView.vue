@@ -217,7 +217,7 @@ const handleChange = async () => {
           alertModal.value = true
           sessionStorage.clear()
           setTimeout(() => {
-            push('/home')
+            push('/')
           }, 2000)
         } else {
           message.value = 'Sikeres adatmódosítás!'
@@ -304,7 +304,7 @@ const handleKiosztDiakDB = async () => {
   if (isValid) {
     await diakFelelet(diakTesztData.value, {
       onSuccess() {
-        message.value = 'Felelet sikeresen kiosztva!'
+        message.value = 'Felelet sikeresen kiosztva a diáknak!'
         dialog4.value = false
         alertModal.value = true
       },
@@ -535,12 +535,14 @@ const handleKijavitasDB = async () => {
           label="Keresés osztály alapján"
           :items="items"
           v-model="selectedOsztaly"
-          @blur="handleKereses"
+          @update:modelValue="handleKereses"
+          clearable
         ></v-select>
         <v-text-field
           label="Keresés név alapján"
           v-model="nameSearch"
-          @input="handleKereses"
+          @update:modelValue="handleKereses"
+          clearable
         ></v-text-field>
       </v-card-actions>
       <v-card-actions>
@@ -567,30 +569,30 @@ const handleKijavitasDB = async () => {
             <td>
               <v-btn
                 v-if="user.jogosultsag == 0"
-                class="ms-auto feleletGomb"
+                class="ms-auto feleletGomb me-2"
                 text="Feleletek"
                 @click="handleUserFeleletek(user.id)"
               ></v-btn>
               <v-btn
                 v-if="user.jogosultsag == 0"
-                class="ms-auto feleletKiosztGomb"
+                class="ms-auto feleletKiosztGomb me-2"
                 text="Felelet kiosztása"
                 @click="handleTesztKiosztDiak(user.nev, user.id)"
               ></v-btn>
               <v-btn
                 v-if="user.jogosultsag == 0"
-                class="ms-auto jogosultsagAdasGomb"
+                class="ms-auto jogosultsagAdasGomb me-2"
                 text="Tanári jogosultság adása"
                 @click="handleJogosultsagAdas(user.nev, user.id)"
               ></v-btn>
               <v-btn
                 v-if="user.jogosultsag == 1"
-                class="ms-auto jogosultsagAdasGomb"
+                class="ms-auto jogosultsagAdasGomb me-2"
                 text="Tanári jogosultság elvétele"
                 @click="handleJogosultsagElvet(user.nev, user.id)"
               ></v-btn>
               <v-btn
-                class="ms-auto torlesGomb"
+                class="ms-auto torlesGomb me-2"
                 text="Törlés"
                 @click="handleTorles(user.nev, user.id)"
               ></v-btn>
@@ -620,6 +622,7 @@ const handleKijavitasDB = async () => {
             @blur="v$2.selectedTeszt.$touch"
             @change="v$2.selectedTeszt.$touch"
             required
+            width="300px"
           ></v-select>
           <v-select
             label="Osztály választása"
@@ -659,12 +662,16 @@ const handleKijavitasDB = async () => {
             </v-list-item>
           </v-list>
         </v-card-text>
-        <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
+          <v-card-actions class="justify-center">
+            <v-btn type="submit" class="hattergomb mb-2">
+              Teszt kiosztása
+            </v-btn>
+          </v-card-actions>
       </v-form>
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="500">
+  <v-dialog v-model="dialog4" transition="dialog-bottom-transition" max-width="600">
     <v-card class="alul">
       <v-card-title class="d-flex tesztTitle"
         >Felelet kiosztása {{ selectedDiak }} tanulónak
@@ -683,6 +690,7 @@ const handleKijavitasDB = async () => {
             @blur="v$3.kepId.$touch"
             @change="v$3.kepId.$touch"
             required
+            width="200px"
           ></v-select>
           <v-select
             label="Teszt mód"
@@ -713,37 +721,41 @@ const handleKijavitasDB = async () => {
             </v-list-item>
           </v-list>
         </v-card-text>
-        <v-btn type="submit" class="hattergomb">Teszt kiosztása</v-btn>
+          <v-card-actions class="justify-center">
+            <v-btn type="submit" class="hattergomb mb-2">
+              Teszt kiosztása
+            </v-btn>
+          </v-card-actions>
       </v-form>
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="500">
+  <v-dialog v-model="dialog5" transition="dialog-bottom-transition" max-width="600">
     <v-card class="alul">
       <v-card-title class="d-flex tesztTitle"
         >Törlés
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="dialog5 = false"></v-btn>
       </v-card-title>
-      <v-card-text> Bíztosan törölni szeretné {{ selectedDiak }} felhasználót? </v-card-text>
-      <v-card-actions>
+      <v-card-text class="font-weight-bold"> Bíztosan törölni szeretné {{ selectedDiak }} felhasználót? </v-card-text>
+      <v-card-actions class="justify-center">
         <v-btn @click="handleTorlesIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
         <v-btn @click="dialog5 = false" class="nemGomb">Nem</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="700">
+  <v-dialog v-model="dialog6" transition="dialog-bottom-transition" max-width="600">
     <v-card class="alul">
       <v-card-title class="d-flex tesztTitle"
         >Jogosultság
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="dialog6 = false"></v-btn>
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="font-weight-bold">
         Bíztosan szeretne tanári jogosultságo adni {{ selectedDiak }} felhasználónak?
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="justify-center">
         <v-btn @click="handleJogosultsagIgen()" :loading="isPending" class="igenGomb">Igen</v-btn>
         <v-btn @click="dialog6 = false" class="nemGomb">Nem</v-btn>
       </v-card-actions>
@@ -834,19 +846,18 @@ const handleKijavitasDB = async () => {
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="700">
+  <v-dialog v-model="dialog9" transition="dialog-bottom-transition" max-width="600">
     <v-card class="alul">
       <v-card-title class="d-flex tesztTitle"
         >Jogosultság
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" @click="dialog9 = false"></v-btn>
       </v-card-title>
-      <v-card-text>
-        Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni??
+      <v-card-text class="font-weight-bold">
+        Bíztosan szeretné {{ selectedDiak }} tanári jogosultságait elvenni?
       </v-card-text>
-      <v-card-actions>
-        <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb"
-          >Igen</v-btn
+      <v-card-actions class="justify-center">
+        <v-btn @click="handleJogosultsagElvetIgen()" :loading="isPending" class="igenGomb">Igen</v-btn
         >
         <v-btn @click="dialog9 = false" class="nemGomb">Nem</v-btn>
       </v-card-actions>
@@ -880,13 +891,13 @@ const handleKijavitasDB = async () => {
             <v-list-item>
               <v-list-item-title class="font-weight-bold">Választós</v-list-item-title>
               <v-list-item-subtitle
-                >Egy listából kell kiválasztanod a jó válaszokat</v-list-item-subtitle
+                >Egy listából kell kiválasztania a jó válaszokat</v-list-item-subtitle
               >
             </v-list-item>
             <v-list-item>
               <v-list-item-title class="font-weight-bold">Saját válasz</v-list-item-title>
               <v-list-item-subtitle
-                >Saját magadtól kell megadnod a jó válaszokat</v-list-item-subtitle
+                >Saját magától kell megadnia a jó válaszokat</v-list-item-subtitle
               >
             </v-list-item>
           </v-list>
@@ -989,9 +1000,11 @@ const handleKijavitasDB = async () => {
   color: #e3f2fd;
 }
 .igenGomb {
-  color: #1976d2;
+  color: #e3f2fd;
+  background-color: green;
 }
 .nemGomb {
-  color: #558b2f;
+  color: #e3f2fd;
+  background-color: #b71c1c;
 }
 </style>

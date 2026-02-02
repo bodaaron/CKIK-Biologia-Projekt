@@ -81,7 +81,7 @@ const handleRegistration = async () => {
       <v-card-title class="text-center">Regisztráció</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="handleRegistration">
-          <v-text-field
+          <v-text-field class="mb-2"
           v-model="registrationDataRef.nev"
           :error-messages="v$.nev.$errors.map((e) => String(e.$message))"
           :counter="40"
@@ -94,7 +94,7 @@ const handleRegistration = async () => {
           prepend-inner-icon="mdi-account-outline"
           ></v-text-field>
           
-          <v-text-field
+          <v-text-field class="mb-2"
           v-model="registrationDataRef.email"
           :error-messages="v$.email.$errors.map((e) => String(e.$message))"
           label="Email"
@@ -106,7 +106,7 @@ const handleRegistration = async () => {
           variant="outlined"
           ></v-text-field>
           
-          <v-text-field
+          <v-text-field class="mb-2"
           v-model="registrationDataRef.jelszo"
           :error-messages="v$.jelszo.$errors.map((e) => String(e.$message))"
           label="Jelszó"
@@ -121,7 +121,7 @@ const handleRegistration = async () => {
           @click:append-inner="show1 = !show1"
           ></v-text-field>
           
-          <v-text-field
+          <v-text-field class="mb-2"
           v-model="registrationDataRef.jelszoMeg"
           :error-messages="v$.jelszoMeg.$errors.map((e) => String(e.$message))"
           label="Jelszó megerősítés"
@@ -136,7 +136,7 @@ const handleRegistration = async () => {
           @click:append-inner="show2 = !show2"
           ></v-text-field>
 
-          <v-select
+          <v-select class="mb-2"
           v-model="registrationDataRef.osztaly"
           :error-messages="v$.osztaly.$errors.map((e) => String(e.$message))"
           label="Osztály"
@@ -148,9 +148,8 @@ const handleRegistration = async () => {
           variant="outlined"
           ></v-select>
           
-          <v-card-actions>
             <v-btn
-            class="mb-8"
+            class="mb-0"
             size="large"
             variant="elevated"
             :loading="isPending"
@@ -159,7 +158,6 @@ const handleRegistration = async () => {
             >
             Regisztráció
           </v-btn>
-        </v-card-actions>
       </v-form>
     </v-card-text>
     <v-alert v-if="error" type="error" dismissible>

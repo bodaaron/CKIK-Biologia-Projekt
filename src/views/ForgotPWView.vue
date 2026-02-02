@@ -2,36 +2,42 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useGetUserek } from '@/api/profile/profileQuery'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
-const message = ref('')
+const error1 = ref<string | null>(null)
+const success = ref<string | null>(null)
 const loading = ref(false)
 const { data: users } = useGetUserek()
+const { push } = useRouter()
 
 const sendEmail = async () => {
   if (!email.value) {
-    message.value = 'Kérlek, adj meg egy e-mail címet!'
+    error1.value = 'Kérjük, adjon meg egy e-mail címet!'
     return
   }
   if(!users.value) return
   const userExists = users.value.some((user) => user.email === email.value)
 
   if (!userExists) {
-    message.value = 'Ez az e-mail cím nem található a rendszerben.'
+    error1.value = 'Ez az e-mail cím nem található a rendszerben.'
     return
   }
 
   loading.value = true
-  message.value = ''
+  error1.value = ''
 
   try {
     const response = await axios.post('http://localhost:3000/send-email', {
       email: email.value,
     })
 
-    message.value = response.data.message
+    if(response.data.success){
+      success.value =  response.data.message
+    }
+
   } catch (error : any) {
-    message.value =
+    error1.value =
       'Hiba történt az e-mail küldése során: ' + (error.response?.data?.error || error.message)
   } finally {
     loading.value = false
@@ -40,50 +46,36 @@ const sendEmail = async () => {
 </script>
 
 <template>
-  <div class="container">
-    <h2>E-mail küldő</h2>
-    <input v-model="email" type="email" placeholder="Add meg az e-mail címet" />
-    <button :disabled="loading" @click="sendEmail">
-      {{ loading ? 'Küldés...' : 'E-mail küldése' }}
-    </button>
-    <p v-if="message">{{ message }}</p>
-  </div>
+  <v-container class="d-flex align-center justify-center fill-height">
+    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+      <v-card-title class="text-center">Elfelejtett jelszó</v-card-title>
+          <v-text-field v-model="email" type="email"   density="compact" prepend-inner-icon="mdi-email-outline" variant="outlined" label="Kérjük addja meg az e-mail címét"/>
+          <v-alert class="mb-2" v-if="error1" type="error" dismissible> {{ error1 }} </v-alert>
+          <v-alert class="mb-2" v-if="success" type="success" icon="mdi-check-circle"> {{ success }} </v-alert>
+          <v-card-actions class="d-flex flex-column">
+            <v-btn class="mb-2" size="large" variant="elevated" :disabled="loading" @click="sendEmail" block>
+              {{ loading ? 'Küldés...' : 'E-mail küldése' }}
+            </v-btn>
+            <v-btn  class="mb-8" size="large" variant="elevated" @click="push({name: 'home'})" block>Vissza</v-btn>
+          </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
 <style scoped>
-.container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
 
-input {
+.v-card-title {
+  color: #009688;
+}
+.v-card {
+  background-color: #e0f2f1;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
-
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+.v-text-field {
+  color: #004d40;
 }
-
-button:disabled {
-  background-color: #ccc;
-}
-
-p {
-  margin-top: 10px;
-  color: #333;
+.v-btn {
+  background-color: #006663;
+  color: #ece7e2;
 }
 </style>

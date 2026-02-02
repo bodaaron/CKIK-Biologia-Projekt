@@ -14,7 +14,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: HomePageView,
       meta: { requiresGuest: true },
@@ -82,7 +82,7 @@ router.beforeEach(async (to, from, next) => {
       } else if (userRole == 0) {
         return next('/tanulo')
       } else if (!userRole) {
-        return next('/home')
+        return next('/')
       }
     }
   }
@@ -97,12 +97,8 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requiresAuth) {
     if (!userData) {
-      return next('/home')
+      return next('/')
     }
-  }
-
-  if (to.path === '/') {
-    next('/home')
   }
 
   next()
