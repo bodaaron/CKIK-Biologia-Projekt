@@ -28,7 +28,7 @@ const sendEmail = async () => {
   error1.value = ''
 
   try {
-    const response = await axios.post('http://localhost:3000/send-email', {
+    const response = await axios.post('/api/send-email', {
       email: email.value,
     })
 

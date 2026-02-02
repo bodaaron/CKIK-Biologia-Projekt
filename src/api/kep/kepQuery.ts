@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/vue-query"
 import type { Adat } from "./kep"
 
 const getAdatok = async (id:number): Promise<Adat[]> => {
-    const response = await axiosClient.get(`http://localhost:3000/adatok/${id}`)
+    const response = await axiosClient.get(`/api/adatok/${id}`)
     return response.data
 }
 

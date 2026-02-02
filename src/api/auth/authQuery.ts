@@ -21,7 +21,7 @@ export const useRegistration = () => {
 var jog: number
 
 const login = async (data: LoginParam) => {
-  const response = await axiosClient.post('http://localhost:3000/users/login', data)
+  const response = await axiosClient.post('/api/users/login', data)
   sessionStorage.setItem('email', data.email)
   sessionStorage.setItem('userData', JSON.stringify(response.data))
   jog = response.data.jogosultsag

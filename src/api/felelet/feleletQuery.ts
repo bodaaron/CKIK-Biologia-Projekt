@@ -5,7 +5,7 @@ import { AxiosError } from "axios"
 import type { DiaknakFeleletData, Felelet, Valasz, Valaszok } from "./felelet"
 
 const diakFelelet = async (data: DiaknakFeleletData) => {
-    const response = await axiosClient.post("http://localhost:3000/feleletek/diak", data)
+    const response = await axiosClient.post("/api/feleletek/diak", data)
     return response.data.data
 }
 
@@ -16,7 +16,7 @@ export const useDiakFelelet = () => {
 }
 
 const getDiakFeleletek = async (id:number): Promise<Felelet[]> => {
-    const response = await axiosClient.get(`http://localhost:3000/feleletek/${id}`)
+    const response = await axiosClient.get(`/api/feleletek/${id}`)
     return response.data
 }
 
@@ -27,7 +27,7 @@ export const useGetDiakFeleletek = () => {
 };
 
 const valaszLeadas = async (data: Valasz) => {
-    const response = await axiosClient.post("http://localhost:3000/valaszok/valasz", data)
+    const response = await axiosClient.post("/api/valaszok/valasz", data)
     return response.data.data
 }
 
@@ -42,7 +42,7 @@ export const useValaszLeadas = () => {
 }
 
 const feleletDateUpdate = async (id: Number) => {
-    const response = await axiosClient.post(`http://localhost:3000/feleletek/date/${id}`)
+    const response = await axiosClient.post(`/api/feleletek/date/${id}`)
     return response.data.data
 }
 
@@ -58,7 +58,7 @@ export const useFeleletDateUpdate = () => {
 
 
 const getValaszok = async (id:number): Promise<Valaszok[]> => {
-    const response = await axiosClient.get(`http://localhost:3000/valaszok/${id}`)
+    const response = await axiosClient.get(`/api/valaszok/${id}`)
     return response.data
 }
 
@@ -69,7 +69,7 @@ export const useGetValaszok = () =>{
 }
 
 const kijavitas = async (data: Valaszok) => {
-    const response = await axiosClient.post(`http://localhost:3000/valaszok/javitas`,data)
+    const response = await axiosClient.post(`/api/valaszok/javitas`,data)
     return response.data
 }
 

@@ -4,7 +4,7 @@ import type { ChangeData, JelszoValtoztato, Kep, Profile, User } from './profile
 
 const getLoggedUser = async (): Promise<Profile> => {
   const email = sessionStorage.getItem('email')
-  const response = await axiosClient.get(`http://localhost:3000/users/user/${email}`)
+  const response = await axiosClient.get(`/api/users/user/${email}`)
   return response.data
 }
 
@@ -16,7 +16,7 @@ export const useGetLoggedUser = () => {
 }
 
 const change = async (data: ChangeData) => {
-  const response = await axiosClient.post(`http://localhost:3000/users/mod/${data.id}`, data)
+  const response = await axiosClient.post(`/api/users/mod/${data.id}`, data)
 }
 
 export const usechange = () => {
@@ -29,7 +29,7 @@ export const usechange = () => {
 }
 
 const getKepek = async (): Promise<Kep[]> => {
-  const response = await axiosClient.get(`http://localhost:3000/kepek/`)
+  const response = await axiosClient.get(`/api/kepek/`)
   return response.data
 }
 
@@ -41,7 +41,7 @@ export const useGetKepek = () => {
 }
 
 const getUserek = async (): Promise<User[]> => {
-  const response = await axiosClient.get(`http://localhost:3000/users/`)
+  const response = await axiosClient.get(`/api/users/`)
   return response.data
 }
 
@@ -53,7 +53,7 @@ export const useGetUserek = () => {
 }
 
 const deleteUser = async (id: number) => {
-  await axiosClient.delete(`http://localhost:3000/users/delete/${id}`)
+  await axiosClient.delete(`/api/users/delete/${id}`)
 }
 
 export const useDeleteUser = () => {
@@ -63,7 +63,7 @@ export const useDeleteUser = () => {
 }
 
 const giveJogToUser = async (id: number) => {
-  await axiosClient.post(`http://localhost:3000/users/jog/${id}`)
+  await axiosClient.post(`/api/users/jog/${id}`)
 }
 
 export const useGiveJogToUser = () => {
@@ -73,7 +73,7 @@ export const useGiveJogToUser = () => {
 }
 
 const takeJogFromUser = async (id: number) => {
-  await axiosClient.post(`http://localhost:3000/users/jog/elvesz/${id}`)
+  await axiosClient.post(`/api/users/jog/elvesz/${id}`)
 }
 
 export const useTakeJogFromUser= () => {
@@ -84,7 +84,7 @@ export const useTakeJogFromUser= () => {
 
 
 const jelszoValtoztatas = async (data: JelszoValtoztato) => {
-  await axiosClient.post(`http://localhost:3000/users/jelszo/${data.email}`, data)
+  await axiosClient.post(`/api/users/jelszo/${data.email}`, data)
 }
 
 export const UseJelszoValtoztatas = () => {
