@@ -1,17 +1,24 @@
 const express = require("express");
-const cors = require('cors');
 
 const app = express();
 
+const cors = require("cors");
+
+app.use(cors(
+{
+   origin:
+   [
+     'http://localhost:3000',
+     'http://localhost:426',
+     'http://127.0.0.1:426',
+     'http://172.22.0.87:426',
+   ],
+   credentials: true,
+}));
+
 app.use(express.json());
 
-app.use(express.urlencoded({extended: true}));
-
-app.use(cors());
-
-app.use(cors({
-    origin: 'http://localhost:5173',
-}))
+app.use(express.urlencoded({extended: true}))
 
 const userRoutes = require("./routes/userRoutes");
 

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/vue-query'
 import { useRouter } from 'vue-router'
 
 const registration = async (data: RegistrationData) => {
-  const response = await axiosClient.post('http://localhost:3000/users/', data)
+  const response = await axiosClient.post('/api/users/', data)
   return response.data.data
 }
 

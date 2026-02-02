@@ -4,9 +4,8 @@ const bodyParser = require('body-parser')
 const sendMail = require('./src/emailsender')
 
 require('./src/database/dbContext')
-require('dotenv').config()
+require('dotenv').config();
 
-app.use(cors({origin: '*'}))
 app.use(bodyParser.json())
 
 app.post('/send-email', async (req, res) => {
@@ -25,5 +24,5 @@ app.post('/send-email', async (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.log('Szerver fut http://localhost:3000 ')
+  console.log('Szerver fut http://localhost:3000')
 })
