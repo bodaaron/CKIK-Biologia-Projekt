@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # ubuntu key files
-.deb
+*.deb
